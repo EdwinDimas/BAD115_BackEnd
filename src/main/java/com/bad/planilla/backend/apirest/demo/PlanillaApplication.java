@@ -7,9 +7,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@ComponentScan(basePackages={"com.bad.planilla.backend.apirest.controller"})
+@ComponentScan(basePackages={"com.bad.planilla.backend.apirest.restcontroller"})
 @EntityScan("com.bad.planilla.backend.entity")
-@EnableJpaRepositories("com.bad.planilla.backend.apirest.controller")
+@EnableJpaRepositories("com.bad.planilla.backend.apirest.restcontroller")
 public class PlanillaApplication {
 
     public static void main(String[] args) {
