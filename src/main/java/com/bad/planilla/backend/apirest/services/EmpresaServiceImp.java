@@ -17,4 +17,14 @@ public class EmpresaServiceImp implements IEmpresaService {
     public List<EmpresaEntity> list() {
         return emp.findAll();
     }
+
+    @Override
+    public EmpresaEntity save(EmpresaEntity empresa) {
+        return emp.save(empresa);
+    }
+
+    @Override
+    public EmpresaEntity findById(Long id) {
+        return emp.findById(id).orElse(null);
+    }
 }
