@@ -1,5 +1,6 @@
 package com.bad.planilla.backend.apirest.restcontroller;
 
+import com.bad.planilla.backend.apirest.globals.Constants;
 import com.bad.planilla.backend.apirest.services.EmpresaServiceImp;
 import com.bad.planilla.backend.apirest.services.IEmpresaService;
 import com.bad.planilla.backend.entity.EmpresaEntity;
@@ -15,18 +16,18 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/planilla/empresa")
+@RequestMapping(Constants.BASE)
 public class EmpresaRestController {
 
     @Autowired
     private IEmpresaService empresaService;
 
-    @GetMapping("/list_empresa")
+    @GetMapping("/empresa")
     public List<EmpresaEntity> list(){
         return empresaService.list();
     }
 
-    @GetMapping("/ver_empresa/{id}")
+    @GetMapping("/empresa/{id}")
     public ResponseEntity<?> buscarEmpresa(@PathVariable Long id){
         EmpresaEntity empresa = null;
         Map<String, Object> respuesta = new HashMap<>();
@@ -46,7 +47,7 @@ public class EmpresaRestController {
         return new ResponseEntity<EmpresaEntity>(empresa,HttpStatus.OK);
     }
 
-    @PostMapping("/crear_empresa")
+    @PostMapping("/empresa")
     public ResponseEntity<?> crearEmpresa(@RequestBody EmpresaEntity empresa){
         EmpresaEntity empresaCreada=null,empresaNueva=null;
         Map<String, Object> respuesta = new HashMap<>();
@@ -62,7 +63,7 @@ public class EmpresaRestController {
         return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.CREATED);
     }
 
-    @PutMapping("/modificar_empresa/{id}")
+    @PutMapping("/empresa/{id}")
     public ResponseEntity<?> modificarEmpresa(@RequestBody EmpresaEntity empresa,@PathVariable Long id){
         EmpresaEntity empresaModificar = null,empresaActual = empresaService.findById(id);
         Map<String, Object> respuesta = new HashMap<>();
