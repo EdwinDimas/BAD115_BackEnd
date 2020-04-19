@@ -24,7 +24,14 @@ public class EmpresaServiceImp implements IEmpresaService {
     }
 
     @Override
-    public EmpresaEntity findById(Long id) {
-        return emp.findById(id).orElse(null);
+    public EmpresaEntity findById(int id) {
+
+        return emp.findByIdEmpresa(id);
+        //return emp.findById(Long.valueOf(id)).orElse(null);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        emp.deleteById(id);
     }
 }

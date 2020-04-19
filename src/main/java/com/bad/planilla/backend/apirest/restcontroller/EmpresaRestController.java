@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@CrossOrigin(origins = { Constants.URL_BASE})
 @RestController
 @RequestMapping(Constants.BASE)
 public class EmpresaRestController {
@@ -28,11 +29,14 @@ public class EmpresaRestController {
     }
 
     @GetMapping("/empresa/{id}")
-    public ResponseEntity<?> buscarEmpresa(@PathVariable Long id){
+    public ResponseEntity<?> buscarEmpresa(@PathVariable int id){
         EmpresaEntity empresa = null;
         Map<String, Object> respuesta = new HashMap<>();
+        System.out.println("ID---:"+id);
         try {
+            System.out.println("ENTRO A TRY=========================");
             empresa = empresaService.findById(id);
+            System.out.println(empresa);
         }catch (DataAccessException e){
                 respuesta.put("mensaje","Error al realizar la busqueda del registro con ID:"+id);
                 respuesta.put("error",e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
@@ -64,7 +68,7 @@ public class EmpresaRestController {
     }
 
     @PutMapping("/empresa/{id}")
-    public ResponseEntity<?> modificarEmpresa(@RequestBody EmpresaEntity empresa,@PathVariable Long id){
+    public ResponseEntity<?> modificarEmpresa(@RequestBody EmpresaEntity empresa,@PathVariable int id){
         EmpresaEntity empresaModificar = null,empresaActual = empresaService.findById(id);
         Map<String, Object> respuesta = new HashMap<>();
         if(empresaActual==null){
@@ -90,5 +94,7 @@ public class EmpresaRestController {
         respuesta.put("empresa", empresaModificar);
         return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.CREATED);
     }
+
+
 
 }
