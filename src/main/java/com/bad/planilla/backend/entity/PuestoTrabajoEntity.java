@@ -1,6 +1,7 @@
 package com.bad.planilla.backend.entity;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @Table(name = "puestostrabajos", schema = "public", catalog = "dfckhqghp2ho34")
@@ -9,6 +10,8 @@ public class PuestoTrabajoEntity {
     private String nombre;
     private String descripcion;
     private boolean estado;
+    private Collection<EmpleadoEntity> empleadosByIdPuestotrabajo;
+    private Collection<SalarioPuestoTrabajoEntity> relationship11sByIdPuestotrabajo;
 
     @Id
     @Column(name = "id_puestotrabajo")
@@ -72,5 +75,23 @@ public class PuestoTrabajoEntity {
         result = 31 * result + (descripcion != null ? descripcion.hashCode() : 0);
         result = 31 * result + (estado ? 1 : 0);
         return result;
+    }
+
+    @OneToMany(mappedBy = "puestostrabajosByIdPuestotrabajo")
+    public Collection<EmpleadoEntity> getEmpleadosByIdPuestotrabajo() {
+        return empleadosByIdPuestotrabajo;
+    }
+
+    public void setEmpleadosByIdPuestotrabajo(Collection<EmpleadoEntity> empleadosByIdPuestotrabajo) {
+        this.empleadosByIdPuestotrabajo = empleadosByIdPuestotrabajo;
+    }
+
+    @OneToMany(mappedBy = "puestostrabajosByIdPuestotrabajo")
+    public Collection<SalarioPuestoTrabajoEntity> getRelationship11sByIdPuestotrabajo() {
+        return relationship11sByIdPuestotrabajo;
+    }
+
+    public void setRelationship11sByIdPuestotrabajo(Collection<SalarioPuestoTrabajoEntity> relationship11sByIdPuestotrabajo) {
+        this.relationship11sByIdPuestotrabajo = relationship11sByIdPuestotrabajo;
     }
 }

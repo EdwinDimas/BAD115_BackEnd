@@ -1,12 +1,15 @@
 package com.bad.planilla.backend.entity;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @Table(name = "departmentos", schema = "public", catalog = "dfckhqghp2ho34")
 public class DepartmentoEntity {
     private int idDepartmento;
     private String nombre;
+    private Collection<DireccionEntity> direccionesByIdDepartmento;
+    private Collection<MunicipioEntity> municipiosByIdDepartmento;
 
     @Id
     @Column(name = "id_departmento")
@@ -46,5 +49,23 @@ public class DepartmentoEntity {
         int result = idDepartmento;
         result = 31 * result + (nombre != null ? nombre.hashCode() : 0);
         return result;
+    }
+
+    @OneToMany(mappedBy = "departmentosByIdDepartmento")
+    public Collection<DireccionEntity> getDireccionesByIdDepartmento() {
+        return direccionesByIdDepartmento;
+    }
+
+    public void setDireccionesByIdDepartmento(Collection<DireccionEntity> direccionesByIdDepartmento) {
+        this.direccionesByIdDepartmento = direccionesByIdDepartmento;
+    }
+
+    @OneToMany(mappedBy = "departmentosByIdDepartmento")
+    public Collection<MunicipioEntity> getMunicipiosByIdDepartmento() {
+        return municipiosByIdDepartmento;
+    }
+
+    public void setMunicipiosByIdDepartmento(Collection<MunicipioEntity> municipiosByIdDepartmento) {
+        this.municipiosByIdDepartmento = municipiosByIdDepartmento;
     }
 }

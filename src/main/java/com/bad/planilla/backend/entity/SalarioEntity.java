@@ -2,6 +2,7 @@ package com.bad.planilla.backend.entity;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Collection;
 
 @Entity
 @Table(name = "salarios", schema = "public", catalog = "dfckhqghp2ho34")
@@ -10,6 +11,7 @@ public class SalarioEntity {
     private BigDecimal desde;
     private BigDecimal hasta;
     private boolean estado;
+    private Collection<SalarioPuestoTrabajoEntity> relationship11sByIdSalario;
 
     @Id
     @Column(name = "id_salario")
@@ -73,5 +75,14 @@ public class SalarioEntity {
         result = 31 * result + (hasta != null ? hasta.hashCode() : 0);
         result = 31 * result + (estado ? 1 : 0);
         return result;
+    }
+
+    @OneToMany(mappedBy = "salariosByIdSalario")
+    public Collection<SalarioPuestoTrabajoEntity> getRelationship11sByIdSalario() {
+        return relationship11sByIdSalario;
+    }
+
+    public void setRelationship11sByIdSalario(Collection<SalarioPuestoTrabajoEntity> relationship11sByIdSalario) {
+        this.relationship11sByIdSalario = relationship11sByIdSalario;
     }
 }

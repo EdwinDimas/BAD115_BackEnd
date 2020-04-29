@@ -9,6 +9,8 @@ public class SalarioPuestoTrabajoEntity {
     private int idSalario;
     private int idPuestotrabajo;
     private boolean estado;
+    private SalarioEntity salariosByIdSalario;
+    private PuestoTrabajoEntity puestostrabajosByIdPuestotrabajo;
 
     @Id
     @Column(name = "id_salario")
@@ -60,5 +62,25 @@ public class SalarioPuestoTrabajoEntity {
         result = 31 * result + idPuestotrabajo;
         result = 31 * result + (estado ? 1 : 0);
         return result;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "id_salario", referencedColumnName = "id_salario", nullable = false)
+    public SalarioEntity getSalariosByIdSalario() {
+        return salariosByIdSalario;
+    }
+
+    public void setSalariosByIdSalario(SalarioEntity salariosByIdSalario) {
+        this.salariosByIdSalario = salariosByIdSalario;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "id_puestotrabajo", referencedColumnName = "id_puestotrabajo", nullable = false)
+    public PuestoTrabajoEntity getPuestostrabajosByIdPuestotrabajo() {
+        return puestostrabajosByIdPuestotrabajo;
+    }
+
+    public void setPuestostrabajosByIdPuestotrabajo(PuestoTrabajoEntity puestostrabajosByIdPuestotrabajo) {
+        this.puestostrabajosByIdPuestotrabajo = puestostrabajosByIdPuestotrabajo;
     }
 }

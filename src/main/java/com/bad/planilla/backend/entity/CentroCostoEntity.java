@@ -8,10 +8,12 @@ import java.sql.Date;
 @Table(name = "centroscosto", schema = "public", catalog = "dfckhqghp2ho34")
 public class CentroCostoEntity {
     private int idCosto;
+    private Integer idUnidadorganizacional;
     private BigDecimal monto;
     private BigDecimal montoactual;
     private Date periodo;
     private boolean estado;
+    private UnidadOrganizacionalEntity unidadesorganizacionalesByIdUnidadorganizacional;
 
     @Id
     @Column(name = "id_costo")
@@ -21,6 +23,16 @@ public class CentroCostoEntity {
 
     public void setIdCosto(int idCosto) {
         this.idCosto = idCosto;
+    }
+
+    @Basic
+    @Column(name = "id_unidadorganizacional")
+    public Integer getIdUnidadorganizacional() {
+        return idUnidadorganizacional;
+    }
+
+    public void setIdUnidadorganizacional(Integer idUnidadorganizacional) {
+        this.idUnidadorganizacional = idUnidadorganizacional;
     }
 
     @Basic
@@ -72,6 +84,8 @@ public class CentroCostoEntity {
 
         if (idCosto != that.idCosto) return false;
         if (estado != that.estado) return false;
+        if (idUnidadorganizacional != null ? !idUnidadorganizacional.equals(that.idUnidadorganizacional) : that.idUnidadorganizacional != null)
+            return false;
         if (monto != null ? !monto.equals(that.monto) : that.monto != null) return false;
         if (montoactual != null ? !montoactual.equals(that.montoactual) : that.montoactual != null) return false;
         if (periodo != null ? !periodo.equals(that.periodo) : that.periodo != null) return false;
@@ -82,10 +96,21 @@ public class CentroCostoEntity {
     @Override
     public int hashCode() {
         int result = idCosto;
+        result = 31 * result + (idUnidadorganizacional != null ? idUnidadorganizacional.hashCode() : 0);
         result = 31 * result + (monto != null ? monto.hashCode() : 0);
         result = 31 * result + (montoactual != null ? montoactual.hashCode() : 0);
         result = 31 * result + (periodo != null ? periodo.hashCode() : 0);
         result = 31 * result + (estado ? 1 : 0);
         return result;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "id_unidadorganizacional", referencedColumnName = "id_unidadorganizacional")
+    public UnidadOrganizacionalEntity getUnidadesorganizacionalesByIdUnidadorganizacional() {
+        return unidadesorganizacionalesByIdUnidadorganizacional;
+    }
+
+    public void setUnidadesorganizacionalesByIdUnidadorganizacional(UnidadOrganizacionalEntity unidadesorganizacionalesByIdUnidadorganizacional) {
+        this.unidadesorganizacionalesByIdUnidadorganizacional = unidadesorganizacionalesByIdUnidadorganizacional;
     }
 }

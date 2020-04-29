@@ -1,6 +1,7 @@
 package com.bad.planilla.backend.entity;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @Table(name = "empresas", schema = "public", catalog = "dfckhqghp2ho34")
@@ -13,6 +14,8 @@ public class EmpresaEntity {
     private String telefono;
     private String email;
     private String page;
+    private Collection<DireccionEntity> direccionesByIdEmpresa;
+    private Collection<UnidadOrganizacionalEntity> unidadesorganizacionalesByIdEmpresa;
 
     @Id
     @Column(name = "id_empresa")
@@ -125,5 +128,23 @@ public class EmpresaEntity {
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (page != null ? page.hashCode() : 0);
         return result;
+    }
+
+    @OneToMany(mappedBy = "empresasByIdEmpresa")
+    public Collection<DireccionEntity> getDireccionesByIdEmpresa() {
+        return direccionesByIdEmpresa;
+    }
+
+    public void setDireccionesByIdEmpresa(Collection<DireccionEntity> direccionesByIdEmpresa) {
+        this.direccionesByIdEmpresa = direccionesByIdEmpresa;
+    }
+
+    @OneToMany(mappedBy = "empresasByIdEmpresa")
+    public Collection<UnidadOrganizacionalEntity> getUnidadesorganizacionalesByIdEmpresa() {
+        return unidadesorganizacionalesByIdEmpresa;
+    }
+
+    public void setUnidadesorganizacionalesByIdEmpresa(Collection<UnidadOrganizacionalEntity> unidadesorganizacionalesByIdEmpresa) {
+        this.unidadesorganizacionalesByIdEmpresa = unidadesorganizacionalesByIdEmpresa;
     }
 }

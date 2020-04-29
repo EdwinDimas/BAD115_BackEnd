@@ -1,6 +1,7 @@
 package com.bad.planilla.backend.entity;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @Table(name = "documentosidentificaciones", schema = "public", catalog = "dfckhqghp2ho34")
@@ -10,6 +11,7 @@ public class DocumentoIdentificacionEntity {
     private String nombre;
     private String formatoregex;
     private boolean estado;
+    private Collection<DocumentoEmpleadoEntity> documentosempleadosByIdDi;
 
     @Id
     @Column(name = "id_di")
@@ -85,5 +87,14 @@ public class DocumentoIdentificacionEntity {
         result = 31 * result + (formatoregex != null ? formatoregex.hashCode() : 0);
         result = 31 * result + (estado ? 1 : 0);
         return result;
+    }
+
+    @OneToMany(mappedBy = "documentosidentificacionesByIdDi")
+    public Collection<DocumentoEmpleadoEntity> getDocumentosempleadosByIdDi() {
+        return documentosempleadosByIdDi;
+    }
+
+    public void setDocumentosempleadosByIdDi(Collection<DocumentoEmpleadoEntity> documentosempleadosByIdDi) {
+        this.documentosempleadosByIdDi = documentosempleadosByIdDi;
     }
 }

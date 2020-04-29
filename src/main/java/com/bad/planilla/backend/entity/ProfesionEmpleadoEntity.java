@@ -7,9 +7,13 @@ import java.sql.Date;
 @Table(name = "profesionesempleados", schema = "public", catalog = "dfckhqghp2ho34")
 public class ProfesionEmpleadoEntity {
     private int idPe;
+    private Integer id;
+    private Integer idProfesion;
     private Date fechatitulacion;
     private Date fecharegistro;
     private boolean estado;
+    private EmpleadoEntity empleadosById;
+    private ProfesionEntity profesionesByIdProfesion;
 
     @Id
     @Column(name = "id_pe")
@@ -19,6 +23,26 @@ public class ProfesionEmpleadoEntity {
 
     public void setIdPe(int idPe) {
         this.idPe = idPe;
+    }
+
+    @Basic
+    @Column(name = "id")
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    @Basic
+    @Column(name = "id_profesion")
+    public Integer getIdProfesion() {
+        return idProfesion;
+    }
+
+    public void setIdProfesion(Integer idProfesion) {
+        this.idProfesion = idProfesion;
     }
 
     @Basic
@@ -60,6 +84,8 @@ public class ProfesionEmpleadoEntity {
 
         if (idPe != that.idPe) return false;
         if (estado != that.estado) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (idProfesion != null ? !idProfesion.equals(that.idProfesion) : that.idProfesion != null) return false;
         if (fechatitulacion != null ? !fechatitulacion.equals(that.fechatitulacion) : that.fechatitulacion != null)
             return false;
         if (fecharegistro != null ? !fecharegistro.equals(that.fecharegistro) : that.fecharegistro != null)
@@ -71,9 +97,31 @@ public class ProfesionEmpleadoEntity {
     @Override
     public int hashCode() {
         int result = idPe;
+        result = 31 * result + (id != null ? id.hashCode() : 0);
+        result = 31 * result + (idProfesion != null ? idProfesion.hashCode() : 0);
         result = 31 * result + (fechatitulacion != null ? fechatitulacion.hashCode() : 0);
         result = 31 * result + (fecharegistro != null ? fecharegistro.hashCode() : 0);
         result = 31 * result + (estado ? 1 : 0);
         return result;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "id", referencedColumnName = "id")
+    public EmpleadoEntity getEmpleadosById() {
+        return empleadosById;
+    }
+
+    public void setEmpleadosById(EmpleadoEntity empleadosById) {
+        this.empleadosById = empleadosById;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "id_profesion", referencedColumnName = "id_profesion")
+    public ProfesionEntity getProfesionesByIdProfesion() {
+        return profesionesByIdProfesion;
+    }
+
+    public void setProfesionesByIdProfesion(ProfesionEntity profesionesByIdProfesion) {
+        this.profesionesByIdProfesion = profesionesByIdProfesion;
     }
 }

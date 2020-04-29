@@ -1,6 +1,7 @@
 package com.bad.planilla.backend.entity;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @Table(name = "generos", schema = "public", catalog = "dfckhqghp2ho34")
@@ -9,6 +10,7 @@ public class GeneroEntity {
     private String acronimo;
     private String nombre;
     private boolean estado;
+    private Collection<EmpleadoEntity> empleadosByIdGenero;
 
     @Id
     @Column(name = "id_genero")
@@ -72,5 +74,14 @@ public class GeneroEntity {
         result = 31 * result + (nombre != null ? nombre.hashCode() : 0);
         result = 31 * result + (estado ? 1 : 0);
         return result;
+    }
+
+    @OneToMany(mappedBy = "generosByIdGenero")
+    public Collection<EmpleadoEntity> getEmpleadosByIdGenero() {
+        return empleadosByIdGenero;
+    }
+
+    public void setEmpleadosByIdGenero(Collection<EmpleadoEntity> empleadosByIdGenero) {
+        this.empleadosByIdGenero = empleadosByIdGenero;
     }
 }

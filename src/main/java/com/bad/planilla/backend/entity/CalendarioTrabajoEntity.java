@@ -2,6 +2,7 @@ package com.bad.planilla.backend.entity;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.Collection;
 
 @Entity
 @Table(name = "calendariostrabajos", schema = "public", catalog = "dfckhqghp2ho34")
@@ -12,6 +13,7 @@ public class CalendarioTrabajoEntity {
     private boolean activo;
     private String periocidad;
     private Boolean estado;
+    private Collection<BoletaPagoEntity> boletaspagosByCalendariotrabajo;
 
     @Id
     @Column(name = "calendariotrabajo")
@@ -99,5 +101,14 @@ public class CalendarioTrabajoEntity {
         result = 31 * result + (periocidad != null ? periocidad.hashCode() : 0);
         result = 31 * result + (estado != null ? estado.hashCode() : 0);
         return result;
+    }
+
+    @OneToMany(mappedBy = "calendariostrabajosByCalendariotrabajo")
+    public Collection<BoletaPagoEntity> getBoletaspagosByCalendariotrabajo() {
+        return boletaspagosByCalendariotrabajo;
+    }
+
+    public void setBoletaspagosByCalendariotrabajo(Collection<BoletaPagoEntity> boletaspagosByCalendariotrabajo) {
+        this.boletaspagosByCalendariotrabajo = boletaspagosByCalendariotrabajo;
     }
 }
