@@ -105,7 +105,7 @@ public class CentroCostoEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "id_unidadorganizacional", referencedColumnName = "id_unidadorganizacional")
+    @JoinColumn(name = "id_unidadorganizacional", referencedColumnName = "id_unidadorganizacional", insertable=false, updatable=false)
     public UnidadOrganizacionalEntity getUnidadesorganizacionalesByIdUnidadorganizacional() {
         return unidadesorganizacionalesByIdUnidadorganizacional;
     }

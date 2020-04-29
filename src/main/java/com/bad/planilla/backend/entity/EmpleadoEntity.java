@@ -268,7 +268,7 @@ public class EmpleadoEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "id_genero", referencedColumnName = "id_genero")
+    @JoinColumn(name = "id_genero", referencedColumnName = "id_genero", insertable=false, updatable=false)
     public GeneroEntity getGenerosByIdGenero() {
         return generosByIdGenero;
     }
@@ -278,7 +278,7 @@ public class EmpleadoEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "id_estadocivil", referencedColumnName = "id_estadocivil")
+    @JoinColumn(name = "id_estadocivil", referencedColumnName = "id_estadocivil", insertable=false, updatable=false)
     public EstadoCivilEntity getEstadoscivilesByIdEstadocivil() {
         return estadoscivilesByIdEstadocivil;
     }
@@ -288,7 +288,7 @@ public class EmpleadoEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "id_puestotrabajo", referencedColumnName = "id_puestotrabajo")
+    @JoinColumn(name = "id_puestotrabajo", referencedColumnName = "id_puestotrabajo", insertable=false, updatable=false)
     public PuestoTrabajoEntity getPuestostrabajosByIdPuestotrabajo() {
         return puestostrabajosByIdPuestotrabajo;
     }
@@ -298,7 +298,7 @@ public class EmpleadoEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "emp_id", referencedColumnName = "id")
+    @JoinColumn(name = "emp_id", referencedColumnName = "id", insertable=false, updatable=false)
     public EmpleadoEntity getEmpleadosByEmpId() {
         return empleadosByEmpId;
     }
@@ -317,7 +317,7 @@ public class EmpleadoEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "id_unidadorganizacional", referencedColumnName = "id_unidadorganizacional")
+    @JoinColumn(name = "id_unidadorganizacional", referencedColumnName = "id_unidadorganizacional", insertable=false, updatable=false)
     public UnidadOrganizacionalEntity getUnidadesorganizacionalesByIdUnidadorganizacional() {
         return unidadesorganizacionalesByIdUnidadorganizacional;
     }

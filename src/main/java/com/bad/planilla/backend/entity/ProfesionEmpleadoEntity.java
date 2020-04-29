@@ -106,7 +106,7 @@ public class ProfesionEmpleadoEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "id", referencedColumnName = "id")
+    @JoinColumn(name = "id", referencedColumnName = "id", insertable=false, updatable=false)
     public EmpleadoEntity getEmpleadosById() {
         return empleadosById;
     }
@@ -116,7 +116,7 @@ public class ProfesionEmpleadoEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "id_profesion", referencedColumnName = "id_profesion")
+    @JoinColumn(name = "id_profesion", referencedColumnName = "id_profesion", insertable=false, updatable=false)
     public ProfesionEntity getProfesionesByIdProfesion() {
         return profesionesByIdProfesion;
     }

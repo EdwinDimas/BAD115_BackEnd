@@ -106,7 +106,7 @@ public class BoletaDescuentoEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "id_caralogodescuento", referencedColumnName = "id_caralogodescuento")
+    @JoinColumn(name = "id_caralogodescuento", referencedColumnName = "id_caralogodescuento", insertable=false, updatable=false)
     public CatalogoDescuentoEntity getCatalogodescuentosByIdCaralogodescuento() {
         return catalogodescuentosByIdCaralogodescuento;
     }
@@ -116,7 +116,7 @@ public class BoletaDescuentoEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "id_boletapago", referencedColumnName = "id_boletapago")
+    @JoinColumn(name = "id_boletapago", referencedColumnName = "id_boletapago", insertable=false, updatable=false)
     public BoletaPagoEntity getBoletaspagosByIdBoletapago() {
         return boletaspagosByIdBoletapago;
     }

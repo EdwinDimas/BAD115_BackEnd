@@ -126,7 +126,7 @@ public class UnidadOrganizacionalEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "id_empresa", referencedColumnName = "id_empresa")
+    @JoinColumn(name = "id_empresa", referencedColumnName = "id_empresa", insertable=false, updatable=false)
     public EmpresaEntity getEmpresasByIdEmpresa() {
         return empresasByIdEmpresa;
     }
@@ -136,7 +136,7 @@ public class UnidadOrganizacionalEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "uni_id_unidadorganizacional", referencedColumnName = "id_unidadorganizacional")
+    @JoinColumn(name = "uni_id_unidadorganizacional", referencedColumnName = "id_unidadorganizacional", insertable=false, updatable=false)
     public UnidadOrganizacionalEntity getUnidadesorganizacionalesByUniIdUnidadorganizacional() {
         return unidadesorganizacionalesByUniIdUnidadorganizacional;
     }

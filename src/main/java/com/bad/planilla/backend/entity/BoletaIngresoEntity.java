@@ -92,7 +92,7 @@ public class BoletaIngresoEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "id_ingresos", referencedColumnName = "id_ingresos")
+    @JoinColumn(name = "id_ingresos", referencedColumnName = "id_ingresos", insertable=false, updatable=false)
     public CatalogoIngresoEntity getCatalogoingresosByIdIngresos() {
         return catalogoingresosByIdIngresos;
     }
@@ -102,7 +102,7 @@ public class BoletaIngresoEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "id_boletapago", referencedColumnName = "id_boletapago")
+    @JoinColumn(name = "id_boletapago", referencedColumnName = "id_boletapago", insertable=false, updatable=false)
     public BoletaPagoEntity getBoletaspagosByIdBoletapago() {
         return boletaspagosByIdBoletapago;
     }

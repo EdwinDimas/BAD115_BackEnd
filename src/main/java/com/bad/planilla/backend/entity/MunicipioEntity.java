@@ -75,7 +75,7 @@ public class MunicipioEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "id_departmento", referencedColumnName = "id_departmento")
+    @JoinColumn(name = "id_departmento", referencedColumnName = "id_departmento", insertable=false, updatable=false)
     public DepartmentoEntity getDepartmentosByIdDepartmento() {
         return departmentosByIdDepartmento;
     }

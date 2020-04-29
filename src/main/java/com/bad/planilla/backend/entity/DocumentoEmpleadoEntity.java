@@ -106,7 +106,7 @@ public class DocumentoEmpleadoEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "id", referencedColumnName = "id")
+    @JoinColumn(name = "id", referencedColumnName = "id", insertable=false, updatable=false)
     public EmpleadoEntity getEmpleadosById() {
         return empleadosById;
     }
@@ -116,7 +116,7 @@ public class DocumentoEmpleadoEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "id_di", referencedColumnName = "id_di")
+    @JoinColumn(name = "id_di", referencedColumnName = "id_di", insertable=false, updatable=false)
     public DocumentoIdentificacionEntity getDocumentosidentificacionesByIdDi() {
         return documentosidentificacionesByIdDi;
     }

@@ -65,7 +65,7 @@ public class SalarioPuestoTrabajoEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "id_salario", referencedColumnName = "id_salario", nullable = false)
+    @JoinColumn(name = "id_salario", referencedColumnName = "id_salario", nullable = false, insertable=false, updatable=false)
     public SalarioEntity getSalariosByIdSalario() {
         return salariosByIdSalario;
     }
@@ -75,7 +75,7 @@ public class SalarioPuestoTrabajoEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "id_puestotrabajo", referencedColumnName = "id_puestotrabajo", nullable = false)
+    @JoinColumn(name = "id_puestotrabajo", referencedColumnName = "id_puestotrabajo", nullable = false, insertable=false, updatable=false)
     public PuestoTrabajoEntity getPuestostrabajosByIdPuestotrabajo() {
         return puestostrabajosByIdPuestotrabajo;
     }

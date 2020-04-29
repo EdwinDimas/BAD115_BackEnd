@@ -132,7 +132,7 @@ public class DireccionEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "id", referencedColumnName = "id")
+    @JoinColumn(name = "id", referencedColumnName = "id", insertable=false, updatable=false)
     public EmpleadoEntity getEmpleadosById() {
         return empleadosById;
     }
@@ -142,7 +142,7 @@ public class DireccionEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "id_departmento", referencedColumnName = "id_departmento")
+    @JoinColumn(name = "id_departmento", referencedColumnName = "id_departmento", insertable=false, updatable=false)
     public DepartmentoEntity getDepartmentosByIdDepartmento() {
         return departmentosByIdDepartmento;
     }
@@ -152,7 +152,7 @@ public class DireccionEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "id_municipio", referencedColumnName = "id_municipio")
+    @JoinColumn(name = "id_municipio", referencedColumnName = "id_municipio", insertable=false, updatable=false)
     public MunicipioEntity getMunicipiosByIdMunicipio() {
         return municipiosByIdMunicipio;
     }
@@ -162,7 +162,7 @@ public class DireccionEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "id_empresa", referencedColumnName = "id_empresa")
+    @JoinColumn(name = "id_empresa", referencedColumnName = "id_empresa", insertable=false, updatable=false)
     public EmpresaEntity getEmpresasByIdEmpresa() {
         return empresasByIdEmpresa;
     }

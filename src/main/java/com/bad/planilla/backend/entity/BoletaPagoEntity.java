@@ -140,7 +140,7 @@ public class BoletaPagoEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "id", referencedColumnName = "id")
+    @JoinColumn(name = "id", referencedColumnName = "id", insertable=false, updatable=false)
     public EmpleadoEntity getEmpleadosById() {
         return empleadosById;
     }
@@ -150,7 +150,7 @@ public class BoletaPagoEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "calendariotrabajo", referencedColumnName = "calendariotrabajo")
+    @JoinColumn(name = "calendariotrabajo", referencedColumnName = "calendariotrabajo", insertable=false, updatable=false)
     public CalendarioTrabajoEntity getCalendariostrabajosByCalendariotrabajo() {
         return calendariostrabajosByCalendariotrabajo;
     }
