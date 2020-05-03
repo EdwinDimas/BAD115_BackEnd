@@ -50,9 +50,7 @@ public class EmpresaRestController {
     public ResponseEntity<?> buscarEmpresa(@PathVariable int id){
         EmpresasEntity empresa = null;
         Map<String, Object> respuesta = new HashMap<>();
-      //  System.out.println("ID---:"+id);
         try {
-           // System.out.println("ENTRO A TRY=========================");
             empresa = empresaService.findById(id);
             System.out.println(empresa);
         }catch (DataAccessException e){
