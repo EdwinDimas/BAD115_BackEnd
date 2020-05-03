@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository("empresaRepository")
 public interface EmpresaRepository extends JpaRepository<EmpresaEntity,Long> {
-    public EmpresaEntity findByIdEmpresa(int id);
 }
