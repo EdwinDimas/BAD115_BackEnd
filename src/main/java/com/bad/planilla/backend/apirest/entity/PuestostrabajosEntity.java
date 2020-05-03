@@ -12,6 +12,7 @@ public class PuestostrabajosEntity {
     private String descripcion;
     private Collection<SalariospuestostrabajosEntity> salarioPuestoTrabajo;
     private boolean estado;
+   // private SalariosEntity id_salario;
 
     @Id
     @Column(name = "id_puestotrabajo", nullable = false)
@@ -76,4 +77,14 @@ public class PuestostrabajosEntity {
     public void setSalarioPuestoTrabajo(Collection<SalariospuestostrabajosEntity> salarioPuestoTrabajo) {
         this.salarioPuestoTrabajo = salarioPuestoTrabajo;
     }
+
+//    @ManyToOne
+//    @JoinColumn(name = "id_salario", referencedColumnName = "id_salario")
+//    public SalariosEntity getId_salario() {
+//        return id_salario;
+//    }
+//
+//    public void setId_salario(SalariosEntity id_salario) {
+//        this.id_salario = id_salario;
+//    }
 }
