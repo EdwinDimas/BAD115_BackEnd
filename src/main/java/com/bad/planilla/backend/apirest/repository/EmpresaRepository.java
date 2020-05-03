@@ -12,8 +12,8 @@ import javax.transaction.Transactional;
 public interface EmpresaRepository extends JpaRepository<EmpresasEntity,Long> {
     public EmpresasEntity findByIdEmpresa(int id);
 
-    @Modifying(clearAutomatically = true)
-    @Transactional
-    @Query(value ="insert into empresas values(?1,?2,?3,?4,?5,?6,?7,?8)" ,nativeQuery = true)
-    public int guardar(String representante, String nit, String nic, String paginaweb,String telefono, String email, String page,int direccion);
+//    @Modifying(clearAutomatically = true)
+//    @Transactional
+//    @Query(value ="insert into empresas values(?1,?2,?3,?4,?5,?6,?7,?8)" ,nativeQuery = true)
+//    public int guardar(String representante, String nit, String nic, String paginaweb,String telefono, String email, String page,int direccion);
 }
