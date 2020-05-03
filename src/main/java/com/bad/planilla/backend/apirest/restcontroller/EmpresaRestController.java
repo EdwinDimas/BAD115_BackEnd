@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@CrossOrigin(origins = { Constants.URL_BASE})
 @RestController
 @RequestMapping(Constants.BASE)
 public class EmpresaRestController {
