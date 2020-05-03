@@ -1,12 +1,12 @@
 package com.bad.planilla.backend.apirest.services;
 
-import com.bad.planilla.backend.entity.EmpresaEntity;
+import com.bad.planilla.backend.apirest.entity.EmpresasEntity;
 
 import java.util.List;
 
 public interface IEmpresaService {
-    public abstract List<EmpresaEntity> list();
-    public abstract EmpresaEntity save(EmpresaEntity empresa);
-    public abstract EmpresaEntity findById(int id);
+    public abstract List<EmpresasEntity> list();
+    public abstract int guardar(EmpresasEntity empresa, int direccion);
+    public abstract EmpresasEntity findById(int id);
     public abstract void deleteById(Long id);
 }

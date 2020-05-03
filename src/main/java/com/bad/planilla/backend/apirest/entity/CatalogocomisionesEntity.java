@@ -1,11 +1,12 @@
-package com.bad.planilla.backend.entity;
+package com.bad.planilla.backend.apirest.entity;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Entity
 @Table(name = "catalogocomisiones", schema = "public", catalog = "dfckhqghp2ho34")
-public class CatalogoComisionEntity {
+public class CatalogocomisionesEntity {
     private int idComision;
     private BigDecimal desde;
     private BigDecimal hasta;
@@ -13,7 +14,7 @@ public class CatalogoComisionEntity {
     private boolean estado;
 
     @Id
-    @Column(name = "id_comision")
+    @Column(name = "id_comision", nullable = false)
     public int getIdComision() {
         return idComision;
     }
@@ -23,7 +24,7 @@ public class CatalogoComisionEntity {
     }
 
     @Basic
-    @Column(name = "desde")
+    @Column(name = "desde", nullable = false, precision = 2)
     public BigDecimal getDesde() {
         return desde;
     }
@@ -33,7 +34,7 @@ public class CatalogoComisionEntity {
     }
 
     @Basic
-    @Column(name = "hasta")
+    @Column(name = "hasta", nullable = false, precision = 2)
     public BigDecimal getHasta() {
         return hasta;
     }
@@ -43,7 +44,7 @@ public class CatalogoComisionEntity {
     }
 
     @Basic
-    @Column(name = "porcentajecomision")
+    @Column(name = "porcentajecomision", nullable = false, precision = 2)
     public BigDecimal getPorcentajecomision() {
         return porcentajecomision;
     }
@@ -53,7 +54,7 @@ public class CatalogoComisionEntity {
     }
 
     @Basic
-    @Column(name = "estado")
+    @Column(name = "estado", nullable = false)
     public boolean isEstado() {
         return estado;
     }
@@ -66,26 +67,16 @@ public class CatalogoComisionEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
-        CatalogoComisionEntity that = (CatalogoComisionEntity) o;
-
-        if (idComision != that.idComision) return false;
-        if (estado != that.estado) return false;
-        if (desde != null ? !desde.equals(that.desde) : that.desde != null) return false;
-        if (hasta != null ? !hasta.equals(that.hasta) : that.hasta != null) return false;
-        if (porcentajecomision != null ? !porcentajecomision.equals(that.porcentajecomision) : that.porcentajecomision != null)
-            return false;
-
-        return true;
+        CatalogocomisionesEntity that = (CatalogocomisionesEntity) o;
+        return idComision == that.idComision &&
+                estado == that.estado &&
+                Objects.equals(desde, that.desde) &&
+                Objects.equals(hasta, that.hasta) &&
+                Objects.equals(porcentajecomision, that.porcentajecomision);
     }
 
     @Override
     public int hashCode() {
-        int result = idComision;
-        result = 31 * result + (desde != null ? desde.hashCode() : 0);
-        result = 31 * result + (hasta != null ? hasta.hashCode() : 0);
-        result = 31 * result + (porcentajecomision != null ? porcentajecomision.hashCode() : 0);
-        result = 31 * result + (estado ? 1 : 0);
-        return result;
+        return Objects.hash(idComision, desde, hasta, porcentajecomision, estado);
     }
 }
