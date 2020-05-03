@@ -1,9 +1,8 @@
 package com.bad.planilla.backend.apirest.services;
 
+import com.bad.planilla.backend.apirest.entity.EmpresasEntity;
 import com.bad.planilla.backend.apirest.repository.EmpresaRepository;
-import com.bad.planilla.backend.entity.EmpresaEntity;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,17 +13,22 @@ public class EmpresaServiceImp implements IEmpresaService {
     private EmpresaRepository emp;
 
     @Override
-    public List<EmpresaEntity> list() {
+    public List<EmpresasEntity> list() {
         return emp.findAll();
     }
 
     @Override
-    public EmpresaEntity save(EmpresaEntity empresa) {
+    public EmpresasEntity guardar(EmpresasEntity empresa) {
         return emp.save(empresa);
     }
 
     @Override
-    public EmpresaEntity findById(Long id) {
-        return emp.findById(id).orElse(null);
+    public EmpresasEntity findById(int id) {
+        return emp.findByIdEmpresa(id);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        emp.deleteById(id);
     }
 }
