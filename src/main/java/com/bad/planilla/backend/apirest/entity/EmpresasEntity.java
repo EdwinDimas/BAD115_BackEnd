@@ -40,7 +40,7 @@ public class EmpresasEntity {
     }
 
     @Basic
-    @Column(name = "nit", nullable = false, length = 15)
+    @Column(name = "nit", nullable = false, length = 20)
     public String getNit() {
         return nit;
     }
@@ -50,7 +50,7 @@ public class EmpresasEntity {
     }
 
     @Basic
-    @Column(name = "nic", nullable = false, length = 15)
+    @Column(name = "nic", nullable = false, length = 20)
     public String getNic() {
         return nic;
     }
@@ -80,7 +80,7 @@ public class EmpresasEntity {
     }
 
     @Basic
-    @Column(name = "email", nullable = false, length = 30)
+    @Column(name = "email", nullable = false, length = 50)
     public String getEmail() {
         return email;
     }
