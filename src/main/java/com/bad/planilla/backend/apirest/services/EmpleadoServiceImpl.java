@@ -1,7 +1,7 @@
 package com.bad.planilla.backend.apirest.services;
 
 import com.bad.planilla.backend.apirest.repository.EmpleadoRepository;
-import com.bad.planilla.backend.entity.EmpleadoEntity;
+import com.bad.planilla.backend.apirest.entity.EmpleadosEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,22 +15,22 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     EmpleadoRepository er;
 
     @Override
-    public List<EmpleadoEntity> list() {
+    public List<EmpleadosEntity> list() {
         return er.findAll();
     }
 
     @Override
-    public EmpleadoEntity save(EmpleadoEntity empresa) {
-        return er.save(empresa);
+    public EmpleadosEntity save(EmpleadosEntity empleado) {
+        return er.save(empleado);
     }
 
     @Override
-    public Optional<EmpleadoEntity> findById(int id) {
-        return er.findById(id);
+    public Optional<EmpleadosEntity> findById(int id_empleado) {
+        return er.findByIdEmpleado(id_empleado);
     }
 
     @Override
-    public void deleteById(int id) {
+    public void deleteById(int id_empleado) {
         //Se debe garantizar que este solo desactive el empleado
     }
 }

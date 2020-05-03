@@ -1,15 +1,15 @@
 package com.bad.planilla.backend.apirest.repository;
 
-import com.bad.planilla.backend.entity.EmpleadoEntity;
+import com.bad.planilla.backend.apirest.entity.EmpleadosEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository("empleadoRepository")
-public interface EmpleadoRepository extends JpaRepository<EmpleadoEntity, Long>{
-    public Optional<EmpleadoEntity> findById(int id);
-    public EmpleadoEntity save(EmpleadoEntity empledo);
+public interface EmpleadoRepository extends JpaRepository<EmpleadosEntity, Long>{
+    public Optional<EmpleadosEntity> findByIdEmpleado(int id_empleado);
+    public EmpleadosEntity save(EmpleadosEntity empledo);
 //    @Query("select u from User u where u.emailAddress = ?1")
 //    User findByEmailAddress(String emailAddress);
 //    @Query("select u from User u where u.firstname like %?1")
