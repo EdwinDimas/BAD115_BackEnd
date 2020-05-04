@@ -34,6 +34,8 @@ public class EmpleadosEntity {
 
     @Id
     @Column(name = "id_empleado", nullable = false)
+    @SequenceGenerator(name="empleado_id_seq", sequenceName = "empleados_id_empleado_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "empleado_id_seq")
     public int getIdEmpleado() {
         return idEmpleado;
     }
