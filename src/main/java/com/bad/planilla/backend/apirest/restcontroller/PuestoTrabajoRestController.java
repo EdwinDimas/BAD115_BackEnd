@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.List;
 
-//@CrossOrigin(origins = { Constants.URL_BASE})
+@CrossOrigin(origins = { Constants.URL_BASE})
 @RestController
 @RequestMapping(Constants.BASE)
 public class PuestoTrabajoRestController {

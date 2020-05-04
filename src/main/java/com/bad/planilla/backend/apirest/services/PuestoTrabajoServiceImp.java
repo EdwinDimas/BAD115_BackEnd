@@ -15,7 +15,7 @@ public class PuestoTrabajoServiceImp implements IPuestoTrabajoService {
 
     @Override
     public List<PuestosTrabajosEntity> list() {
-        return puestoTrabajoRepository.findAll();
+        return puestoTrabajoRepository.findAllByOrderByNombre();
     }
 
     @Override
@@ -35,6 +35,7 @@ public class PuestoTrabajoServiceImp implements IPuestoTrabajoService {
 
     @Override
     public String desactivar(int id) {
+        // Verificar que el puesto de trabajo no tenga empleados asignados
         PuestosTrabajosEntity puestoTrabajo = puestoTrabajoRepository.findByIdPuestotrabajo(id);
         if(puestoTrabajo.isEstado()) {
             puestoTrabajo.setEstado(false);

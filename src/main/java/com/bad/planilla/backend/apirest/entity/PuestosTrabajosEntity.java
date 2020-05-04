@@ -37,7 +37,7 @@ public class PuestosTrabajosEntity {
     }
 
     @Basic
-    @Column(name = "descripcion", nullable = false, length = 100)
+    @Column(name = "descripcion", nullable = false, length = 500)
     public String getDescripcion() {
         return descripcion;
     }
