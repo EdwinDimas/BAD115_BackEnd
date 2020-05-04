@@ -56,6 +56,7 @@
             <artifactId>json</artifactId>
             <version>20190722</version>
         </dependency>
+
         <dependency>
             <groupId>com.github.rkonovalov</groupId>
             <artifactId>json-ignore</artifactId>
