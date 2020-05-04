@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "salariospuestostrabajos", schema = "public", catalog = "dfckhqghp2ho34")
-public class SalariospuestostrabajosEntity {
+public class SalariosPuestosTrabajosEntity {
 
     @Id
     @Column(name="id_salariopuestotrabajo")
