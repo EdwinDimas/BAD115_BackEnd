@@ -20,6 +20,6 @@ public class DepartamentoServiceImp implements IDepartamentoService {
 
     @Override
     public DepartmentosEntity findById(int id) {
-        return null;
+        return departamentoRepository.findByIdDepartmento(id);
     }
 }
