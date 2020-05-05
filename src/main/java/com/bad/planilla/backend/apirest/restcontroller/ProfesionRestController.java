@@ -35,7 +35,7 @@ public class ProfesionRestController {
         }
     }
 
-    @PutMapping("/profesion/{id}")
+    @PutMapping("/profesion")
     public ResponseEntity<?> modificarProfesion(@RequestBody ProfesionesEntity profesion)
     {
         try{

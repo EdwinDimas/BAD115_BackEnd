@@ -11,4 +11,5 @@ public interface IProfesionService {
     public abstract ProfesionesEntity guardar(ProfesionesEntity profesion);
     public abstract ProfesionesEntity findById(int id);
     public abstract ProfesionesEntity modificar(ProfesionesEntity profesion);
+
 }
