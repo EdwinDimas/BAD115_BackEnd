@@ -20,6 +20,7 @@ import com.bad.planilla.backend.apirest.globals.Constants;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(origins = { Constants.URL_BASE})
 @RestController
 @RequestMapping(Constants.BASE)
 public class EmpleadoRestController {
@@ -77,5 +78,11 @@ public class EmpleadoRestController {
             return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/estadocivil")
+    public List listarEstadosCiviles(){return ecr.findAll(); }
+
+    @GetMapping("/genero")
+    public List listarGeneros(){return gr.findAll();}
 
 }
