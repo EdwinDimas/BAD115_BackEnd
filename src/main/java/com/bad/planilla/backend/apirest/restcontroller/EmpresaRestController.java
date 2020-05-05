@@ -11,7 +11,6 @@ import com.bad.planilla.backend.apirest.services.IDepartamentoService;
 import com.bad.planilla.backend.apirest.services.IDireccionService;
 import com.bad.planilla.backend.apirest.services.IEmpresaService;
 import com.bad.planilla.backend.apirest.services.IMunicipioService;
-import com.jfilter.filter.FieldFilterSetting;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -26,7 +25,6 @@ import java.util.Map;
 @RestController
 @RequestMapping(Constants.BASE)
 public class EmpresaRestController {
-
     @Autowired
     private IEmpresaService empresaService;
 

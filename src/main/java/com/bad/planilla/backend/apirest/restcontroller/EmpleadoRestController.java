@@ -54,6 +54,35 @@ public class EmpleadoRestController {
             @PathVariable int id_estadocivil,
             @PathVariable int id_puestotrabajo){
         return crearActualizarEmpleado(id_genero, id_estadocivil, id_puestotrabajo, empleado);
+
+    @GetMapping("/empleado")
+    public List List(){
+        return es.list();
+    }
+
+    @GetMapping("/empleado/{id}")
+    public Optional<EmpleadosEntity> getEmpleadp(@PathVariable int id){
+        return es.findById(id);
+    }
+
+    @PostMapping("/empleado")
+    public ResponseEntity<?> crearEmpleado(@RequestBody EmpleadosEntity empleado){
+        try {
+            empleado.setId_genero(gr.findByIdGenero(empleado.getId_genero().getIdGenero()));
+            empleado.setId_estadocivil(ecr.findByIdEstadocivil(empleado.getId_estadocivil().getIdEstadocivil()));
+            return new ResponseEntity<>(es.save(empleado), HttpStatus.CREATED);
+        }catch (DataAccessException e){
+            return new ResponseEntity<>(e.getCause().getCause().toString(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/empleado")
+    public ResponseEntity<?> modificarEmpleado(@RequestBody EmpleadosEntity empleado){
+        if(empleado != null){
+            return new ResponseEntity<>(es.save(empleado), HttpStatus.CREATED);
+        }else{
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PutMapping("/empleado/{id_genero}/{id_estadocivil}/{id_puestotrabajo}")
