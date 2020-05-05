@@ -12,9 +12,14 @@ public class DireccionServiceImp implements IDireccionService {
     private DireccionRepository direccionRepository;
 
     @Override
-    public int guardar(DireccionesEntity direccion, int departamento, int municipio) {
+    public DireccionesEntity guardar(DireccionesEntity direccion) {
 
-        return 0;
-        //return direccionRepository.guardar(direccion.getColonia(),direccion.getDescripcion(),direccion.isEstado(),departamento,municipio);
+        //return 0;
+        return direccionRepository.save(direccion);
+    }
+
+    @Override
+    public DireccionesEntity buscarId(int id) {
+        return direccionRepository.findByIdDireccion(id);
     }
 }

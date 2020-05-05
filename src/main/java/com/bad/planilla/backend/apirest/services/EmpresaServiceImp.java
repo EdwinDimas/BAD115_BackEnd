@@ -18,16 +18,13 @@ public class EmpresaServiceImp implements IEmpresaService {
     }
 
     @Override
-    public int guardar(EmpresasEntity empresa, int direccion) {
-
-        return emp.guardar(empresa.getRepresentante(),empresa.getNit(),empresa.getNic(),empresa.getPaginaweb(),empresa.getTelefono(),empresa.getEmail(),empresa.getPage(),direccion);
+    public EmpresasEntity guardar(EmpresasEntity empresa) {
+        return emp.save(empresa);
     }
 
     @Override
     public EmpresasEntity findById(int id) {
-
         return emp.findByIdEmpresa(id);
-        //return emp.findById(Long.valueOf(id)).orElse(null);
     }
 
     @Override
