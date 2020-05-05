@@ -53,17 +53,8 @@ public class EmpleadoRestController {
             @PathVariable int id_genero,
             @PathVariable int id_estadocivil,
             @PathVariable int id_puestotrabajo){
-        return crearActualizarEmpleado(id_genero, id_estadocivil, id_puestotrabajo, empleado);
+        return crearActualizarEmpleado(id_genero, id_estadocivil, id_puestotrabajo, empleado);}
 
-    @GetMapping("/empleado")
-    public List List(){
-        return es.list();
-    }
-
-    @GetMapping("/empleado/{id}")
-    public Optional<EmpleadosEntity> getEmpleadp(@PathVariable int id){
-        return es.findById(id);
-    }
 
     @PostMapping("/empleado")
     public ResponseEntity<?> crearEmpleado(@RequestBody EmpleadosEntity empleado){
