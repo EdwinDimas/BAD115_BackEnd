@@ -25,7 +25,6 @@ import java.util.Map;
 @RestController
 @RequestMapping(Constants.BASE)
 public class EmpresaRestController {
-
     @Autowired
     private IEmpresaService empresaService;
 
