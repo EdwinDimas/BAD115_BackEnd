@@ -6,15 +6,18 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "puestostrabajos", schema = "public", catalog = "dfckhqghp2ho34")
-public class PuestostrabajosEntity {
+public class PuestosTrabajosEntity {
     private int idPuestotrabajo;
     private String nombre;
     private String descripcion;
-    private Collection<SalariospuestostrabajosEntity> salarioPuestoTrabajo;
+    private Collection<SalariosPuestosTrabajosEntity> salarioPuestoTrabajo;
     private boolean estado;
+    private SalariosEntity id_salario;
 
     @Id
     @Column(name = "id_puestotrabajo", nullable = false)
+    @SequenceGenerator(name = "puestostrabajos_id_seq", sequenceName = "puestostrabajos_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "puestostrabajos_id_seq")
     public int getIdPuestotrabajo() {
         return idPuestotrabajo;
     }
@@ -34,7 +37,7 @@ public class PuestostrabajosEntity {
     }
 
     @Basic
-    @Column(name = "descripcion", nullable = false, length = 100)
+    @Column(name = "descripcion", nullable = false, length = 500)
     public String getDescripcion() {
         return descripcion;
     }
@@ -43,8 +46,6 @@ public class PuestostrabajosEntity {
         this.descripcion = descripcion;
     }
 
-    @Basic
-    @Column(name = "estado")
     public boolean isEstado() {
         return estado;
     }
@@ -53,11 +54,16 @@ public class PuestostrabajosEntity {
         this.estado = estado;
     }
 
+    @Basic
+    @Column(name = "estado")
+
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PuestostrabajosEntity that = (PuestostrabajosEntity) o;
+        PuestosTrabajosEntity that = (PuestosTrabajosEntity) o;
         return idPuestotrabajo == that.idPuestotrabajo &&
                 Objects.equals(nombre, that.nombre) &&
                 Objects.equals(descripcion, that.descripcion);
@@ -69,11 +75,21 @@ public class PuestostrabajosEntity {
     }
 
     @OneToMany(mappedBy = "id_puestotrabajo")
-    public Collection<SalariospuestostrabajosEntity> getSalarioPuestoTrabajo() {
+    public Collection<SalariosPuestosTrabajosEntity> getSalarioPuestoTrabajo() {
         return salarioPuestoTrabajo;
     }
 
-    public void setSalarioPuestoTrabajo(Collection<SalariospuestostrabajosEntity> salarioPuestoTrabajo) {
+    public void setSalarioPuestoTrabajo(Collection<SalariosPuestosTrabajosEntity> salarioPuestoTrabajo) {
         this.salarioPuestoTrabajo = salarioPuestoTrabajo;
+    }
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_salario", referencedColumnName = "id_salario")
+    public SalariosEntity getId_salario() {
+        return id_salario;
+    }
+
+    public void setId_salario(SalariosEntity id_salario) {
+        this.id_salario = id_salario;
     }
 }

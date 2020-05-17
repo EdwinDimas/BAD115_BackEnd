@@ -1,11 +1,10 @@
 package com.bad.planilla.backend.apirest.entity;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
 @Table(name = "salariospuestostrabajos", schema = "public", catalog = "dfckhqghp2ho34")
-public class SalariospuestostrabajosEntity {
+public class SalariosPuestosTrabajosEntity {
 
     @Id
     @Column(name="id_salariopuestotrabajo")
@@ -19,7 +18,7 @@ public class SalariospuestostrabajosEntity {
 
     @ManyToOne
     @JoinColumn(name = "id_puestotrabajo", referencedColumnName = "id_puestotrabajo", nullable = false)
-    private PuestostrabajosEntity id_puestotrabajo;
+    private PuestosTrabajosEntity id_puestotrabajo;
 
     @Basic
     @Column(name = "estado")
@@ -41,11 +40,11 @@ public class SalariospuestostrabajosEntity {
         this.id_salario = id_salario;
     }
 
-    public PuestostrabajosEntity getId_puestotrabajo() {
+    public PuestosTrabajosEntity getId_puestotrabajo() {
         return id_puestotrabajo;
     }
 
-    public void setId_puestotrabajo(PuestostrabajosEntity id_puestotrabajo) {
+    public void setId_puestotrabajo(PuestosTrabajosEntity id_puestotrabajo) {
         this.id_puestotrabajo = id_puestotrabajo;
     }
 
