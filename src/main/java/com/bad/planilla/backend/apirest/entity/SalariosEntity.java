@@ -14,6 +14,8 @@ public class SalariosEntity {
 
     @Id
     @Column(name = "id_salario", nullable = false)
+    @SequenceGenerator(name="salarios_id_seq",sequenceName = "salarios_id_seq",allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "salarios_id_seq")
     public int getIdSalario() {
         return idSalario;
     }

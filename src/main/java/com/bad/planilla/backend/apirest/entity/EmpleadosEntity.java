@@ -25,7 +25,7 @@ public class EmpleadosEntity {
     private GenerosEntity id_genero;
     private EstadoscivilesEntity id_estadocivil;
     private DireccionesEntity id_direccion;
-    private PuestostrabajosEntity id_puestotrabajo;
+    private PuestosTrabajosEntity id_puestotrabajo;
     private UnidadesorganizacionalesEntity id_unidadorganizacional;
     private Collection<EmpleadoscatalogodescuentosEntity> empleadoCatalogoDescuentos;
     private Collection<EmpleadoscatalogoingresosEntity> empleadoCatalogoIngresos;
@@ -34,6 +34,8 @@ public class EmpleadosEntity {
 
     @Id
     @Column(name = "id_empleado", nullable = false)
+    @SequenceGenerator(name="empleado_id_seq", sequenceName = "empleados_id_empleado_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "empleado_id_seq")
     public int getIdEmpleado() {
         return idEmpleado;
     }
@@ -223,11 +225,11 @@ public class EmpleadosEntity {
 
     @ManyToOne
     @JoinColumn(name = "id_puestotrabajo", referencedColumnName = "id_puestotrabajo")
-    public PuestostrabajosEntity getId_puestotrabajo() {
+    public PuestosTrabajosEntity getId_puestotrabajo() {
         return id_puestotrabajo;
     }
 
-    public void setId_puestotrabajo(PuestostrabajosEntity id_puestotrabajo) {
+    public void setId_puestotrabajo(PuestosTrabajosEntity id_puestotrabajo) {
         this.id_puestotrabajo = id_puestotrabajo;
     }
 
