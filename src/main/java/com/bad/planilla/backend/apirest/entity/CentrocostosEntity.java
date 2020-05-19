@@ -13,6 +13,7 @@ public class CentrocostosEntity {
     private BigDecimal montoactual;
     private Date periodo;
     private UnidadesorganizacionalesEntity id_unidadorganizacional;
+    private int idUnidadPadre;
     private boolean estado;
 
     @Id
@@ -64,8 +65,19 @@ public class CentrocostosEntity {
     public void setEstado(boolean estado) {
         this.estado = estado;
     }
+    
+    
+    @Basic
+    @Column(name="id_unidadpadre")
+    public int getIdUnidadPadre() {
+		return idUnidadPadre;
+	}
 
-    @Override
+	public void setIdUnidadPadre(int idUnidadPadre) {
+		this.idUnidadPadre = idUnidadPadre;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

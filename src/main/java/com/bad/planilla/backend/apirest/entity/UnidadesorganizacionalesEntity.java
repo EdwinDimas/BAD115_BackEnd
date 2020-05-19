@@ -1,10 +1,14 @@
 package com.bad.planilla.backend.apirest.entity;
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.Objects;
 
 @Entity
 @Table(name = "unidadesorganizacionales", schema = "public", catalog = "dfckhqghp2ho34")
+@JsonIgnoreProperties(value = { "id_empresa" })
 public class UnidadesorganizacionalesEntity {
     private int idUnidadorganizacional;
     private Integer unidadOrganizacionalSuperior;
