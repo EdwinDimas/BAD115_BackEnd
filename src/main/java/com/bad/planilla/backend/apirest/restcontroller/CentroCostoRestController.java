@@ -62,7 +62,7 @@ public class CentroCostoRestController {
 			respuesta.put("mensaje", "El registro con ID:" + idCosto + " no existe en la DB");
 			return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.NOT_FOUND);
 		}
-
+		
 		return new ResponseEntity<CentrocostosEntity>(costo, HttpStatus.OK);
 
 	}
@@ -71,11 +71,22 @@ public class CentroCostoRestController {
 	public ResponseEntity<?> crearCosto(@RequestBody CentrocostosEntity costo,@PathVariable int idUnidad){
 		CentrocostosEntity costoCreado = null;
 		Map<String, Object> respuesta = new HashMap<>();
+		
+		UnidadesorganizacionalesEntity unidad = uos.findById(idUnidad);
+		if (unidad == null) {
+			respuesta.put("mensaje", "La unidad con ID:" + idUnidad + " no existe en la DB");
+			return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.NOT_FOUND);
+		}
+		
+		int unidadPadre = (unidad.getUnidadOrganizacionalSuperior() == 0 ) ? 0: unidad.getUnidadOrganizacionalSuperior(); 
+		
 		java.sql.Date date = new java.sql.Date(Calendar.getInstance().getTime().getTime());
 		try {
 			costo.setEstado(true);
 			costo.setMontoactual(costo.getMonto());
 			costo.setPeriodo(date);
+			costo.setId_unidadorganizacional(unidad);
+			costo.setIdUnidadPadre(unidadPadre);
 			costoCreado = cs.guardar(costo);
 		} catch (DataAccessException e) {
 			respuesta.put("mensaje", "Error al realizar el ingreso del registro en la DB!!");
@@ -97,9 +108,20 @@ public class CentroCostoRestController {
 			respuesta.put("mensaje", "Error al obtener el registro empresa con ID:" + idCosto);
             return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.NOT_FOUND);
 		}
+		
+		UnidadesorganizacionalesEntity unidad = uos.findById(idUnidad);
+		if (unidad == null) {
+			respuesta.put("mensaje", "La unidad con ID:" + idUnidad + " no existe en la DB");
+			return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.NOT_FOUND);
+		}
+		
+		int unidadPadre = (unidad.getUnidadOrganizacionalSuperior() == 0 ) ? 0: unidad.getUnidadOrganizacionalSuperior(); 
+		
 		try {
 			costoActual.setMonto(costo.getMonto());
 			costoActual.setMontoactual(costo.getMonto());
+			costoActual.setId_unidadorganizacional(unidad);
+			costoActual.setIdUnidadPadre(unidadPadre);
 			costoEditado = cs.guardar(costoActual);
 		} catch (DataAccessException e) {
 			respuesta.put("mensaje", "Error al actualizar el registro en la DB con ID:" + idCosto + " !!");
