@@ -24,7 +24,7 @@ public class UnidadOrganizacionalServiceImp implements IUnidadOrganizacionalServ
 
     @Override
     public UnidadesorganizacionalesEntity findById(int id) {
-        return null;
+        return unidadOrganizacionalRepository.findByIdUnidadorganizacional(id);
     }
 
     @Override

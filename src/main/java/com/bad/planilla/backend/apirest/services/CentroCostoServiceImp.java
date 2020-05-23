@@ -1,5 +1,6 @@
 package com.bad.planilla.backend.apirest.services;
 
+import java.sql.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,14 +33,20 @@ public class CentroCostoServiceImp implements ICentroCostoService{
 	}
 
 	@Override
-	public List<CentrocostosEntity> costosHijos(int id) {
+	public List<CentrocostosEntity> costosHijos(int id,int periodo) {
 		
-		return ccr.findByIdUnidadPadre(id);
+		return ccr.findByIdUnidadPadre(id,periodo);
 	}
 
 	@Override
-	public List<CentrocostosEntity> costosUnidadMayor() {
+	public List<CentrocostosEntity> costosUnidadMayor(int periodo) {
 		
-		return ccr.findByUnidadMayor();
+		return ccr.findByUnidadMayor(periodo);
+	}
+
+	@Override
+	public CentrocostosEntity costoByUnidadAndPeriodo(int idUnidad, int periodo) {
+		
+		return ccr.findByUnidadAndPeriodo(idUnidad,periodo);
 	}
 }

@@ -1,6 +1,9 @@
 package com.bad.planilla.backend.apirest.restcontroller;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,20 +34,59 @@ public class CentroCostoRestController {
 
 	@Autowired
 	private ICentroCostoService cs;
-	
+
 	@Autowired
 	private IUnidadOrganizacionalService uos;
-	
+
+//	@GetMapping("/unidad_organizacional/list/{id}")
+//	public List<UnidadesorganizacionalesEntity> listUnidades(@PathVariable int id){	
+//		return (id==-1)?uos.listUnidadMayor(true):uos.listUnidadesSuperiores(id);
+//	}
 
 	@GetMapping("/unidad_organizacional/list/{id}")
-	public List<UnidadesorganizacionalesEntity> listUnidades(@PathVariable int id){	
-		return (id==-1)?uos.listUnidadMayor(true):uos.listUnidadesSuperiores(id);
+	public ResponseEntity<?> listUnidades(@PathVariable int id) {
+		Map<String, Object> respuesta = new HashMap<>();
+		List<UnidadesorganizacionalesEntity> unidades = null;
+		unidades = (id == -1) ? uos.listUnidadMayor(true) : uos.listUnidadesSuperiores(id);
+		if (unidades == null) {
+			respuesta.put("mensaje", "La unidad con ID:" + id + " no existe en la DB");
+			return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.NOT_FOUND);
+		}
+		BigDecimal presupuestoTotal = null, presupuestoAsignado = null, presupuestoDisponible = null;
+
+		// java.sql.Date date = new
+		// java.sql.Date(Calendar.getInstance().getTime().getTime());
+		//AQUI COMIENZA IF DE -1
+		if(id !=-1) {
+		CentrocostosEntity costoPadre = cs.costoByUnidadAndPeriodo(id, LocalDate.now().getYear());
+		presupuestoTotal = costoPadre.getMonto();
+		presupuestoDisponible = costoPadre.getMontoactual();
+		presupuestoAsignado = (presupuestoTotal.subtract(presupuestoDisponible));
+		}
+		//AQUI TERMINA IF DE -1
+
+		respuesta.put("unidades", unidades);
+		respuesta.put("unidadPadre", id);
+		respuesta.put("presupuestoTotal", presupuestoTotal);
+		respuesta.put("presupuestoDisponible", presupuestoDisponible);
+		respuesta.put("presupuestoAsignado", presupuestoAsignado);
+		return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/centro_costo/list/{id}")
 	public List<CentrocostosEntity> listCostos(@PathVariable int id) {
-		return (id == -1) ? cs.costosUnidadMayor():cs.costosHijos(id);
+		int año = LocalDate.now().getYear();
+		return (id == -1) ? cs.costosUnidadMayor(año) : cs.costosHijos(id,año);
 	}
+
+//	@GetMapping("/centro_costo/list/{id}")
+//	public ResponseEntity<?> listCostos(@PathVariable int id){
+//		Map<String, Object> respuesta = new HashMap<>();
+//		List<CentrocostosEntity> costos = null;
+//		costos = (id==-1) ? cs.costosUnidadMayor():cs.costosHijos(id);
+//		respuesta.put("costos",costos);
+//		return new ResponseEntity<List<CentrocostosEntity>>(costos, HttpStatus.OK);
+//	}
 
 	@GetMapping("/centro_costo/{idCosto}")
 	public ResponseEntity<?> buscarCosto(@PathVariable int idCosto) {
@@ -62,61 +104,75 @@ public class CentroCostoRestController {
 			respuesta.put("mensaje", "El registro con ID:" + idCosto + " no existe en la DB");
 			return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.NOT_FOUND);
 		}
-		
+
 		return new ResponseEntity<CentrocostosEntity>(costo, HttpStatus.OK);
 
 	}
-	
+
 	@PostMapping("/centro_costo/{idUnidad}")
-	public ResponseEntity<?> crearCosto(@RequestBody CentrocostosEntity costo,@PathVariable int idUnidad){
-		CentrocostosEntity costoCreado = null;
+	public ResponseEntity<?> crearCosto(@RequestBody CentrocostosEntity costo, @PathVariable int idUnidad) {
+		CentrocostosEntity costoCreado = null,costoPadre=null,costoExiste=null;
 		Map<String, Object> respuesta = new HashMap<>();
-		
+		int año = LocalDate.now().getYear();
 		UnidadesorganizacionalesEntity unidad = uos.findById(idUnidad);
 		if (unidad == null) {
 			respuesta.put("mensaje", "La unidad con ID:" + idUnidad + " no existe en la DB");
 			return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.NOT_FOUND);
 		}
 		
-		int unidadPadre = (unidad.getUnidadOrganizacionalSuperior() == 0 ) ? 0: unidad.getUnidadOrganizacionalSuperior(); 
-		
-		java.sql.Date date = new java.sql.Date(Calendar.getInstance().getTime().getTime());
+		costoExiste = cs.costoByUnidadAndPeriodo(idUnidad, año);
+		if(costoExiste !=null) {
+			respuesta.put("mensaje", "El presupuesto asignado a unidad con ID:"+idUnidad+", ya existe para el periodo actual!!");
+			return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.BAD_REQUEST);
+		}
+
+		int unidadPadre = (unidad.isUnidadmayor()) ? 0 : unidad.getUnidadOrganizacionalSuperior();
 		try {
-			costo.setEstado(true);
+			if(!unidad.isUnidadmayor()) {
+				costoPadre = cs.costoByUnidadAndPeriodo(unidad.getUnidadOrganizacionalSuperior(),año);
+				if(costoPadre.getMontoactual().compareTo(costo.getMonto()) == -1) {
+					respuesta.put("mensaje", "El presupuesto asignado es mayor que el presupuesto disponible!!");
+					return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.BAD_REQUEST);
+				}
+				costoPadre.setMontoactual(costoPadre.getMontoactual().subtract(costo.getMonto()));
+				costoPadre = cs.guardar(costoPadre);
+			}
 			costo.setMontoactual(costo.getMonto());
-			costo.setPeriodo(date);
+			costo.setEstado(true);
+			costo.setPeriodo(año);
 			costo.setId_unidadorganizacional(unidad);
 			costo.setIdUnidadPadre(unidadPadre);
 			costoCreado = cs.guardar(costo);
 		} catch (DataAccessException e) {
 			respuesta.put("mensaje", "Error al realizar el ingreso del registro en la DB!!");
-            respuesta.put("error", e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
-            return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.INTERNAL_SERVER_ERROR);
+			respuesta.put("error", e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
+
 		respuesta.put("mensaje", "El registro ha sido creado con exito!!");
-        respuesta.put("costo", costoCreado);
-        return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.CREATED);
-	} 
-	
+		respuesta.put("costo", costoCreado);
+		return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.CREATED);
+	}
+
 	@PutMapping("/centro_costo/{idUnidad}/{idCosto}")
-	public ResponseEntity<?> editarCosto(@RequestBody CentrocostosEntity costo, @PathVariable int idUnidad, @PathVariable int idCosto){
-		CentrocostosEntity costoEditado = null,costoActual=null;
+	public ResponseEntity<?> editarCosto(@RequestBody CentrocostosEntity costo, @PathVariable int idUnidad,
+			@PathVariable int idCosto) {
+		CentrocostosEntity costoEditado = null, costoActual = null;
 		Map<String, Object> respuesta = new HashMap<>();
 		costoActual = cs.findById(idCosto);
-		if (costoActual==null) {
+		if (costoActual == null) {
 			respuesta.put("mensaje", "Error al obtener el registro empresa con ID:" + idCosto);
-            return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.NOT_FOUND);
+			return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.NOT_FOUND);
 		}
-		
+
 		UnidadesorganizacionalesEntity unidad = uos.findById(idUnidad);
 		if (unidad == null) {
 			respuesta.put("mensaje", "La unidad con ID:" + idUnidad + " no existe en la DB");
 			return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.NOT_FOUND);
 		}
-		
-		int unidadPadre = (unidad.getUnidadOrganizacionalSuperior() == 0 ) ? 0: unidad.getUnidadOrganizacionalSuperior(); 
-		
+
+		int unidadPadre = (unidad.isUnidadmayor()) ? 0 : unidad.getUnidadOrganizacionalSuperior();
+
 		try {
 			costoActual.setMonto(costo.getMonto());
 			costoActual.setMontoactual(costo.getMonto());
@@ -125,59 +181,53 @@ public class CentroCostoRestController {
 			costoEditado = cs.guardar(costoActual);
 		} catch (DataAccessException e) {
 			respuesta.put("mensaje", "Error al actualizar el registro en la DB con ID:" + idCosto + " !!");
-            respuesta.put("error", e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
-            return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.INTERNAL_SERVER_ERROR);
+			respuesta.put("error", e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		 respuesta.put("mensaje", "El registro ha sido actualizado con exito!!");
-	     respuesta.put("costo", costoEditado);
-	     return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.CREATED);
+		respuesta.put("mensaje", "El registro ha sido actualizado con exito!!");
+		respuesta.put("costo", costoEditado);
+		return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.CREATED);
 	}
-	
+
 	@PutMapping("/centro_costo/desactivar/{idCosto}")
-	public ResponseEntity<?> desactivarCosto(@PathVariable int idCosto){
+	public ResponseEntity<?> desactivarCosto(@PathVariable int idCosto) {
 		Map<String, Object> respuesta = new HashMap<>();
-		CentrocostosEntity costoEditado = null,costoActual=null;
-		List<CentrocostosEntity> costoHijo=null;
+		CentrocostosEntity costoEditado = null, costoActual = null;
+		List<CentrocostosEntity> costoHijo = null;
 		costoActual = cs.findById(idCosto);
-		
+
 		if (costoActual == null) {
 			respuesta.put("mensaje", "Error al obtener el registro empresa con ID:" + idCosto);
-            return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.NOT_FOUND);
+			return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.NOT_FOUND);
 		}
-		
-		costoHijo = cs.costosHijos(costoActual.getId_unidadorganizacional().getIdUnidadorganizacional());
-		if (costoHijo != null ) {
-			respuesta.put("mensaje", "El costo con registro con ID:" + idCosto+" tiene costos hijos, no se puede eliminar");
-            return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.BAD_REQUEST);
+		int año = LocalDate.now().getYear();
+		costoHijo = cs.costosHijos(costoActual.getId_unidadorganizacional().getIdUnidadorganizacional(),año);
+		if (!costoHijo.isEmpty()) {
+			respuesta.put("mensaje",
+					"El costo con registro con ID:" + idCosto + " tiene costos hijos, no se puede eliminar");
+			return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.BAD_REQUEST);
 		}
-		
+
 		try {
 			costoActual.setEstado(false);
 			costoEditado = cs.guardar(costoActual);
 		} catch (DataAccessException e) {
 			respuesta.put("mensaje", "Error al desactivar el registro en la DB con ID:" + idCosto + " !!");
-            respuesta.put("error", e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
-            return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.INTERNAL_SERVER_ERROR);
+			respuesta.put("error", e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
+
 		respuesta.put("mensaje", "El registro ha sido desactivado con exito!!");
-	     respuesta.put("costo", costoEditado);
-	     return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.CREATED);
-		
+		respuesta.put("costo", costoEditado);
+		return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.CREATED);
+
 	}
-	
+
 	@PutMapping("/centro_costo/descontar/{idCosto}")
-	public ResponseEntity<?> descontarCosto(@PathVariable int idCosto){
+	public ResponseEntity<?> descontarCosto(@PathVariable int idCosto) {
 		Map<String, Object> respuesta = new HashMap<>();
-		
+
 		return null;
 	}
-	
-	
-	
-	
-	
-	
-	
 
 }
