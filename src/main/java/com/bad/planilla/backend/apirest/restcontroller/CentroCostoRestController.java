@@ -56,14 +56,14 @@ public class CentroCostoRestController {
 
 		// java.sql.Date date = new
 		// java.sql.Date(Calendar.getInstance().getTime().getTime());
-		//AQUI COMIENZA IF DE -1
-		if(id !=-1) {
-		CentrocostosEntity costoPadre = cs.costoByUnidadAndPeriodo(id, LocalDate.now().getYear());
-		presupuestoTotal = costoPadre.getMonto();
-		presupuestoDisponible = costoPadre.getMontoactual();
-		presupuestoAsignado = (presupuestoTotal.subtract(presupuestoDisponible));
+		// AQUI COMIENZA IF DE -1
+		if (id != -1) {
+			CentrocostosEntity costoPadre = cs.costoByUnidadAndPeriodo(id, LocalDate.now().getYear());
+			presupuestoTotal = costoPadre.getMonto();
+			presupuestoDisponible = costoPadre.getMontoactual();
+			presupuestoAsignado = (presupuestoTotal.subtract(presupuestoDisponible));
 		}
-		//AQUI TERMINA IF DE -1
+		// AQUI TERMINA IF DE -1
 
 		respuesta.put("unidades", unidades);
 		respuesta.put("unidadPadre", id);
@@ -76,7 +76,7 @@ public class CentroCostoRestController {
 	@GetMapping("/centro_costo/list/{id}")
 	public List<CentrocostosEntity> listCostos(@PathVariable int id) {
 		int año = LocalDate.now().getYear();
-		return (id == -1) ? cs.costosUnidadMayor(año) : cs.costosHijos(id,año);
+		return (id == -1) ? cs.costosUnidadMayor(año) : cs.costosHijos(id, año);
 	}
 
 //	@GetMapping("/centro_costo/list/{id}")
@@ -111,7 +111,7 @@ public class CentroCostoRestController {
 
 	@PostMapping("/centro_costo/{idUnidad}")
 	public ResponseEntity<?> crearCosto(@RequestBody CentrocostosEntity costo, @PathVariable int idUnidad) {
-		CentrocostosEntity costoCreado = null,costoPadre=null,costoExiste=null;
+		CentrocostosEntity costoCreado = null, costoPadre = null, costoExiste = null;
 		Map<String, Object> respuesta = new HashMap<>();
 		int año = LocalDate.now().getYear();
 		UnidadesorganizacionalesEntity unidad = uos.findById(idUnidad);
@@ -119,18 +119,19 @@ public class CentroCostoRestController {
 			respuesta.put("mensaje", "La unidad con ID:" + idUnidad + " no existe en la DB");
 			return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.NOT_FOUND);
 		}
-		
+
 		costoExiste = cs.costoByUnidadAndPeriodo(idUnidad, año);
-		if(costoExiste !=null) {
-			respuesta.put("mensaje", "El presupuesto asignado a unidad con ID:"+idUnidad+", ya existe para el periodo actual!!");
+		if (costoExiste != null) {
+			respuesta.put("mensaje",
+					"El presupuesto asignado a unidad con ID:" + idUnidad + ", ya existe para el periodo actual!!");
 			return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.BAD_REQUEST);
 		}
 
 		int unidadPadre = (unidad.isUnidadmayor()) ? 0 : unidad.getUnidadOrganizacionalSuperior();
 		try {
-			if(!unidad.isUnidadmayor()) {
-				costoPadre = cs.costoByUnidadAndPeriodo(unidad.getUnidadOrganizacionalSuperior(),año);
-				if(costoPadre.getMontoactual().compareTo(costo.getMonto()) == -1) {
+			if (!unidad.isUnidadmayor()) {
+				costoPadre = cs.costoByUnidadAndPeriodo(unidad.getUnidadOrganizacionalSuperior(), año);
+				if (costoPadre.getMontoactual().compareTo(costo.getMonto()) == -1) {
 					respuesta.put("mensaje", "El presupuesto asignado es mayor que el presupuesto disponible!!");
 					return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.BAD_REQUEST);
 				}
@@ -157,8 +158,9 @@ public class CentroCostoRestController {
 	@PutMapping("/centro_costo/{idUnidad}/{idCosto}")
 	public ResponseEntity<?> editarCosto(@RequestBody CentrocostosEntity costo, @PathVariable int idUnidad,
 			@PathVariable int idCosto) {
-		CentrocostosEntity costoEditado = null, costoActual = null;
+		CentrocostosEntity costoEditado = null, costoActual = null, costoPadre = null;
 		Map<String, Object> respuesta = new HashMap<>();
+		int año = LocalDate.now().getYear();
 		costoActual = cs.findById(idCosto);
 		if (costoActual == null) {
 			respuesta.put("mensaje", "Error al obtener el registro empresa con ID:" + idCosto);
@@ -174,6 +176,17 @@ public class CentroCostoRestController {
 		int unidadPadre = (unidad.isUnidadmayor()) ? 0 : unidad.getUnidadOrganizacionalSuperior();
 
 		try {
+
+			if (costoActual.getIdUnidadPadre() != 0) {
+				costoPadre = cs.costoByUnidadAndPeriodo(costoActual.getIdUnidadPadre(), año);
+
+				costoPadre.setMontoactual(costoPadre.getMontoactual().add(costoActual.getMonto()));
+				costoPadre = cs.guardar(costoPadre);
+
+				costoPadre.setMontoactual(costoPadre.getMontoactual().subtract(costo.getMonto()));
+				costoPadre = cs.guardar(costoPadre);
+			}
+
 			costoActual.setMonto(costo.getMonto());
 			costoActual.setMontoactual(costo.getMonto());
 			costoActual.setId_unidadorganizacional(unidad);
@@ -192,16 +205,15 @@ public class CentroCostoRestController {
 	@PutMapping("/centro_costo/desactivar/{idCosto}")
 	public ResponseEntity<?> desactivarCosto(@PathVariable int idCosto) {
 		Map<String, Object> respuesta = new HashMap<>();
-		CentrocostosEntity costoEditado = null, costoActual = null;
+		CentrocostosEntity costoEditado = null, costoActual = null, costoPadre = null;
 		List<CentrocostosEntity> costoHijo = null;
 		costoActual = cs.findById(idCosto);
-
+		int año = LocalDate.now().getYear();
 		if (costoActual == null) {
 			respuesta.put("mensaje", "Error al obtener el registro empresa con ID:" + idCosto);
 			return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.NOT_FOUND);
 		}
-		int año = LocalDate.now().getYear();
-		costoHijo = cs.costosHijos(costoActual.getId_unidadorganizacional().getIdUnidadorganizacional(),año);
+		costoHijo = cs.costosHijos(costoActual.getId_unidadorganizacional().getIdUnidadorganizacional(), año);
 		if (!costoHijo.isEmpty()) {
 			respuesta.put("mensaje",
 					"El costo con registro con ID:" + idCosto + " tiene costos hijos, no se puede eliminar");
@@ -209,6 +221,12 @@ public class CentroCostoRestController {
 		}
 
 		try {
+			if (costoActual.getIdUnidadPadre() != 0) {
+				costoPadre = cs.costoByUnidadAndPeriodo(costoActual.getIdUnidadPadre(), año);
+				costoPadre.setMontoactual(costoPadre.getMontoactual().add(costoActual.getMonto()));
+				costoPadre = cs.guardar(costoPadre);
+			}
+
 			costoActual.setEstado(false);
 			costoEditado = cs.guardar(costoActual);
 		} catch (DataAccessException e) {
