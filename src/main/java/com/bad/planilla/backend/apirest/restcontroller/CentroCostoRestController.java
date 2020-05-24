@@ -48,17 +48,19 @@ public class CentroCostoRestController {
 		Map<String, Object> respuesta = new HashMap<>();
 		List<UnidadesorganizacionalesEntity> unidades = null;
 		unidades = (id == -1) ? uos.listUnidadMayor(true) : uos.listUnidadesSuperiores(id);
-		if (unidades == null) {
-			respuesta.put("mensaje", "La unidad con ID:" + id + " no existe en la DB");
-			return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.NOT_FOUND);
+		System.out.println("unidades:"+unidades);
+		if (unidades.isEmpty()) {
+			respuesta.put("mensaje", "La unidad padre con ID:" + id + " no existe en la DB");
 		}
 		BigDecimal presupuestoTotal = null, presupuestoAsignado = null, presupuestoDisponible = null;
 
-		// java.sql.Date date = new
-		// java.sql.Date(Calendar.getInstance().getTime().getTime());
 		// AQUI COMIENZA IF DE -1
 		if (id != -1) {
 			CentrocostosEntity costoPadre = cs.costoByUnidadAndPeriodo(id, LocalDate.now().getYear());
+			if (costoPadre==null) {
+				respuesta.put("mensaje", "El costo padre con ID:" + id + " no existe en la DB");
+				return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.NOT_FOUND);
+			}	
 			presupuestoTotal = costoPadre.getMonto();
 			presupuestoDisponible = costoPadre.getMontoactual();
 			presupuestoAsignado = (presupuestoTotal.subtract(presupuestoDisponible));
