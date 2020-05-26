@@ -15,12 +15,12 @@ public class UnidadesorganizacionalesEntity {
 
     @Id
     @Column(name = "id_unidadorganizacional", nullable = false)
+    @SequenceGenerator(name = "unidadorganizacional_id_seq", sequenceName = "unidadorganizacional_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "unidadorganizacional_id_seq")
+
     public int getIdUnidadorganizacional() {
         return idUnidadorganizacional;
     }
-    //Aun no unidadesorganizacionales
-    @SequenceGenerator(name = "unidadesorganizacionales_id_seq", sequenceName = "unidadesorganizacionales_id_seq", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "unidadesorganizacionales_id_seq")
     public void setIdUnidadorganizacional(int idUnidadorganizacional) {
         this.idUnidadorganizacional = idUnidadorganizacional;
     }

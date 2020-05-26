@@ -18,6 +18,9 @@ public class CalendariostrabajosEntity {
 
     @Id
     @Column(name = "calendariotrabajo", nullable = false)
+    @SequenceGenerator(name = "calendariotrabajo_seq", sequenceName = "calendariotrabajo_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "calendariotrabajo_seq")
+
     public int getCalendariotrabajo() {
         return calendariotrabajo;
     }
