@@ -19,17 +19,22 @@ public class UnidadOrganizacionalServiceImp implements IUnidadOrganizacionalServ
 
     @Override
     public UnidadesorganizacionalesEntity guardar(UnidadesorganizacionalesEntity unidadOrganizacional) {
-        return null;
+        return unidadOrganizacionalRepository.save(unidadOrganizacional);
     }
 
     @Override
     public UnidadesorganizacionalesEntity findById(int id) {
-        return null;
+        return unidadOrganizacionalRepository.findByIdUnidadorganizacional(id);
     }
 
     @Override
     public UnidadesorganizacionalesEntity modificar(UnidadesorganizacionalesEntity unidadOrganizacional) {
-        return null;
+        return unidadOrganizacionalRepository.save(unidadOrganizacional);
+    }
+
+    @Override
+    public void eliminar(int id) {
+
     }
 
     @Override

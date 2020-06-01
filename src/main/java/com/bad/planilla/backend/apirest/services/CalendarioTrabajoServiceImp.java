@@ -6,31 +6,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-@Service("calendarioTrabajoServicd")
+@Service("calendarioTrabajoService")
 public class CalendarioTrabajoServiceImp implements ICalendarioTrabajoService{
 
     @Autowired
     private CalendarioTrabajoRepository calendarioTrabajoRepository;
 
-
     @Override
     public List<CalendariostrabajosEntity> list() {
-        return null;
+        return calendarioTrabajoRepository.findByOrderByPeriocidad();
     }
 
     @Override
     public CalendariostrabajosEntity guardar(CalendariostrabajosEntity calendariotra) {
-        return null;
+        return calendarioTrabajoRepository.save(calendariotra);
     }
 
     @Override
     public CalendariostrabajosEntity findById(int id) {
-        return null;
+        return calendarioTrabajoRepository.findByCalendariotrabajo(id);
     }
 
     @Override
     public CalendariostrabajosEntity modificar(CalendariostrabajosEntity calendariotra) {
-        return null;
+        return calendarioTrabajoRepository.save(calendariotra);
+    }
+
+    @Override
+    public void eliminar(int id) {
+        calendarioTrabajoRepository.deleteById(id);
     }
 
     @Override

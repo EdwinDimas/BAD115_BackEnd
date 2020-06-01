@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository("unidadOrganizacional")
+@Repository("unidadOrganizacionalRepository")
 public interface UnidadOrganizacionalRepository extends JpaRepository<UnidadesorganizacionalesEntity, Integer> {
     public UnidadesorganizacionalesEntity findByIdUnidadorganizacional(int id);
     public List<UnidadesorganizacionalesEntity> findAllByOrderByNombre();
