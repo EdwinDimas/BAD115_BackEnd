@@ -165,7 +165,7 @@ public class CentroCostoRestController {
 		int año = LocalDate.now().getYear();
 		costoActual = cs.findById(idCosto);
 		if (costoActual == null) {
-			respuesta.put("mensaje", "Error al obtener el registro empresa con ID:" + idCosto);
+			respuesta.put("mensaje", "Error al obtener el registro costo con ID:" + idCosto);
 			return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.NOT_FOUND);
 		}
 
@@ -184,7 +184,11 @@ public class CentroCostoRestController {
 
 				costoPadre.setMontoactual(costoPadre.getMontoactual().add(costoActual.getMonto()));
 				costoPadre = cs.guardar(costoPadre);
-
+				
+				if (costoPadre.getMontoactual().compareTo(costo.getMonto()) == -1) {
+					respuesta.put("mensaje", "El presupuesto asignado es mayor que el presupuesto disponible!!");
+					return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.BAD_REQUEST);
+				}
 				costoPadre.setMontoactual(costoPadre.getMontoactual().subtract(costo.getMonto()));
 				costoPadre = cs.guardar(costoPadre);
 			}
@@ -243,11 +247,33 @@ public class CentroCostoRestController {
 
 	}
 
+	//SE ASUME POR EL MOMENTO QUE AL MOMENTO DE IMPRIMIR LA BOLETA SE DESCONTARA EL MONTO CORRESPONDIENTE DEL PRESUPUESTO
+	//SE DEBE PASARA COO PARAMETRO EL SALARIO BASE + INGRESOS DEL EMPLEADO
 	@PutMapping("/centro_costo/descontar/{idCosto}")
-	public ResponseEntity<?> descontarCosto(@PathVariable int idCosto) {
+	public ResponseEntity<?> descontarCosto(@PathVariable int idUnidad,float salario) {
 		Map<String, Object> respuesta = new HashMap<>();
-
-		return null;
+		CentrocostosEntity costoUnidad = cs.costoByUnidadAndPeriodo(idUnidad, LocalDate.now().getYear()); 
+		if (costoUnidad == null) {
+			respuesta.put("mensaje", "La unidad con ID:" + idUnidad + " no existe en la DB");
+			return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.NOT_FOUND);
+		}
+		BigDecimal bDecimalSalario = new BigDecimal(Float.toString(salario));
+		//DESCUENTO A LA UNIDAD CORRESPONDIENTE
+		try {
+			if (costoUnidad.getMontoactual().compareTo(bDecimalSalario) == -1) {
+				respuesta.put("mensaje", "El salario ha descontar es mayor que el presupuesto disponible en la unidad organizacional!!");
+				return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.BAD_REQUEST);
+			}else {
+				costoUnidad.setMontoactual(costoUnidad.getMontoactual().subtract(bDecimalSalario));
+				costoUnidad = cs.guardar(costoUnidad);
+			}
+		} catch (DataAccessException e) {
+			respuesta.put("mensaje", "Error al descontar el salario!!");
+			respuesta.put("error", e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		respuesta.put("mensaje", "El salario ha sido descontado de la unidad organizacional con exito!!");
+		return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.CREATED);
 	}
 
 }
