@@ -39,6 +39,13 @@ public class UnidadOrganizacionalServiceImp implements IUnidadOrganizacionalServ
 
     @Override
     public String desactivar(int id) {
-        return null;
+        UnidadesorganizacionalesEntity unidadOrganizacional = unidadOrganizacionalRepository.findByIdUnidadorganizacional(id);
+        if(unidadOrganizacional.isEstado()) {
+            unidadOrganizacional.setEstado(false);
+            unidadOrganizacionalRepository.save(unidadOrganizacional);
+            return "Unidad desactivada";
+        } else {
+            return "Unidad esta desactivada";
+        }
     }
 }
