@@ -2,6 +2,7 @@ package com.bad.planilla.backend.apirest.restcontroller;
 
 import com.bad.planilla.backend.apirest.entity.UnidadesorganizacionalesEntity;
 import com.bad.planilla.backend.apirest.globals.Constants;
+import com.bad.planilla.backend.apirest.services.IEmpresaService;
 import com.bad.planilla.backend.apirest.services.IUnidadOrganizacionalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -18,15 +19,38 @@ public class UnidadOrganizacionalRestController {
 
     @Autowired
     private IUnidadOrganizacionalService unidadOrganizacionalService;
+    @Autowired
+    private IEmpresaService empresaService;
+
     //Mostrar lista
     @GetMapping("/departamentos")
     public List<UnidadesorganizacionalesEntity>list(){
         return unidadOrganizacionalService.list();
     }
 
-    //Crear
+//    //Crear
+//    @PostMapping("/departamentos/{id_empresa}/{unidadOrganizacionalSuperior}")
+//    public ResponseEntity<?> crearUnidadorganizacional(
+//            @RequestBody UnidadesorganizacionalesEntity unidad,
+//            @PathVariable int id_empresa,
+//            @PathVariable int unidadOrganizacionalSuperior){
+//        return crearActualizarUnidad(id_empresa, unidadOrganizacionalSuperior);
+//    }
+
+//    @PostMapping("/departamentos")
+//    public ResponseEntity<?> crearUnidadorganizacional(@RequestBody UnidadesorganizacionalesEntity  unidadOrganizacional){
+//        try {
+//            unidadOrganizacional.setEstado(true);
+//            //unidadOrganizacional.setId_empresa(empresaR.findByIdEmpresa(unidadOrganizacional.getId_empresa().getIdEmpresa()));
+//            //unidadOrganizacional.setUnidadOrganizacionalSuperior(uni);
+//            return new ResponseEntity<>(unidadOrganizacionalService.guardar(unidadOrganizacional), HttpStatus.CREATED);
+//        } catch (DataAccessException e) {
+//            return new ResponseEntity<>(e.getCause().getCause().toString(), HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
     @PostMapping("/departamentos")
     public ResponseEntity<?> crearUnidadorganizacional(@RequestBody UnidadesorganizacionalesEntity  unidadOrganizacional){
+
         try {
             unidadOrganizacional.setEstado(true);
             return new ResponseEntity<>(unidadOrganizacionalService.guardar(unidadOrganizacional), HttpStatus.CREATED);
