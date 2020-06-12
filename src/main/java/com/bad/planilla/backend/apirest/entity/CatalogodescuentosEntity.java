@@ -12,7 +12,7 @@ public class CatalogodescuentosEntity {
     private boolean estado;
 
     @Id
-    @Column(name = "id_caralogodescuento", nullable = false)
+    @Column(name = "id_catalogodescuento", nullable = false)
     public int getId_caralogodescuento() {
         return id_caralogodescuento;
     }

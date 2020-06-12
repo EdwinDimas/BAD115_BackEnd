@@ -21,7 +21,7 @@ public class EmpleadosEntity {
     private boolean comision;
     private Collection<BoletaspagosEntity> boletaPago;
     private Collection<DocumentosempleadosEntity> documentosempleado;
-    private Collection<EmpleadodescuentosotrosEntity> empleadoDescuentosOtros;
+    private Collection<EmpleadosDescuentosEntity> empleadoDescuentosOtros;
     private GenerosEntity id_genero;
     private EstadoscivilesEntity id_estadocivil;
     private DireccionesEntity id_direccion;
@@ -185,11 +185,11 @@ public class EmpleadosEntity {
     }
 
     @OneToMany(mappedBy = "id_empleado")
-    public Collection<EmpleadodescuentosotrosEntity> getEmpleadoDescuentosOtros() {
+    public Collection<EmpleadosDescuentosEntity> getEmpleadoDescuentosOtros() {
         return empleadoDescuentosOtros;
     }
 
-    public void setEmpleadoDescuentosOtros(Collection<EmpleadodescuentosotrosEntity> empleadoDescuentosOtros) {
+    public void setEmpleadoDescuentosOtros(Collection<EmpleadosDescuentosEntity> empleadoDescuentosOtros) {
         this.empleadoDescuentosOtros = empleadoDescuentosOtros;
     }
 
