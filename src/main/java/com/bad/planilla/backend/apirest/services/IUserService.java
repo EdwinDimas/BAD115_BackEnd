@@ -11,4 +11,6 @@ public interface IUserService {
 	public UsersEntity buscar(int id);
 	public UsersEntity buscarUsername(String username);
 	public UsersEntity buscarEmail(String email);
+	public UsersEntity buscarUsernameEmail(String username,String email);
+	public UsersEntity get_usuario(int idUser);
 }

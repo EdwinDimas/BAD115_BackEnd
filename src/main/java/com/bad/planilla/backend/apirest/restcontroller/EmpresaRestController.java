@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -39,11 +41,14 @@ public class EmpresaRestController {
 
     private RegexGeneral regexGeneral = new RegexGeneral();
     //@FieldFilterSetting(className = EmpresasEntity.class, fields = {"municipiosByIdDepartmento"})
+    //@Secured("ROLE_EMPRESA_READ")
+    @PreAuthorize("isAuthenticated() and hasAuthority('EMPRESA_READ')")
     @GetMapping("/empresa")
     public List<EmpresasEntity> list(){
         return empresaService.list();
     }
-
+    
+    @PreAuthorize("isAuthenticated() and hasAuthority('EMPRESA_READ')")
     @GetMapping("/empresa/{id}")
     public ResponseEntity<?> buscarEmpresa(@PathVariable int id){
         EmpresasEntity empresa = null;
@@ -64,6 +69,7 @@ public class EmpresaRestController {
         return new ResponseEntity<EmpresasEntity>(empresa,HttpStatus.OK);
     }
 
+    @PreAuthorize("isAuthenticated() and hasAuthority('EMPRESA_CREATE')")
     @PostMapping("/empresa/crear")
     public ResponseEntity<?> crearEmpresa(@RequestBody EmpresaModel empresa){
         EmpresasEntity empresaCreada=null;
@@ -132,7 +138,7 @@ public class EmpresaRestController {
     }
 
 
-
+    @PreAuthorize("isAuthenticated() and hasAuthority('EMPRESA_UPDATE')")
     @PutMapping("/empresa/{idEmpresa}/{idDireccion}")
     public ResponseEntity<?> modificarEmpresa(@RequestBody EmpresaModel empresa,@PathVariable int idEmpresa,@PathVariable int idDireccion){
         EmpresasEntity empresaModificar = null,empresaActual = empresaService.findById(idEmpresa);
@@ -200,6 +206,8 @@ public class EmpresaRestController {
         return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.CREATED);
     }
 
+    @PreAuthorize("isAuthenticated() and hasAuthority('EMPRESA_READ')")
+    @Secured("EMPRESA_READ")
     @GetMapping("/empresa/departamento/municipios")
     public List<DepartmentosEntity> departamentosMunicipios(){
         List<DepartmentosEntity> departmentoEntityList = departamentoService.listDepartamentos();

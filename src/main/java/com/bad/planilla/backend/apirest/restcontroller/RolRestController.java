@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +25,7 @@ import com.bad.planilla.backend.apirest.globals.Constants;
 import com.bad.planilla.backend.apirest.services.IPermisoService;
 import com.bad.planilla.backend.apirest.services.IRolService;
 import com.bad.planilla.backend.apirest.services.IUserService;
+import com.bad.planilla.backend.apirest.services.UserServiceImp;
 
 @CrossOrigin(origins = { Constants.URL_BASE })
 @RestController
@@ -37,23 +39,28 @@ public class RolRestController {
 	private IPermisoService ps;
 	
 	@Autowired
-	private IUserService us;
+	private UserServiceImp us;
 	
+	@PreAuthorize("isAuthenticated() and hasAuthority('PERMISOS_READ')")
 	@GetMapping("/permisos/list")
 	public List<PermisosEntity> listPermisos(){
 		return ps.list();
 	}
+	
 	//PARA SERVICE DE USER EN FRONTEND
+	@PreAuthorize("isAuthenticated() and hasAuthority('ROL_USER_READ')")
 	@GetMapping("/rol/list/user")
 	public List<RolesEntity> listTrue(){
 		return rs.listEstadoTrue();
 	}
 	
+	@PreAuthorize("isAuthenticated() and hasAuthority('ROL_READ')")
 	@GetMapping("/rol/list")
 	public List<RolesEntity> list(){
 		return rs.list();
 	}
 	
+	@PreAuthorize("isAuthenticated() and hasAuthority('ROL_READ')")
 	@GetMapping("/rol/{idRol}")
 	public ResponseEntity<?> buscarRol(@PathVariable int idRol){
 		Map<String, Object> respuesta = new HashMap<>();
@@ -74,6 +81,7 @@ public class RolRestController {
 		return new ResponseEntity<RolesEntity>(rol, HttpStatus.OK);
 	}
 	
+	@PreAuthorize("isAuthenticated() and hasAuthority('ROL_CREATE')")
 	@PostMapping("/rol")
 	public ResponseEntity<?> crearRol(@RequestBody RolesEntity rol){
 		RolesEntity rolcreado = null;
@@ -90,6 +98,7 @@ public class RolRestController {
 		return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.CREATED);
 	}
 	
+	@PreAuthorize("isAuthenticated() and hasAuthority('ROL_UPDATE')")
 	@PutMapping("/rol/{idRol}")
 	public ResponseEntity<?> editarRol(@RequestBody RolesEntity rol,@PathVariable int idRol){
 		RolesEntity rolEditado = null,rolActual=null;
@@ -115,6 +124,7 @@ public class RolRestController {
 		return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.CREATED);
 	}
 	
+	@PreAuthorize("isAuthenticated() and hasAuthority('ROL_DISABLED')")
 	@PutMapping("/rol/desactivar/{idRol}")
 	public ResponseEntity<?> desactivarRol(@PathVariable int idRol){
 		RolesEntity rolActual=null,rolDesactivado=null;

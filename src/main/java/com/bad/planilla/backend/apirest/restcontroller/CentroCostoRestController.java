@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,6 +44,7 @@ public class CentroCostoRestController {
 //		return (id==-1)?uos.listUnidadMayor(true):uos.listUnidadesSuperiores(id);
 //	}
 
+	@PreAuthorize("isAuthenticated() and hasAuthority('UNIDAD_ORGANIZACIONAL_READ')")
 	@GetMapping("/unidad_organizacional/list/{id}")
 	public ResponseEntity<?> listUnidades(@PathVariable int id) {
 		Map<String, Object> respuesta = new HashMap<>();
@@ -90,6 +92,7 @@ public class CentroCostoRestController {
 //		return new ResponseEntity<List<CentrocostosEntity>>(costos, HttpStatus.OK);
 //	}
 
+	@PreAuthorize("isAuthenticated() and hasAuthority('CENTRO_COSTO_READ')")
 	@GetMapping("/centro_costo/{idCosto}")
 	public ResponseEntity<?> buscarCosto(@PathVariable int idCosto) {
 		Map<String, Object> respuesta = new HashMap<>();
@@ -111,6 +114,7 @@ public class CentroCostoRestController {
 
 	}
 
+	@PreAuthorize("isAuthenticated() and hasAuthority('CENTRO_COSTO_CREATE')")
 	@PostMapping("/centro_costo/{idUnidad}")
 	public ResponseEntity<?> crearCosto(@RequestBody CentrocostosEntity costo, @PathVariable int idUnidad) {
 		CentrocostosEntity costoCreado = null, costoPadre = null, costoExiste = null;
@@ -157,6 +161,7 @@ public class CentroCostoRestController {
 		return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.CREATED);
 	}
 
+	@PreAuthorize("isAuthenticated() and hasAuthority('CENTRO_COSTO_UPDATE')")
 	@PutMapping("/centro_costo/{idUnidad}/{idCosto}")
 	public ResponseEntity<?> editarCosto(@RequestBody CentrocostosEntity costo, @PathVariable int idUnidad,
 			@PathVariable int idCosto) {
@@ -208,6 +213,7 @@ public class CentroCostoRestController {
 		return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.CREATED);
 	}
 
+	@PreAuthorize("isAuthenticated() and hasAuthority('CENTRO_COSTO_DISABLED')")
 	@PutMapping("/centro_costo/desactivar/{idCosto}")
 	public ResponseEntity<?> desactivarCosto(@PathVariable int idCosto) {
 		Map<String, Object> respuesta = new HashMap<>();
@@ -249,6 +255,7 @@ public class CentroCostoRestController {
 
 	//SE ASUME POR EL MOMENTO QUE AL MOMENTO DE IMPRIMIR LA BOLETA SE DESCONTARA EL MONTO CORRESPONDIENTE DEL PRESUPUESTO
 	//SE DEBE PASARA COO PARAMETRO EL SALARIO BASE + INGRESOS DEL EMPLEADO
+	@PreAuthorize("isAuthenticated() and hasAuthority('CENTRO_COSTO_DISCOUNT')")
 	@PutMapping("/centro_costo/descontar/{idCosto}")
 	public ResponseEntity<?> descontarCosto(@PathVariable int idUnidad,float salario) {
 		Map<String, Object> respuesta = new HashMap<>();

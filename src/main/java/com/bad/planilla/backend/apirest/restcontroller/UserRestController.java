@@ -3,15 +3,24 @@ package com.bad.planilla.backend.apirest.restcontroller;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 
 import org.omg.CORBA.UserException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bad.planilla.backend.apirest.entity.UsersEntity;
 import com.bad.planilla.backend.apirest.globals.Constants;
 import com.bad.planilla.backend.apirest.services.IUserService;
-import com.google.common.hash.Hashing;
+import com.bad.planilla.backend.apirest.services.UserServiceImp;
 
 @CrossOrigin(origins = { Constants.URL_BASE })
 @RestController
@@ -34,11 +43,16 @@ public class UserRestController {
 	@Autowired
 	private IUserService us;
 	
+	@Autowired
+	private JavaMailSender javaMailSender;
+	
+	@PreAuthorize("isAuthenticated() and hasAuthority('USER_READ')")
 	@GetMapping("/users/list")
 	public List<UsersEntity> list(){
 		return us.list();
 	}
 	
+	@PreAuthorize("isAuthenticated() and hasAuthority('USER_READ')")
 	@GetMapping("/user/{idUser}")
 	public ResponseEntity<?> buscar(@PathVariable int idUser){
 		Map<String, Object> respuesta = new HashMap<>();
@@ -57,6 +71,7 @@ public class UserRestController {
 		return new ResponseEntity<UsersEntity>(usuario, HttpStatus.OK);
 	}
 	
+	@PreAuthorize("isAuthenticated() and hasAuthority('USER_CREATE')")
 	@PostMapping("/user")
 	public ResponseEntity<?> crearUsuario(@RequestBody UsersEntity usuario) throws NoSuchAlgorithmException{
 		Map<String, Object> respuesta = new HashMap<>();
@@ -72,11 +87,13 @@ public class UserRestController {
 			respuesta.put("mensaje", "Ya existe un usuario con el email:"+usuario.getEmail());
 			return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.BAD_REQUEST);
 		}
+		
 		try {
-			String sha256hex = Hashing.sha256()
-					  .hashString(usuario.getPassword(), StandardCharsets.UTF_8)
-					  .toString();
-			usuario.setPassword(sha256hex);
+//			String sha256hex = Hashing.sha256()
+//					  .hashString(usuario.getPassword(), StandardCharsets.UTF_8)
+//					  .toString();
+			BCryptPasswordEncoder pe = new BCryptPasswordEncoder(12,new SecureRandom());
+			usuario.setPassword(pe.encode(usuario.getPassword()));
 			usuarioCreado = us.guardar(usuario);
 		} catch (DataAccessException e) {
 			respuesta.put("mensaje", "Error al insertar el nuevo registro");
@@ -89,23 +106,26 @@ public class UserRestController {
 		return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.CREATED);
 	}
 	
+	@PreAuthorize("isAuthenticated() and hasAuthority('USER_UPDATE')")
 	@PutMapping("/user/{idUsuario}")
 	public ResponseEntity<?> editarUsuario(@RequestBody UsersEntity usuario, @PathVariable int idUsuario) throws NoSuchAlgorithmException{
 		Map<String, Object> respuesta = new HashMap<>();
 		UsersEntity usuarioEditado = null,usuarioActual=null;
 		usuarioActual = us.buscar(idUsuario);
 		if (usuarioActual == null) {
-			respuesta.put("mensaje", "Error al obtener el registro rol con ID:" + idUsuario);
+			respuesta.put("mensaje", "Error al obtener el registro  con ID:" + idUsuario);
 			return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.NOT_FOUND);
 		}
 		try {
 			usuarioActual.setUsername(usuario.getUsername());
 			usuarioActual.setEmail(usuario.getEmail());
 			if (!usuario.getPassword().isEmpty()) {
-				MessageDigest digest = MessageDigest.getInstance("SHA-256");
-				byte[] hash = digest.digest(usuario.getPassword().getBytes(StandardCharsets.UTF_8));
-				usuarioActual.setPassword(new String(hash));
+//				MessageDigest digest = MessageDigest.getInstance("SHA-256");
+//				byte[] hash = digest.digest(usuario.getPassword().getBytes(StandardCharsets.UTF_8));
+				BCryptPasswordEncoder pe = new BCryptPasswordEncoder(12,new SecureRandom());
+				usuarioActual.setPassword(pe.encode(usuario.getPassword()));
 			}
+			usuarioActual.setRoles(usuario.getRoles());
 			usuarioEditado = us.guardar(usuarioActual);
 		} catch (DataAccessException e) {
 			respuesta.put("mensaje", "Error al editar el registro");
@@ -116,11 +136,11 @@ public class UserRestController {
 		respuesta.put("mensaje", "El registro ha sido editado con exito!!");
 		respuesta.put("usuario",usuarioEditado);
 		return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.CREATED);
-
 	}
 	
+	@PreAuthorize("isAuthenticated() and hasAuthority('USER_DISABLED')")
 	@PutMapping("/user/desactivar/{idUsuario}")
-	public ResponseEntity<?> desactivarUsuario(@PathVariable int idUsuario){
+	public ResponseEntity<?> desactivarUsuario(@PathVariable int idUsuario) throws MessagingException{
 		Map<String, Object> respuesta = new HashMap<>();
 		UsersEntity usuarioDesactivado = null,usuarioActual=null;
 		usuarioActual = us.buscar(idUsuario);
@@ -140,9 +160,76 @@ public class UserRestController {
 			respuesta.put("error", e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		String mensaje = usuarioDesactivado.isEstado() ? "El registro ha sido ACTIVADO con exito!!" : "El registro ha sido DESACTIVADO con exito!!";
-		respuesta.put("mensaje", mensaje);
+
+		String mensaje = usuarioDesactivado.isEstado() ? "ACTIVADO" : "DESACTIVADO";
+		MimeMessage msg = javaMailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(msg, true);
+		helper.setTo(usuarioDesactivado.getEmail());
+		helper.setSubject("ESTADO DE CUENTA:"+mensaje);
+		helper.setText("<h1>Su cuenta en sistema Planilla ha sido "+mensaje+"</h1>", true);
+		helper.setText("<h3>Para mayor información consulte con administrador mediante este correo: rr14059@ues.edu.sv</h3>", true);
+		try {
+			javaMailSender.send(msg);
+		} catch (MailException ex) {
+			// Simple Log para errores msg
+			System.err.println(ex.getMessage());
+		}
+		
+		respuesta.put("mensaje","El registro ha sido "+ mensaje+" con éxito!!");
 		respuesta.put("usuario",usuarioDesactivado);
 		return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.CREATED);
 	}
+	
+	
+	//BUSCAR Y ACTUALIZAR USUARIO GENERAL GET AND PUT
+	@PreAuthorize("isAuthenticated() and hasAuthority('USER_READ')")
+	@GetMapping("/user/general/{idUser}")
+	public ResponseEntity<?> buscarUsuario(@PathVariable int idUser){
+		Map<String, Object> respuesta = new HashMap<>();
+		UsersEntity usuario = null;
+		try {
+			usuario = us.get_usuario(idUser);
+		} catch (DataAccessException e) {
+			respuesta.put("mensaje", "Error al realizar la busqueda del registro con ID:" + idUser);
+			respuesta.put("error", e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		if (usuario==null) {
+			respuesta.put("mensaje", "El registro con ID:" + idUser + " no existe en la DB");
+			return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<UsersEntity>(usuario, HttpStatus.OK);
+	}
+	
+	@PreAuthorize("isAuthenticated() and hasAuthority('USER_UPDATE')")
+	@PutMapping("/user/general/{idUsuario}")
+	public ResponseEntity<?> editarUsuarioGeneral(@RequestBody UsersEntity usuario, @PathVariable int idUsuario) throws NoSuchAlgorithmException{
+		Map<String, Object> respuesta = new HashMap<>();
+		UsersEntity usuarioEditado = null,usuarioActual=null;
+		usuarioActual = us.buscar(idUsuario);
+		if (usuarioActual == null) {
+			respuesta.put("mensaje", "Error al obtener su pérfi");
+			return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.NOT_FOUND);
+		}
+		try {
+			usuarioActual.setUsername(usuario.getUsername());
+			usuarioActual.setEmail(usuario.getEmail());
+			if (!usuario.getPassword().isEmpty()) {
+				BCryptPasswordEncoder pe = new BCryptPasswordEncoder(12,new SecureRandom());
+				usuarioActual.setPassword(pe.encode(usuario.getPassword()));
+			}
+			usuarioEditado = us.guardar(usuarioActual);
+		} catch (DataAccessException e) {
+			respuesta.put("mensaje", "Error al editar su pérfil");
+			respuesta.put("error", e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.INTERNAL_SERVER_ERROR);	
+		}
+		
+		respuesta.put("mensaje", "Su perfíl ha sido editado con éxito!!");
+		respuesta.put("usuario",usuarioEditado);
+		return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.CREATED);
+	}
+	
+
+	
 }

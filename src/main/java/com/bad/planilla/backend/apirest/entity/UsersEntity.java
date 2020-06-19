@@ -13,6 +13,10 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotBlank;
+
+import org.hibernate.validator.constraints.UniqueElements;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -20,10 +24,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name="users",schema = "public", catalog = "dfckhqghp2ho34")
+@Table(name="users",schema = "public", catalog = "dfckhqghp2ho34"
+,uniqueConstraints= {@UniqueConstraint(columnNames="username"),@UniqueConstraint(columnNames="email")})
 @Getter
 @Setter
-public class UsersEntity {
+public class UsersEntity extends AuditModel{
 	private static final long serialVersionUID = 1L;
 	@Id
 	@Column(name="id_user",nullable=false)
@@ -31,12 +36,15 @@ public class UsersEntity {
 	@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="user_id_seq")
 	private int idUser;
 	
+	@NotBlank
 	@Column(name="username", unique=true, length=50,nullable=false)
 	private String username;
 	
+	@NotBlank
 	@Column(name="email", unique=true, length=60, nullable=false)
 	private String email;
 	
+	@NotBlank
 	@Column(name="password",length=256,nullable=false)
 	private String password;
 	
