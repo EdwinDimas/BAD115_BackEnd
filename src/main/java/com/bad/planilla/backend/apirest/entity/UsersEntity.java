@@ -49,7 +49,7 @@ public class UsersEntity extends AuditModel{
 	private String password;
 	
 	@Column(name="estado")
-	private boolean estado = true;
+	private boolean estado;
 	
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name="users_roles")

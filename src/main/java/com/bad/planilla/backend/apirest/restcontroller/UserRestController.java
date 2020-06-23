@@ -12,6 +12,8 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.omg.CORBA.UserException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -45,6 +47,9 @@ public class UserRestController {
 	
 	@Autowired
 	private JavaMailSender javaMailSender;
+	
+	private Logger logger = LoggerFactory.getLogger(UserRestController.class);
+
 	
 	@PreAuthorize("isAuthenticated() and hasAuthority('USER_READ')")
 	@GetMapping("/users/list")
@@ -94,6 +99,7 @@ public class UserRestController {
 //					  .toString();
 			BCryptPasswordEncoder pe = new BCryptPasswordEncoder(12,new SecureRandom());
 			usuario.setPassword(pe.encode(usuario.getPassword()));
+			usuario.setEstado(true);
 			usuarioCreado = us.guardar(usuario);
 		} catch (DataAccessException e) {
 			respuesta.put("mensaje", "Error al insertar el nuevo registro");
@@ -167,7 +173,7 @@ public class UserRestController {
 		helper.setTo(usuarioDesactivado.getEmail());
 		helper.setSubject("ESTADO DE CUENTA:"+mensaje);
 		helper.setText("<h1>Su cuenta en sistema Planilla ha sido "+mensaje+"</h1>", true);
-		helper.setText("<h3>Para mayor información consulte con administrador mediante este correo: rr14059@ues.edu.sv</h3>", true);
+		helper.setText("<h3>Para mayor información consulte con administrador mediante este correo:salvadorramos394@gmail.com</h3>", true);
 		try {
 			javaMailSender.send(msg);
 		} catch (MailException ex) {
@@ -230,6 +236,46 @@ public class UserRestController {
 		return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.CREATED);
 	}
 	
-
+	@GetMapping("/user/bloqueado/{username}")
+	public ResponseEntity<?> usuarioBloqueado(@PathVariable String username){
+		Map<String, Object> respuesta = new HashMap<>();
+		UsersEntity usuario = us.buscarUsername(username);
+		if (usuario == null) {
+			//respuesta.put("mensaje", "Error, usuario o password invalidos");
+			logger.error("Error, no existe el usuario");
+		}
+		try {
+			try {
+				//MENSAJE ENVIADO A USUARIO
+				MimeMessage msg = javaMailSender.createMimeMessage();
+				MimeMessageHelper helper = new MimeMessageHelper(msg, true);
+				helper.setTo(usuario.getEmail());
+				helper.setSubject("ESTADO DE CUENTA");
+				helper.setText("<h1>Su cuenta en sistema Planilla ha sido DESACTIVADA por tener un máximo de 3 errores en iniciar sesión</h1>"
+						+ "<h1>Se ha enviado un email al administrador para que este pueda activar su cuenta</h1>"
+						+ "<h3>Para mayor información consulte con administrador mediante este correo: rr14059@ues.edu.sv</h3>", true);
+				javaMailSender.send(msg);
+				 
+				//MENSAJE ENVIADO A ADMINISTRADOR
+				MimeMessage msgAdmin = javaMailSender.createMimeMessage();
+				MimeMessageHelper helperAdmin = new MimeMessageHelper(msgAdmin, true);
+				helperAdmin.setTo("rr14059@ues.edu.sv");
+				helperAdmin.setSubject("ESTADO DE CUENTA PETICIÓN ACTIVAR");
+				helperAdmin.setText("<h1>Cuenta de usuario con Username:"+usuario.getUsername()+" y con Email:"+usuario.getEmail()+" ha exedido los 3 intentos permitidos, su cuenta se ha bloqueado</h1>"
+						+ "<h1>Se solicita que su cuenta sea desbloqueada</h1>", true);
+				javaMailSender.send(msgAdmin);
+				usuario.setEstado(false);
+				usuario = us.guardar(usuario);
+				} catch (MessagingException e) {
+				    System.err.println(e.getMessage());
+				}
+			
+		} catch (DataAccessException e) {
+			logger.error( e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
+		}
+		
+		respuesta.put("mensaje", "Su cuenta de usuario"+usuario.getUsername()+" ha sido bloqueada, se ha enviado un mensaje a administrador y a su email:"+usuario.getEmail()+"!!");
+		return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.CREATED);
+	}
 	
 }
