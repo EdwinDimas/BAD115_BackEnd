@@ -5,19 +5,21 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
-@Table(name = "empleadodescuentosotros", schema = "public", catalog = "dfckhqghp2ho34")
-public class EmpleadodescuentosotrosEntity {
+@Table(name = "empleadosdescuentos", schema = "public", catalog = "dfckhqghp2ho34")
+public class EmpleadosDescuentosEntity {
     private int idDescotros;
     private BigDecimal descuento;
     private BigDecimal desde;
     private BigDecimal hasta;
     private BigDecimal monto;
-    private DescuentosotrosEntity id_descuentootros;
+    private DescuentosEntity id_descuento;
     private EmpleadosEntity id_empleado;
     private boolean estado;
 
     @Id
     @Column(name = "id_descotros", nullable = false)
+    @SequenceGenerator(name = "empleadodescuento_id_seq", sequenceName = "empleadodescuento_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "empleadodescuento_id_seq")
     public int getIdDescotros() {
         return idDescotros;
     }
@@ -27,7 +29,7 @@ public class EmpleadodescuentosotrosEntity {
     }
 
     @Basic
-    @Column(name = "descuento", nullable = false, precision = 2)
+    @Column(name = "descuento", precision = 2)
     public BigDecimal getDescuento() {
         return descuento;
     }
@@ -37,7 +39,7 @@ public class EmpleadodescuentosotrosEntity {
     }
 
     @Basic
-    @Column(name = "desde", nullable = false, precision = 2)
+    @Column(name = "desde", precision = 2)
     public BigDecimal getDesde() {
         return desde;
     }
@@ -47,7 +49,7 @@ public class EmpleadodescuentosotrosEntity {
     }
 
     @Basic
-    @Column(name = "hasta", nullable = false, precision = 2)
+    @Column(name = "hasta", precision = 2)
     public BigDecimal getHasta() {
         return hasta;
     }
@@ -57,7 +59,7 @@ public class EmpleadodescuentosotrosEntity {
     }
 
     @Basic
-    @Column(name = "monto", nullable = false, precision = 2)
+    @Column(name = "monto", precision = 2)
     public BigDecimal getMonto() {
         return monto;
     }
@@ -80,7 +82,7 @@ public class EmpleadodescuentosotrosEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        EmpleadodescuentosotrosEntity that = (EmpleadodescuentosotrosEntity) o;
+        EmpleadosDescuentosEntity that = (EmpleadosDescuentosEntity) o;
         return idDescotros == that.idDescotros &&
                 Objects.equals(descuento, that.descuento) &&
                 Objects.equals(desde, that.desde) &&
@@ -94,13 +96,13 @@ public class EmpleadodescuentosotrosEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "id_descuentootros", referencedColumnName = "id_descuentootros")
-    public DescuentosotrosEntity getId_descuentootros() {
-        return id_descuentootros;
+    @JoinColumn(name = "id_descuento", referencedColumnName = "id_descuento")
+    public DescuentosEntity getId_descuento() {
+        return id_descuento;
     }
 
-    public void setId_descuentootros(DescuentosotrosEntity id_descuentootros) {
-        this.id_descuentootros = id_descuentootros;
+    public void setId_descuento(DescuentosEntity id_descuento) {
+        this.id_descuento = id_descuento;
     }
 
     @ManyToOne
