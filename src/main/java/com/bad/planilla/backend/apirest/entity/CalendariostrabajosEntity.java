@@ -9,12 +9,11 @@ import java.util.Objects;
 @Table(name = "calendariostrabajos", schema = "public", catalog = "dfckhqghp2ho34")
 public class CalendariostrabajosEntity {
     private int calendariotrabajo;
-    private BigDecimal desde;
-    private BigDecimal hasta;
     private boolean activo;
     private String periocidad;
     private Collection<BoletaspagosEntity> boletaspagosByCalendariotrabajo;
     private boolean estado;
+    private Integer periodo;
 
     @Id
     @Column(name = "calendariotrabajo", nullable = false)
@@ -24,26 +23,6 @@ public class CalendariostrabajosEntity {
 
     public void setCalendariotrabajo(int calendariotrabajo) {
         this.calendariotrabajo = calendariotrabajo;
-    }
-
-    @Basic
-    @Column(name = "desde", nullable = false, precision = 2)
-    public BigDecimal getDesde() {
-        return desde;
-    }
-
-    public void setDesde(BigDecimal desde) {
-        this.desde = desde;
-    }
-
-    @Basic
-    @Column(name = "hasta", nullable = false, precision = 2)
-    public BigDecimal getHasta() {
-        return hasta;
-    }
-
-    public void setHasta(BigDecimal hasta) {
-        this.hasta = hasta;
     }
 
     @Basic
@@ -83,14 +62,12 @@ public class CalendariostrabajosEntity {
         CalendariostrabajosEntity that = (CalendariostrabajosEntity) o;
         return calendariotrabajo == that.calendariotrabajo &&
                 activo == that.activo &&
-                Objects.equals(desde, that.desde) &&
-                Objects.equals(hasta, that.hasta) &&
                 Objects.equals(periocidad, that.periocidad);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(calendariotrabajo, desde, hasta, activo, periocidad);
+        return Objects.hash(calendariotrabajo, activo, periocidad);
     }
 
     @OneToMany(mappedBy = "calendariotrabajo")
@@ -100,5 +77,15 @@ public class CalendariostrabajosEntity {
 
     public void setBoletaspagosByCalendariotrabajo(Collection<BoletaspagosEntity> boletaspagosByCalendariotrabajo) {
         this.boletaspagosByCalendariotrabajo = boletaspagosByCalendariotrabajo;
+    }
+
+    @Basic
+    @Column(name = "periodo")
+    public Integer getPeriodo() {
+        return periodo;
+    }
+
+    public void setPeriodo(Integer periodo) {
+        this.periodo = periodo;
     }
 }
