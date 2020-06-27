@@ -114,4 +114,5 @@ public class BoletaspagosEntity {
     public void setDetalleBoletaPago(Collection<DetalleboletaspagosEntity> detalleBoletaPago) {
         this.detalleBoletaPago = detalleBoletaPago;
     }
+
 }
