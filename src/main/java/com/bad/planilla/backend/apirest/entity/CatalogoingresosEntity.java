@@ -1,6 +1,7 @@
 package com.bad.planilla.backend.apirest.entity;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
@@ -9,6 +10,7 @@ public class CatalogoingresosEntity {
     private int idCatalogoingresos;
     private String acronimoIngresos;
     private String nombre;
+    private BigDecimal porcentaje_ingreso;
     private boolean estado;
 
     @Id
@@ -39,6 +41,16 @@ public class CatalogoingresosEntity {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    @Basic
+    @Column(name="porcentaje_ingreso")
+    public BigDecimal getPorcentaje_ingreso() {
+        return porcentaje_ingreso;
+    }
+
+    public void setPorcentaje_ingreso(BigDecimal porcentaje_ingreso) {
+        this.porcentaje_ingreso = porcentaje_ingreso;
     }
 
     @Basic

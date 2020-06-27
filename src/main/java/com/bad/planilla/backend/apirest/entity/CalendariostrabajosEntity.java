@@ -1,7 +1,6 @@
 package com.bad.planilla.backend.apirest.entity;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Objects;
 
