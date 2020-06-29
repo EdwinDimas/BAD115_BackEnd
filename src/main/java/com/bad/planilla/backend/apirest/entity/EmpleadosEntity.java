@@ -31,6 +31,7 @@ public class EmpleadosEntity {
     private Collection<EmpleadoscatalogoingresosEntity> empleadoCatalogoIngresos;
     private Collection<ProfesionesempleadosEntity> profesionesEmpleado;
     private boolean estado;
+    private Boolean esServicioProfesional;
 
     @Id
     @Column(name = "id_empleado", nullable = false)
@@ -268,5 +269,15 @@ public class EmpleadosEntity {
 
     public void setProfesionesEmpleado(Collection<ProfesionesempleadosEntity> profesionesEmpleado) {
         this.profesionesEmpleado = profesionesEmpleado;
+    }
+
+    @Basic
+    @Column(name = "es_servicio_profesional")
+    public Boolean getEsServicioProfesional() {
+        return esServicioProfesional;
+    }
+
+    public void setEsServicioProfesional(Boolean esServicioProfesional) {
+        this.esServicioProfesional = esServicioProfesional;
     }
 }
