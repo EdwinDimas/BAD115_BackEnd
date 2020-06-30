@@ -125,7 +125,7 @@ public class RolRestController {
 	}
 	
 	@PreAuthorize("isAuthenticated() and hasAuthority('ROL_DISABLED')")
-	@PutMapping("/rol/desactivar/{idRol}")
+	@GetMapping("/rol/desactivar/{idRol}")
 	public ResponseEntity<?> desactivarRol(@PathVariable int idRol){
 		RolesEntity rolActual=null,rolDesactivado=null;
 		Map<String, Object> respuesta = new HashMap<>();
@@ -156,7 +156,7 @@ public class RolRestController {
 		String mensaje = rolDesactivado.isEstado() ? "El registro ha sido ACTIVADO con exito!!" : "El registro ha sido DESACTIVADO con exito!!";
 		respuesta.put("mensaje",mensaje );
 		respuesta.put("rol",rolDesactivado);
-		return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.CREATED);
+		return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.OK);
 	}
 	
 	

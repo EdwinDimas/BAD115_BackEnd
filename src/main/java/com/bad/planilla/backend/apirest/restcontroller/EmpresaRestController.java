@@ -207,7 +207,6 @@ public class EmpresaRestController {
     }
 
     @PreAuthorize("isAuthenticated() and hasAuthority('EMPRESA_READ')")
-    @Secured("EMPRESA_READ")
     @GetMapping("/empresa/departamento/municipios")
     public List<DepartmentosEntity> departamentosMunicipios(){
         List<DepartmentosEntity> departmentoEntityList = departamentoService.listDepartamentos();

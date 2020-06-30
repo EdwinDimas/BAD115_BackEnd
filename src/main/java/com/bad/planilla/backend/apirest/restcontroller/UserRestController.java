@@ -106,7 +106,6 @@ public class UserRestController {
 			respuesta.put("error", e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
 		respuesta.put("mensaje", "El registro ha sido creado con exito!!");
 		respuesta.put("usuario",usuarioCreado);
 		return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.CREATED);
@@ -145,7 +144,7 @@ public class UserRestController {
 	}
 	
 	@PreAuthorize("isAuthenticated() and hasAuthority('USER_DISABLED')")
-	@PutMapping("/user/desactivar/{idUsuario}")
+	@GetMapping("/user/desactivar/{idUsuario}")
 	public ResponseEntity<?> desactivarUsuario(@PathVariable int idUsuario) throws MessagingException{
 		Map<String, Object> respuesta = new HashMap<>();
 		UsersEntity usuarioDesactivado = null,usuarioActual=null;
@@ -173,7 +172,7 @@ public class UserRestController {
 		helper.setTo(usuarioDesactivado.getEmail());
 		helper.setSubject("ESTADO DE CUENTA:"+mensaje);
 		helper.setText("<h1>Su cuenta en sistema Planilla ha sido "+mensaje+"</h1>", true);
-		helper.setText("<h3>Para mayor información consulte con administrador mediante este correo:salvadorramos394@gmail.com</h3>", true);
+		helper.setText("<h3>Para mayor información consulte con administrador mediante este correo:rr14059@ues.edu.sv</h3>", true);
 		try {
 			javaMailSender.send(msg);
 		} catch (MailException ex) {
@@ -188,7 +187,7 @@ public class UserRestController {
 	
 	
 	//BUSCAR Y ACTUALIZAR USUARIO GENERAL GET AND PUT
-	@PreAuthorize("isAuthenticated() and hasAuthority('USER_READ')")
+	@PreAuthorize("isAuthenticated() and hasAuthority('USER_GENERAL_READ')")
 	@GetMapping("/user/general/{idUser}")
 	public ResponseEntity<?> buscarUsuario(@PathVariable int idUser){
 		Map<String, Object> respuesta = new HashMap<>();
@@ -207,7 +206,7 @@ public class UserRestController {
 		return new ResponseEntity<UsersEntity>(usuario, HttpStatus.OK);
 	}
 	
-	@PreAuthorize("isAuthenticated() and hasAuthority('USER_UPDATE')")
+	@PreAuthorize("isAuthenticated() and hasAuthority('USER_GENERAL_UPDATE')")
 	@PutMapping("/user/general/{idUsuario}")
 	public ResponseEntity<?> editarUsuarioGeneral(@RequestBody UsersEntity usuario, @PathVariable int idUsuario) throws NoSuchAlgorithmException{
 		Map<String, Object> respuesta = new HashMap<>();
@@ -264,17 +263,18 @@ public class UserRestController {
 				helperAdmin.setText("<h1>Cuenta de usuario con Username:"+usuario.getUsername()+" y con Email:"+usuario.getEmail()+" ha exedido los 3 intentos permitidos, su cuenta se ha bloqueado</h1>"
 						+ "<h1>Se solicita que su cuenta sea desbloqueada</h1>", true);
 				javaMailSender.send(msgAdmin);
-				usuario.setEstado(false);
-				usuario = us.guardar(usuario);
+				
 				} catch (MessagingException e) {
 				    System.err.println(e.getMessage());
 				}
-			
+			usuario.setEstado(false);
+			usuario = us.guardar(usuario);
+			//System.out.println("estado de usuario bloqueado:"+usuario.isEstado());
 		} catch (DataAccessException e) {
 			logger.error( e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
 		}
 		
-		respuesta.put("mensaje", "Su cuenta de usuario"+usuario.getUsername()+" ha sido bloqueada, se ha enviado un mensaje a administrador y a su email:"+usuario.getEmail()+"!!");
+		respuesta.put("mensaje", "Su cuenta de usuario:"+usuario.getUsername()+" ha sido bloqueada, se ha enviado un mensaje a administrador y a su email:"+usuario.getEmail()+"!!");
 		return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.CREATED);
 	}
 	

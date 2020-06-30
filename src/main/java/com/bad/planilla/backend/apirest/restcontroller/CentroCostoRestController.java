@@ -77,6 +77,7 @@ public class CentroCostoRestController {
 		return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.OK);
 	}
 
+	@PreAuthorize("isAuthenticated() and hasAuthority('CENTRO_COSTO_READ')")
 	@GetMapping("/centro_costo/list/{id}")
 	public List<CentrocostosEntity> listCostos(@PathVariable int id) {
 		int año = LocalDate.now().getYear();
@@ -214,7 +215,7 @@ public class CentroCostoRestController {
 	}
 
 	@PreAuthorize("isAuthenticated() and hasAuthority('CENTRO_COSTO_DISABLED')")
-	@PutMapping("/centro_costo/desactivar/{idCosto}")
+	@GetMapping("/centro_costo/desactivar/{idCosto}")
 	public ResponseEntity<?> desactivarCosto(@PathVariable int idCosto) {
 		Map<String, Object> respuesta = new HashMap<>();
 		CentrocostosEntity costoEditado = null, costoActual = null, costoPadre = null;
@@ -249,7 +250,7 @@ public class CentroCostoRestController {
 
 		respuesta.put("mensaje", "El registro ha sido desactivado con exito!!");
 		respuesta.put("costo", costoEditado);
-		return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.CREATED);
+		return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.OK);
 
 	}
 

@@ -15,7 +15,7 @@ public interface UserRepository extends CrudRepository<UsersEntity, Integer>{
 	
 	public UsersEntity findByUsernameAndEmail(String username,String email);
 	
-	@Query(value="CALL get_usuario(:id_user_backend)",nativeQuery=true)
+	@Query(value="select * from get_usuario(:id_user_backend)",nativeQuery=true)
 	public UsersEntity get_usuario(@Param("id_user_backend") int idUser);
 	
 }
