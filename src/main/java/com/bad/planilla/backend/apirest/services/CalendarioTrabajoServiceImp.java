@@ -48,4 +48,9 @@ public class CalendarioTrabajoServiceImp implements ICalendarioTrabajoService{
             return "Calendario esta desactivada";
         }
     }
+
+    @Override
+    public CalendariostrabajosEntity obtenerCalendarioDelAnio(int anio) {
+        return calendarioTrabajoRepository.obtenerCalendarioDelAnio(anio);
+    }
 }

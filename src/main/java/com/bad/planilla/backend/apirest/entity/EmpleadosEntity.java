@@ -31,6 +31,8 @@ public class EmpleadosEntity {
     private Collection<EmpleadoscatalogoingresosEntity> empleadoCatalogoIngresos;
     private Collection<ProfesionesempleadosEntity> profesionesEmpleado;
     private boolean estado;
+    private boolean esServicioProfesional;
+    private boolean tomarVacaciones;
 
     @Id
     @Column(name = "id_empleado", nullable = false)
@@ -45,7 +47,7 @@ public class EmpleadosEntity {
     }
 
     @Basic
-    @Column(name = "emp_id_empleado", nullable = true)
+    @Column(name = "emp_id", nullable = true)
     public Integer getEmpleadoJefe() {
         return empleadoJefe;
     }
@@ -268,5 +270,25 @@ public class EmpleadosEntity {
 
     public void setProfesionesEmpleado(Collection<ProfesionesempleadosEntity> profesionesEmpleado) {
         this.profesionesEmpleado = profesionesEmpleado;
+    }
+
+    @Basic
+    @Column(name = "es_servicio_profesional")
+    public boolean isEsServicioProfesional() {
+        return esServicioProfesional;
+    }
+
+    public void setEsServicioProfesional(boolean esServicioProfesional) {
+        this.esServicioProfesional = esServicioProfesional;
+    }
+
+    @Basic
+    @Column(name = "tomar_vacaciones")
+    public boolean isTomarVacaciones() {
+        return tomarVacaciones;
+    }
+
+    public void setTomarVacaciones(boolean tomarVacaciones) {
+        this.tomarVacaciones = tomarVacaciones;
     }
 }

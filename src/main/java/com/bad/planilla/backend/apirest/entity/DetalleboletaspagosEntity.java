@@ -15,9 +15,20 @@ public class DetalleboletaspagosEntity {
     private BigDecimal monto;
     private BoletaspagosEntity id_boletapago;
     private boolean estado;
+    private boolean serviciosProfesionales;
+    private BigDecimal renta;
+    private BigDecimal isss;
+    private BigDecimal isssEmpleador;
+    private BigDecimal afp;
+    private BigDecimal afpEmpleador;
+    private BigDecimal pago;
+    private BigDecimal otrosDescuentos;
+    private int idBoletaPago;
 
     @Id
     @Column(name = "id_detalle_boleta", nullable = false)
+    @SequenceGenerator(name = "detalleboletaspago_id_seq", sequenceName = "detalleboletaspago_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "detalleboletaspago_id_seq")
     public int getIdDetalleBoleta() {
         return idDetalleBoleta;
     }
@@ -27,7 +38,7 @@ public class DetalleboletaspagosEntity {
     }
 
     @Basic
-    @Column(name = "movimiento_id", nullable = false)
+    @Column(name = "movimiento_id", nullable = true)
     public int getMovimientoId() {
         return movimientoId;
     }
@@ -37,7 +48,7 @@ public class DetalleboletaspagosEntity {
     }
 
     @Basic
-    @Column(name = "tipo_movimiento", nullable = false, length = 20)
+    @Column(name = "tipo_movimiento", nullable = true, length = 20)
     public String getTipoMovimiento() {
         return tipoMovimiento;
     }
@@ -47,7 +58,7 @@ public class DetalleboletaspagosEntity {
     }
 
     @Basic
-    @Column(name = "preciohora", nullable = false, precision = 2)
+    @Column(name = "preciohora", nullable = true, precision = 2)
     public BigDecimal getPreciohora() {
         return preciohora;
     }
@@ -57,7 +68,7 @@ public class DetalleboletaspagosEntity {
     }
 
     @Basic
-    @Column(name = "horas", nullable = false, precision = 2)
+    @Column(name = "horas", nullable = true, precision = 2)
     public BigDecimal getHoras() {
         return horas;
     }
@@ -67,7 +78,7 @@ public class DetalleboletaspagosEntity {
     }
 
     @Basic
-    @Column(name = "monto", nullable = false, precision = 2)
+    @Column(name = "monto", nullable = true, precision = 2)
     public BigDecimal getMonto() {
         return monto;
     }
@@ -112,5 +123,95 @@ public class DetalleboletaspagosEntity {
 
     public void setId_boletapago(BoletaspagosEntity id_boletapago) {
         this.id_boletapago = id_boletapago;
+    }
+
+    @Basic
+    @Column(name = "servicios_profesionales")
+    public boolean isServiciosProfesionales() {
+        return serviciosProfesionales;
+    }
+
+    public void setServiciosProfesionales(boolean serviciosProfesionales) {
+        this.serviciosProfesionales = serviciosProfesionales;
+    }
+
+    @Basic
+    @Column(name = "renta")
+    public BigDecimal getRenta() {
+        return renta;
+    }
+
+    public void setRenta(BigDecimal renta) {
+        this.renta = renta;
+    }
+
+    @Basic
+    @Column(name = "isss")
+    public BigDecimal getIsss() {
+        return isss;
+    }
+
+    public void setIsss(BigDecimal isss) {
+        this.isss = isss;
+    }
+
+    @Basic
+    @Column(name = "isss_empleador")
+    public BigDecimal getIsssEmpleador() {
+        return isssEmpleador;
+    }
+
+    public void setIsssEmpleador(BigDecimal isssEmpleador) {
+        this.isssEmpleador = isssEmpleador;
+    }
+
+    @Basic
+    @Column(name = "afp")
+    public BigDecimal getAfp() {
+        return afp;
+    }
+
+    public void setAfp(BigDecimal afp) {
+        this.afp = afp;
+    }
+
+    @Basic
+    @Column(name = "afp_empleador")
+    public BigDecimal getAfpEmpleador() {
+        return afpEmpleador;
+    }
+
+    public void setAfpEmpleador(BigDecimal afpEmpleador) {
+        this.afpEmpleador = afpEmpleador;
+    }
+
+    @Basic
+    @Column(name = "pago")
+    public BigDecimal getPago() {
+        return pago;
+    }
+
+    public void setPago(BigDecimal pago) {
+        this.pago = pago;
+    }
+
+    @Basic
+    @Column(name = "otros_descuentos")
+    public BigDecimal getOtrosDescuentos() {
+        return otrosDescuentos;
+    }
+
+    public void setOtrosDescuentos(BigDecimal otrosDescuentos) {
+        this.otrosDescuentos = otrosDescuentos;
+    }
+
+    @Basic
+    @Column(name = "id_boleta_pago")
+    public int getIdBoletaPago() {
+        return idBoletaPago;
+    }
+
+    public void setIdBoletaPago(int idBoletaPago) {
+        this.idBoletaPago = idBoletaPago;
     }
 }

@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Repository
-public interface BoletaPagoRepository extends JpaRepository<BoletaPago, Integer>{
+public interface BoletaPagoFunctionRepository extends JpaRepository<BoletaPago, Integer>{
     @Query(value="select * from generar_boleta(?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12)", nativeQuery = true)
     public BoletaPago obtenerBoleta(int id, int diasFaltados, BigDecimal horasFaltadas, BigDecimal horasExtra,
                                     BigDecimal horasNocturnas, BigDecimal ventas, BigDecimal bonos, int diasFestivos,

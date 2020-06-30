@@ -12,11 +12,13 @@ import java.math.BigDecimal;
 public class BoletaPago {
     @Id
     @Column(name = "total_descuentos", nullable = true)
-    private BigDecimal total_descuentos;
+    private BigDecimal totalDescuentos;
+    @Column(name="pk_empleado")
+    private int key;
     @Column(name = "salario_base", nullable = true)
-    private BigDecimal salario_base;
+    private BigDecimal salarioBase;
     @Column(name = "salario_nominal", nullable = true)
-    private BigDecimal salario_nominal;
+    private BigDecimal salarioNominal;
     @Column(name = "isss", nullable = true)
     private BigDecimal isss;
     @Column(name = "afp", nullable = true)
@@ -24,50 +26,46 @@ public class BoletaPago {
     @Column(name = "renta", nullable = true)
     private BigDecimal renta;
     @Column(name = "costo_hora", nullable = true)
-    private BigDecimal costo_hora;
+    private BigDecimal costoHora;
     @Column(name = "isss_empleador", nullable = true)
-    private BigDecimal isss_empleador;
+    private BigDecimal isssEmpleador;
     @Column(name = "afp_empleador", nullable = true)
-    private BigDecimal afp_empleador;
+    private BigDecimal afpEmpleador;
     @Column(name = "vacaciones", nullable = true)
     private BigDecimal vacaciones;
     @Column(name = "salario_a_cobrar", nullable = true)
-    private BigDecimal salario_a_cobrar;
+    private BigDecimal salarioACobrar;
 
-//    out total_descuentos numeric,
-//    out salario_base numeric,
-//    out salario_nominal numeric,
-//    out isss numeric,
-//    out afp numeric,
-//    out renta numeric,
-//    out costo_hora numeric,
-//    out isss_empleador numeric,
-//    out afp_empleador numeric,
-//    out vacaciones numeric,
-//    out salario_a_cobrar numeric
-
-    public BigDecimal getTotal_descuentos() {
-        return total_descuentos;
+    public int getKey() {
+        return key;
     }
 
-    public void setTotal_descuentos(BigDecimal total_descuentos) {
-        this.total_descuentos = total_descuentos;
+    public void setKey(int key) {
+        this.key = key;
     }
 
-    public BigDecimal getSalario_base() {
-        return salario_base;
+    public BigDecimal getTotalDescuentos() {
+        return totalDescuentos;
     }
 
-    public void setSalario_base(BigDecimal salario_base) {
-        this.salario_base = salario_base;
+    public void setTotalDescuentos(BigDecimal totalDescuentos) {
+        this.totalDescuentos = totalDescuentos;
     }
 
-    public BigDecimal getSalario_nominal() {
-        return salario_nominal;
+    public BigDecimal getSalarioBase() {
+        return salarioBase;
     }
 
-    public void setSalario_nominal(BigDecimal salario_nominal) {
-        this.salario_nominal = salario_nominal;
+    public void setSalarioBase(BigDecimal salarioBase) {
+        this.salarioBase = salarioBase;
+    }
+
+    public BigDecimal getSalarioNominal() {
+        return salarioNominal;
+    }
+
+    public void setSalarioNominal(BigDecimal salarioNominal) {
+        this.salarioNominal = salarioNominal;
     }
 
     public BigDecimal getIsss() {
@@ -94,28 +92,28 @@ public class BoletaPago {
         this.renta = renta;
     }
 
-    public BigDecimal getCosto_hora() {
-        return costo_hora;
+    public BigDecimal getCostoHora() {
+        return costoHora;
     }
 
-    public void setCosto_hora(BigDecimal costo_hora) {
-        this.costo_hora = costo_hora;
+    public void setCostoHora(BigDecimal costoHora) {
+        this.costoHora = costoHora;
     }
 
-    public BigDecimal getIsss_empleador() {
-        return isss_empleador;
+    public BigDecimal getIsssEmpleador() {
+        return isssEmpleador;
     }
 
-    public void setIsss_empleador(BigDecimal isss_empleador) {
-        this.isss_empleador = isss_empleador;
+    public void setIsssEmpleador(BigDecimal isssEmpleador) {
+        this.isssEmpleador = isssEmpleador;
     }
 
-    public BigDecimal getAfp_empleador() {
-        return afp_empleador;
+    public BigDecimal getAfpEmpleador() {
+        return afpEmpleador;
     }
 
-    public void setAfp_empleador(BigDecimal afp_empleador) {
-        this.afp_empleador = afp_empleador;
+    public void setAfpEmpleador(BigDecimal afpEmpleador) {
+        this.afpEmpleador = afpEmpleador;
     }
 
     public BigDecimal getVacaciones() {
@@ -126,11 +124,11 @@ public class BoletaPago {
         this.vacaciones = vacaciones;
     }
 
-    public BigDecimal getSalario_a_cobrar() {
-        return salario_a_cobrar;
+    public BigDecimal getSalarioACobrar() {
+        return salarioACobrar;
     }
 
-    public void setSalario_a_cobrar(BigDecimal salario_a_cobrar) {
-        this.salario_a_cobrar = salario_a_cobrar;
+    public void setSalarioACobrar(BigDecimal salarioACobrar) {
+        this.salarioACobrar = salarioACobrar;
     }
 }

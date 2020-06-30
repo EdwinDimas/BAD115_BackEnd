@@ -1,15 +1,20 @@
 package com.bad.planilla.backend.apirest.restcontroller;
 
 import com.bad.planilla.backend.apirest.entity.BoletaPago;
+import com.bad.planilla.backend.apirest.entity.BoletaspagosEntity;
+import com.bad.planilla.backend.apirest.entity.DetalleboletaspagosEntity;
 import com.bad.planilla.backend.apirest.globals.ConsultaBoletaPago;
 import com.bad.planilla.backend.apirest.globals.Constants;
-import com.bad.planilla.backend.apirest.services.BoletaPagoServiceImp;
+import com.bad.planilla.backend.apirest.repository.DetalleBoletaPagoRepository;
+import com.bad.planilla.backend.apirest.services.BoletaDePagoServiceImp;
+import com.bad.planilla.backend.apirest.services.BoletaPagoFunctionServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
+import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityManager;
-import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
 
 @CrossOrigin(origins = Constants.URL_BASE)
@@ -17,7 +22,13 @@ import java.util.List;
 @RequestMapping(Constants.BASE)
 public class BoletaPagoRestController {
     @Autowired
-    private BoletaPagoServiceImp boletaPagoServiceImp;
+    private BoletaPagoFunctionServiceImp boletaPagoServiceImp;
+
+    @Autowired
+    private BoletaDePagoServiceImp boletaDePagoServiceImp;
+
+    @Autowired
+    private DetalleBoletaPagoRepository detalleBoletaPagoRepository;
 
 //   produces = MediaType.APPLICATION_JSON_VALUE
     @PostMapping("/obtenerboleta")
@@ -28,5 +39,20 @@ public class BoletaPagoRestController {
                 boletaPago.getBonos(), boletaPago.getDiasFestivos(), boletaPago.getOtrosDescuentos(),
                 boletaPago.isEsServicioProfesional(), boletaPago.isAplicarVacaciones(),
                 boletaPago.getPeriodicidad());
+    }
+
+    @PostMapping("/boletapago")
+    public ResponseEntity<?> guardarBoleta(@RequestBody BoletaspagosEntity boletaDePago){
+        try {
+            BoletaspagosEntity boletaPago = boletaDePagoServiceImp.guardar(boletaDePago);
+            Collection<DetalleboletaspagosEntity> detalleBoleta = boletaPago.getDetalleBoletaPago();
+            for (DetalleboletaspagosEntity detalleboletaspagosEntity : detalleBoleta){
+                detalleboletaspagosEntity.setIdBoletaPago(boletaPago.getIdBoletapago());
+                detalleBoletaPagoRepository.save(detalleboletaspagosEntity);
+            }
+            return new ResponseEntity<>(boletaPago, HttpStatus.CREATED);
+        } catch (DataAccessException exception) {
+            return new ResponseEntity<>(exception.getCause().getCause().toString(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

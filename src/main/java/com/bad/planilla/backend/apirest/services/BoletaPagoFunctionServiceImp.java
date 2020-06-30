@@ -3,16 +3,15 @@ package com.bad.planilla.backend.apirest.services;
 import com.bad.planilla.backend.apirest.entity.BoletaPago;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.bad.planilla.backend.apirest.repository.BoletaPagoRepository;
+import com.bad.planilla.backend.apirest.repository.BoletaPagoFunctionRepository;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Service("boletaPagoService")
-public class BoletaPagoServiceImp implements IBoletaPagoService {
+public class BoletaPagoFunctionServiceImp implements IBoletaPagoFunctionService {
 
     @Autowired
-    private BoletaPagoRepository boletaPagoRepository;
+    private BoletaPagoFunctionRepository boletaPagoRepository;
 
     @Override
     public BoletaPago obtenerBoleta(int id, int diasFaltados, BigDecimal horasFaltadas,
