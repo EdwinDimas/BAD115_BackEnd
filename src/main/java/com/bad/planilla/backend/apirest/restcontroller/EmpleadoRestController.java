@@ -6,6 +6,7 @@ import com.bad.planilla.backend.apirest.entity.PuestosTrabajosEntity;
 import com.bad.planilla.backend.apirest.repository.EmpleadoRepository;
 import com.bad.planilla.backend.apirest.repository.EstadoCivilRepository;
 import com.bad.planilla.backend.apirest.repository.GeneroRepository;
+import com.bad.planilla.backend.apirest.repository.PuestoTrabajoRepository;
 import com.bad.planilla.backend.apirest.services.EmpleadoServiceImpl;
 import com.bad.planilla.backend.apirest.entity.EmpleadosEntity;
 import com.bad.planilla.backend.apirest.services.IPuestoTrabajoService;
@@ -35,6 +36,9 @@ public class EmpleadoRestController {
     private GeneroRepository gr;
 
     @Autowired
+    private PuestoTrabajoRepository pdtr;
+
+    @Autowired
     private EstadoCivilRepository ecr;
 
     @GetMapping("/empleado")
@@ -53,6 +57,7 @@ public class EmpleadoRestController {
             @PathVariable int id_genero,
             @PathVariable int id_estadocivil,
             @PathVariable int id_puestotrabajo) {
+        empleado.setEstado(true);
         return crearActualizarEmpleado(id_genero, id_estadocivil, id_puestotrabajo, empleado);
     }
 
@@ -84,5 +89,10 @@ public class EmpleadoRestController {
 
     @GetMapping("/genero")
     public List listarGeneros(){return gr.findAll();}
+
+    @GetMapping("/puestostrabajo")
+    public List listarPuestosDeTrabajo(){return pdtr.findAllByOrderByNombre(); }
+
+
 
 }
