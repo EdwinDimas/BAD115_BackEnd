@@ -1,5 +1,7 @@
 package com.bad.planilla.backend.apirest.repository;
 
+public interface CentroCostoRepository {
+
 import java.sql.Date;
 import java.util.List;
 
@@ -26,4 +28,5 @@ public interface CentroCostoRepository extends JpaRepository<CentrocostosEntity,
 	
 	//@Query(value="select * from planilla_descontar",nativeQuery=true)
 	//public List<PlanillaDescontar> getPlanillaDescontar(); 
+
 }

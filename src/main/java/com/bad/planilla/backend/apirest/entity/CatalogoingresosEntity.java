@@ -45,11 +45,22 @@ public class CatalogoingresosEntity {
 		this.nombre = nombre;
 	}
 
-	@Basic
-	@Column(name = "porcentaje_ingreso")
-	public BigDecimal getPorcentaje_ingreso() {
-		return porcentaje_ingreso;
-	}
+
+    @Basic
+    @Column(name="porcentaje_ingreso")
+    public BigDecimal getPorcentaje_ingreso() {
+        return porcentaje_ingreso;
+    }
+
+    public void setPorcentaje_ingreso(BigDecimal porcentaje_ingreso) {
+        this.porcentaje_ingreso = porcentaje_ingreso;
+    }
+
+    @Basic
+    @Column(name = "estado")
+    public boolean isEstado() {
+        return estado;
+    }
 
 	public void setPorcentaje_ingreso(BigDecimal porcentaje_ingreso) {
 		this.porcentaje_ingreso = porcentaje_ingreso;

@@ -92,7 +92,6 @@ public class CalendariostrabajosEntity {
     public void setBoletaspagosByCalendariotrabajo(Collection<BoletaspagosEntity> boletaspagosByCalendariotrabajo) {
         this.boletaspagosByCalendariotrabajo = boletaspagosByCalendariotrabajo;
     }
-
     @Basic
     @Column(name = "periodo")
     public Integer getPeriodo() {

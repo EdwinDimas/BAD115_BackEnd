@@ -1,5 +1,7 @@
 package com.bad.planilla.backend.apirest.services;
 
+public class CentroCostoServiceImp implements ICentroCostoService{
+
 import java.sql.Date;
 import java.util.List;
 

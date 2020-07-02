@@ -8,6 +8,7 @@ import com.bad.planilla.backend.apirest.services.SalarioServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +25,7 @@ public class PuestoTrabajoRestController {
     @Autowired
     private SalarioServiceImp salarioServiceImp;
 
-    @GetMapping("/puestotrabajo")
+    @GetMapping(value = "/puestotrabajo")
     public List<PuestosTrabajosEntity> list() {
         return puestoTrabajoService.list();
     }

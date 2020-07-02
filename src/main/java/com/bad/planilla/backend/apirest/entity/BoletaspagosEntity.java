@@ -1,5 +1,7 @@
 package com.bad.planilla.backend.apirest.entity;
 
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -11,15 +13,20 @@ import java.util.Objects;
 public class BoletaspagosEntity {
     private int idBoletapago;
     private Date fecha;
-    private BigDecimal salariobase;
-    private BigDecimal salarioneto;
+    private BigDecimal salarioBase;
+    private BigDecimal salarioNeto;
     private EmpleadosEntity id_empleado;
-    private CalendariostrabajosEntity calendariotrabajo;
+    private CalendariostrabajosEntity calendario_trabajo;
     private Collection<DetalleboletaspagosEntity> detalleBoletaPago;
     private boolean estado;
+    private int idEmpleado;
+    private int idCalendario;
+    private boolean pagado;
 
     @Id
     @Column(name = "id_boletapago", nullable = false)
+    @SequenceGenerator(name = "boletapago_id_seq", sequenceName = "boletapago_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "boletapago_id_seq")
     public int getIdBoletapago() {
         return idBoletapago;
     }
@@ -38,24 +45,26 @@ public class BoletaspagosEntity {
         this.fecha = fecha;
     }
 
-    @Basic
-    @Column(name = "salariobase", nullable = false, precision = 8)
-    public BigDecimal getSalariobase() {
-        return salariobase;
-    }
-
-    public void setSalariobase(BigDecimal salariobase) {
-        this.salariobase = salariobase;
-    }
 
     @Basic
-    @Column(name = "salarioneto", nullable = false, precision = 8)
-    public BigDecimal getSalarioneto() {
-        return salarioneto;
+    @Column(name = "salario_base", nullable = true, precision = 8)
+    public BigDecimal getSalarioBase() {
+        return salarioBase;
     }
 
-    public void setSalarioneto(BigDecimal salarioneto) {
-        this.salarioneto = salarioneto;
+    public void setSalarioBase(BigDecimal salarioBase) {
+        this.salarioBase = salarioBase;
+    }
+
+
+    @Basic
+    @Column(name = "salario_neto", nullable = true, precision = 8)
+    public BigDecimal getSalarioNeto() {
+        return salarioNeto;
+    }
+
+    public void setSalarioNeto(BigDecimal salarioNeto) {
+        this.salarioNeto = salarioNeto;
     }
 
     @Basic
@@ -75,13 +84,13 @@ public class BoletaspagosEntity {
         BoletaspagosEntity that = (BoletaspagosEntity) o;
         return idBoletapago == that.idBoletapago &&
                 Objects.equals(fecha, that.fecha) &&
-                Objects.equals(salariobase, that.salariobase) &&
-                Objects.equals(salarioneto, that.salarioneto);
+                Objects.equals(salarioBase, that.salarioBase) &&
+                Objects.equals(salarioNeto, that.salarioNeto);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idBoletapago, fecha, salariobase, salarioneto);
+        return Objects.hash(idBoletapago, fecha, salarioBase, salarioNeto);
     }
 
     @ManyToOne
@@ -96,13 +105,13 @@ public class BoletaspagosEntity {
 
 
     @ManyToOne
-    @JoinColumn(name = "calendariotrabajo", referencedColumnName = "calendariotrabajo")
+    @JoinColumn(name = "calendario_trabajo", referencedColumnName = "calendariotrabajo")
     public CalendariostrabajosEntity getCalendariotrabajo() {
-        return calendariotrabajo;
+        return calendario_trabajo;
     }
 
-    public void setCalendariotrabajo(CalendariostrabajosEntity calendariotrabajo) {
-        this.calendariotrabajo = calendariotrabajo;
+    public void setCalendariotrabajo(CalendariostrabajosEntity calendario_trabajo) {
+        this.calendario_trabajo = calendario_trabajo;
     }
 
 
@@ -113,5 +122,35 @@ public class BoletaspagosEntity {
 
     public void setDetalleBoletaPago(Collection<DetalleboletaspagosEntity> detalleBoletaPago) {
         this.detalleBoletaPago = detalleBoletaPago;
+    }
+
+    @Basic
+    @Column(name = "id_emp")
+    public int getIdEmpleado() {
+        return idEmpleado;
+    }
+
+    public void setIdEmpleado(int idEmpleado) {
+        this.idEmpleado = idEmpleado;
+    }
+
+    @Basic
+    @Column(name = "id_calendario")
+    public int getIdCalendario() {
+        return idCalendario;
+    }
+
+    public void setIdCalendario(int idCalendario) {
+        this.idCalendario = idCalendario;
+    }
+
+    @Basic
+    @Column(name = "pagado")
+    public boolean isPagado() {
+        return pagado;
+    }
+
+    public void setPagado(boolean pagado) {
+        this.pagado = pagado;
     }
 }
