@@ -31,6 +31,7 @@ public class EmpleadosEntity {
     private Collection<EmpleadoscatalogoingresosEntity> empleadoCatalogoIngresos;
     private Collection<ProfesionesempleadosEntity> profesionesEmpleado;
     private boolean estado;
+    private BigDecimal prestamo;
     private Boolean esServicioProfesional;
 
     @Id
@@ -143,6 +144,16 @@ public class EmpleadosEntity {
 
     public void setEstado(boolean estado) {
         this.estado = estado;
+    }
+
+    @Basic
+    @Column(name = "prestamo", nullable = false, precision = 2)
+    public BigDecimal getPrestamo() {
+        return prestamo;
+    }
+
+    public void setPrestamo(BigDecimal prestamo) {
+        this.prestamo =prestamo;
     }
 
     @Override
