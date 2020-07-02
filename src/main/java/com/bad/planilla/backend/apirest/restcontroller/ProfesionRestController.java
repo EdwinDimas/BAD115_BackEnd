@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = { Constants.URL_BASE})
 @RestController
 @RequestMapping(Constants.BASE)
 public class ProfesionRestController {

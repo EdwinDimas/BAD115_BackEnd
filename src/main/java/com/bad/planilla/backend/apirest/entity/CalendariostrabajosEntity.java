@@ -1,7 +1,6 @@
 package com.bad.planilla.backend.apirest.entity;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -11,12 +10,16 @@ public class CalendariostrabajosEntity {
     private int calendariotrabajo;
     private boolean activo;
     private String periocidad;
+    private Integer periodo;
     private Collection<BoletaspagosEntity> boletaspagosByCalendariotrabajo;
     private boolean estado;
     private Integer periodo;
 
     @Id
     @Column(name = "calendariotrabajo", nullable = false)
+    @SequenceGenerator(name = "calendariostrabajos_seq", sequenceName = "calendariostrabajos_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "calendariostrabajos_seq")
+
     public int getCalendariotrabajo() {
         return calendariotrabajo;
     }
@@ -46,6 +49,16 @@ public class CalendariostrabajosEntity {
     }
 
     @Basic
+    @Column(name = "periodo", nullable = true)
+    public Integer getPeriodo() {
+        return periodo;
+    }
+
+    public void setPeriodo(Integer periodo) {
+        this.periodo = periodo;
+    }
+
+    @Basic
     @Column(name = "estado")
     public boolean isEstado() {
         return estado;
@@ -62,12 +75,13 @@ public class CalendariostrabajosEntity {
         CalendariostrabajosEntity that = (CalendariostrabajosEntity) o;
         return calendariotrabajo == that.calendariotrabajo &&
                 activo == that.activo &&
-                Objects.equals(periocidad, that.periocidad);
+                Objects.equals(periocidad, that.periocidad)&&
+                Objects.equals(periodo, that.periodo);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(calendariotrabajo, activo, periocidad);
+        return Objects.hash(calendariotrabajo, activo, periocidad, periodo);
     }
 
     @OneToMany(mappedBy = "calendariotrabajo")
