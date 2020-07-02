@@ -28,26 +28,6 @@ public class UnidadOrganizacionalRestController {
         return unidadOrganizacionalService.list();
     }
 
-//    //Crear
-//    @PostMapping("/departamentos/{id_empresa}/{unidadOrganizacionalSuperior}")
-//    public ResponseEntity<?> crearUnidadorganizacional(
-//            @RequestBody UnidadesorganizacionalesEntity unidad,
-//            @PathVariable int id_empresa,
-//            @PathVariable int unidadOrganizacionalSuperior){
-//        return crearActualizarUnidad(id_empresa, unidadOrganizacionalSuperior);
-//    }
-
-//    @PostMapping("/departamentos")
-//    public ResponseEntity<?> crearUnidadorganizacional(@RequestBody UnidadesorganizacionalesEntity  unidadOrganizacional){
-//        try {
-//            unidadOrganizacional.setEstado(true);
-//            //unidadOrganizacional.setId_empresa(empresaR.findByIdEmpresa(unidadOrganizacional.getId_empresa().getIdEmpresa()));
-//            //unidadOrganizacional.setUnidadOrganizacionalSuperior(uni);
-//            return new ResponseEntity<>(unidadOrganizacionalService.guardar(unidadOrganizacional), HttpStatus.CREATED);
-//        } catch (DataAccessException e) {
-//            return new ResponseEntity<>(e.getCause().getCause().toString(), HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
     @PostMapping("/departamentos")
     public ResponseEntity<?> crearUnidadorganizacional(@RequestBody UnidadesorganizacionalesEntity  unidadOrganizacional){
 

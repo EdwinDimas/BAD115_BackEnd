@@ -39,6 +39,13 @@ public class CalendarioTrabajoServiceImp implements ICalendarioTrabajoService{
 
     @Override
     public String desactivar(int id) {
-        return null;
+        CalendariostrabajosEntity calendarioTrabajo = calendarioTrabajoRepository.findByCalendariotrabajo(id);
+        if (calendarioTrabajo.isEstado()){
+            calendarioTrabajo.setEstado(false);
+            calendarioTrabajoRepository.save(calendarioTrabajo);
+            return "Calendario desactivada";
+        } else {
+            return "Calendario esta desactivada";
+        }
     }
 }
