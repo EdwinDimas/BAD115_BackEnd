@@ -6,6 +6,7 @@ import com.bad.planilla.backend.apirest.entity.PuestosTrabajosEntity;
 import com.bad.planilla.backend.apirest.repository.EmpleadoRepository;
 import com.bad.planilla.backend.apirest.repository.EstadoCivilRepository;
 import com.bad.planilla.backend.apirest.repository.GeneroRepository;
+import com.bad.planilla.backend.apirest.repository.PuestoTrabajoRepository;
 import com.bad.planilla.backend.apirest.services.EmpleadoServiceImpl;
 import com.bad.planilla.backend.apirest.entity.EmpleadosEntity;
 import com.bad.planilla.backend.apirest.services.IPuestoTrabajoService;
@@ -35,6 +36,9 @@ public class EmpleadoRestController {
     private GeneroRepository gr;
 
     @Autowired
+    private PuestoTrabajoRepository pdtr;
+
+    @Autowired
     private EstadoCivilRepository ecr;
 
     @GetMapping("/empleado")
@@ -52,28 +56,9 @@ public class EmpleadoRestController {
             @RequestBody EmpleadosEntity empleado,
             @PathVariable int id_genero,
             @PathVariable int id_estadocivil,
-            @PathVariable int id_puestotrabajo){
-        return crearActualizarEmpleado(id_genero, id_estadocivil, id_puestotrabajo, empleado);}
-
-
-    @PostMapping("/empleado")
-    public ResponseEntity<?> crearEmpleado(@RequestBody EmpleadosEntity empleado){
-        try {
-            empleado.setId_genero(gr.findByIdGenero(empleado.getId_genero().getIdGenero()));
-            empleado.setId_estadocivil(ecr.findByIdEstadocivil(empleado.getId_estadocivil().getIdEstadocivil()));
-            return new ResponseEntity<>(es.save(empleado), HttpStatus.CREATED);
-        }catch (DataAccessException e){
-            return new ResponseEntity<>(e.getCause().getCause().toString(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @PutMapping("/empleado")
-    public ResponseEntity<?> modificarEmpleado(@RequestBody EmpleadosEntity empleado){
-        if(empleado != null){
-            return new ResponseEntity<>(es.save(empleado), HttpStatus.CREATED);
-        }else{
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+            @PathVariable int id_puestotrabajo) {
+        empleado.setEstado(true);
+        return crearActualizarEmpleado(id_genero, id_estadocivil, id_puestotrabajo, empleado);
     }
 
     @PutMapping("/empleado/{id_genero}/{id_estadocivil}/{id_puestotrabajo}")
@@ -104,5 +89,10 @@ public class EmpleadoRestController {
 
     @GetMapping("/genero")
     public List listarGeneros(){return gr.findAll();}
+
+    @GetMapping("/puestostrabajo")
+    public List listarPuestosDeTrabajo(){return pdtr.findAllByOrderByNombre(); }
+
+
 
 }

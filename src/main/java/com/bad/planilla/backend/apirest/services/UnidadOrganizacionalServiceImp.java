@@ -48,4 +48,16 @@ public class UnidadOrganizacionalServiceImp implements IUnidadOrganizacionalServ
             return "Unidad esta desactivada";
         }
     }
+
+	@Override
+	public List<UnidadesorganizacionalesEntity> listUnidadMayor(boolean unidad) {
+		
+		return unidadOrganizacionalRepository.findByUnidadmayorAndEstado(unidad,true);
+	}
+
+	@Override
+	public List<UnidadesorganizacionalesEntity> listUnidadesSuperiores(int unidad) {
+		
+		return unidadOrganizacionalRepository.findByUnidadOrganizacionalSuperiorAndEstado(unidad,true);
+	}
 }

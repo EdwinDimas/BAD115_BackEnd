@@ -10,4 +10,6 @@ import java.util.List;
 public interface UnidadOrganizacionalRepository extends JpaRepository<UnidadesorganizacionalesEntity, Integer> {
     public UnidadesorganizacionalesEntity findByIdUnidadorganizacional(int id);
     public List<UnidadesorganizacionalesEntity> findAllByOrderByNombre();
+    public List<UnidadesorganizacionalesEntity> findByUnidadmayorAndEstado(boolean unidad,boolean estado);
+    public List<UnidadesorganizacionalesEntity> findByUnidadOrganizacionalSuperiorAndEstado(int unidad,boolean estado);
 }

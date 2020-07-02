@@ -147,6 +147,16 @@ public class EmpleadosEntity {
         this.estado = estado;
     }
 
+    @Basic
+    @Column(name = "prestamo", nullable = false, precision = 2)
+    public BigDecimal getPrestamo() {
+        return prestamo;
+    }
+
+    public void setPrestamo(BigDecimal prestamo) {
+        this.prestamo =prestamo;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -275,6 +285,7 @@ public class EmpleadosEntity {
 
     @Basic
     @Column(name = "es_servicio_profesional")
+
     public boolean isEsServicioProfesional() {
         return esServicioProfesional;
     }

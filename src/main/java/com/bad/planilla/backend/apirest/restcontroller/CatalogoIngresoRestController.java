@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,18 +29,21 @@ public class CatalogoIngresoRestController {
 	
 	@Autowired
 	private ICatalogoIngresoService cs;
-
+	
+	@PreAuthorize("isAuthenticated() and hasAuthority('INGRESO_READ')")
 	@GetMapping("/ingreso/list/activos")
 	public List<CatalogoingresosEntity> listActivos(){
 		
 		return cs.listTrue();
 	}
-
+	
+	@PreAuthorize("isAuthenticated() and hasAuthority('INGRESO_READ')")
 	@GetMapping("/ingreso/list/all")
 	public List<CatalogoingresosEntity> listAll(){
 		return cs.list();
 	}
-
+  
+	@PreAuthorize("isAuthenticated() and hasAuthority('INGRESO_READ')")
 	@GetMapping("/ingreso/{id}")
 	public ResponseEntity<?> buscar(@PathVariable int id){
 		Map<String, Object> respuesta = new HashMap<>();
@@ -59,7 +63,8 @@ public class CatalogoIngresoRestController {
 		}
 		return new ResponseEntity<CatalogoingresosEntity>(ingreso, HttpStatus.OK);
 	}
-
+  
+	@PreAuthorize("isAuthenticated() and hasAuthority('INGRESO_CREATE')")
 	@PostMapping("/ingreso")
 	public ResponseEntity<?> crearIngreso(@RequestBody CatalogoingresosEntity ingreso){
 		Map<String, Object> respuesta = new HashMap<>();
@@ -76,6 +81,7 @@ public class CatalogoIngresoRestController {
 		return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.CREATED);
 	}
 
+	@PreAuthorize("isAuthenticated() and hasAuthority('INGRESO_UPDATE')")
 	@PutMapping("/ingreso/{id}")
 	public ResponseEntity<?> editarIngreso(@RequestBody CatalogoingresosEntity ingreso,@PathVariable int id){
 		Map<String, Object> respuesta = new HashMap<>();
@@ -99,6 +105,8 @@ public class CatalogoIngresoRestController {
 		respuesta.put("ingreso",ingresoEditado);
 		return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.CREATED);
 	}
+
+	@PreAuthorize("isAuthenticated() and hasAuthority('INGRESO_DISABLED')")
 
 	@GetMapping("/ingreso/desactivar/{id}")
 	public ResponseEntity<?> desactivarRol(@PathVariable int id){
