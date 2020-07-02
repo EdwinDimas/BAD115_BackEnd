@@ -21,6 +21,7 @@ public class BoletaspagosEntity {
     private boolean estado;
     private int idEmpleado;
     private int idCalendario;
+    private boolean pagado;
 
     @Id
     @Column(name = "id_boletapago", nullable = false)
@@ -141,5 +142,15 @@ public class BoletaspagosEntity {
 
     public void setIdCalendario(int idCalendario) {
         this.idCalendario = idCalendario;
+    }
+
+    @Basic
+    @Column(name = "pagado")
+    public boolean isPagado() {
+        return pagado;
+    }
+
+    public void setPagado(boolean pagado) {
+        this.pagado = pagado;
     }
 }

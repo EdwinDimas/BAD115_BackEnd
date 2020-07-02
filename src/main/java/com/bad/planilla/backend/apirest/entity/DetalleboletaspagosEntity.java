@@ -24,6 +24,15 @@ public class DetalleboletaspagosEntity {
     private BigDecimal pago;
     private BigDecimal otrosDescuentos;
     private int idBoletaPago;
+    private BigDecimal horasExtra;
+    private BigDecimal horasNocturnidad;
+    private BigDecimal totalVentas;
+    private BigDecimal bonos;
+    private int diasFestivos;
+    private boolean vacaciones;
+    private BigDecimal comida;
+    private int diasPerdidos;
+    private BigDecimal horasADescontar;
 
     @Id
     @Column(name = "id_detalle_boleta", nullable = false)
@@ -213,5 +222,95 @@ public class DetalleboletaspagosEntity {
 
     public void setIdBoletaPago(int idBoletaPago) {
         this.idBoletaPago = idBoletaPago;
+    }
+
+    @Basic
+    @Column(name = "horas_extra")
+    public BigDecimal getHorasExtra() {
+        return horasExtra;
+    }
+
+    public void setHorasExtra(BigDecimal horasExtra) {
+        this.horasExtra = horasExtra;
+    }
+
+    @Basic
+    @Column(name = "horas_nocturnidad")
+    public BigDecimal getHorasNocturnidad() {
+        return horasNocturnidad;
+    }
+
+    public void setHorasNocturnidad(BigDecimal horasNocturnidad) {
+        this.horasNocturnidad = horasNocturnidad;
+    }
+
+    @Basic
+    @Column(name = "total_ventas")
+    public BigDecimal getTotalVentas() {
+        return totalVentas;
+    }
+
+    public void setTotalVentas(BigDecimal totalVentas) {
+        this.totalVentas = totalVentas;
+    }
+
+    @Basic
+    @Column(name = "bonos")
+    public BigDecimal getBonos() {
+        return bonos;
+    }
+
+    public void setBonos(BigDecimal bonos) {
+        this.bonos = bonos;
+    }
+
+    @Basic
+    @Column(name = "dias_festivos")
+    public int getDiasFestivos() {
+        return diasFestivos;
+    }
+
+    public void setDiasFestivos(int diasFestivos) {
+        this.diasFestivos = diasFestivos;
+    }
+
+    @Basic
+    @Column(name = "vacaciones")
+    public boolean isVacaciones() {
+        return vacaciones;
+    }
+
+    public void setVacaciones(boolean vacaciones) {
+        this.vacaciones = vacaciones;
+    }
+
+    @Basic
+    @Column(name = "comida")
+    public BigDecimal getComida() {
+        return comida;
+    }
+
+    public void setComida(BigDecimal comida) {
+        this.comida = comida;
+    }
+
+    @Basic
+    @Column(name = "dias_perdidos")
+    public int getDiasPerdidos() {
+        return diasPerdidos;
+    }
+
+    public void setDiasPerdidos(int diasPerdidos) {
+        this.diasPerdidos = diasPerdidos;
+    }
+
+    @Basic
+    @Column(name = "horas_a_descontar")
+    public BigDecimal getHorasADescontar() {
+        return horasADescontar;
+    }
+
+    public void setHorasADescontar(BigDecimal horasADescontar) {
+        this.horasADescontar = horasADescontar;
     }
 }

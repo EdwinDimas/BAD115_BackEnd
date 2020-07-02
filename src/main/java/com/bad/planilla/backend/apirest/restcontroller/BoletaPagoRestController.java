@@ -1,6 +1,6 @@
 package com.bad.planilla.backend.apirest.restcontroller;
 
-import com.bad.planilla.backend.apirest.entity.BoletaPago;
+import com.bad.planilla.backend.apirest.entity.BoletaPagoFunctionEntity;
 import com.bad.planilla.backend.apirest.entity.BoletaspagosEntity;
 import com.bad.planilla.backend.apirest.entity.DetalleboletaspagosEntity;
 import com.bad.planilla.backend.apirest.globals.ConsultaBoletaPago;
@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
-import java.util.List;
 
 @CrossOrigin(origins = Constants.URL_BASE)
 @RestController
@@ -32,7 +31,7 @@ public class BoletaPagoRestController {
 
 //   produces = MediaType.APPLICATION_JSON_VALUE
     @PostMapping("/obtenerboleta")
-    public BoletaPago obtenerBoleta(@RequestBody ConsultaBoletaPago boletaPago){
+    public BoletaPagoFunctionEntity obtenerBoleta(@RequestBody ConsultaBoletaPago boletaPago){
         return boletaPagoServiceImp.obtenerBoleta(boletaPago.getId(), boletaPago.getDiasFaltados(),
                 boletaPago.getHorasFaltadas(), boletaPago.getHorasExtra(),
                 boletaPago.getHorasNocturnas(), boletaPago.getVentas(),

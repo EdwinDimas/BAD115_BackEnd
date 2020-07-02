@@ -33,6 +33,7 @@ public class EmpleadosEntity {
     private boolean estado;
     private boolean esServicioProfesional;
     private boolean tomarVacaciones;
+    private BigDecimal prestamo;
 
     @Id
     @Column(name = "id_empleado", nullable = false)
@@ -290,5 +291,15 @@ public class EmpleadosEntity {
 
     public void setTomarVacaciones(boolean tomarVacaciones) {
         this.tomarVacaciones = tomarVacaciones;
+    }
+
+    @Basic
+    @Column(name = "prestamo", nullable = false, precision = 2)
+    public BigDecimal getPrestamo() {
+        return prestamo;
+    }
+
+    public void setPrestamo(BigDecimal prestamo) {
+        this.prestamo =prestamo;
     }
 }

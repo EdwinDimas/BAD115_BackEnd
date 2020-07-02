@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 
 @Entity
 @Table(name = "boletapagofunction", schema = "public", catalog = "dfckhqghp2ho34")
-public class BoletaPago {
+public class BoletaPagoFunctionEntity {
     @Id
     @Column(name = "total_descuentos", nullable = true)
     private BigDecimal totalDescuentos;
