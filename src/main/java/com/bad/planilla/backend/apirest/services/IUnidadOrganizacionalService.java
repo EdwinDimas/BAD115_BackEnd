@@ -14,4 +14,7 @@ public interface IUnidadOrganizacionalService {
     public abstract UnidadesorganizacionalesEntity modificar(UnidadesorganizacionalesEntity unidadOrganizacional);
     public void eliminar(int id);
     public abstract String desactivar(int id);
+    
+    public abstract List<UnidadesorganizacionalesEntity> listUnidadMayor(boolean unidad);
+    public abstract List<UnidadesorganizacionalesEntity> listUnidadesSuperiores(int unidad);
 }

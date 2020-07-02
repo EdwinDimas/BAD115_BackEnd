@@ -21,7 +21,7 @@ public class EmpleadosEntity {
     private boolean comision;
     private Collection<BoletaspagosEntity> boletaPago;
     private Collection<DocumentosempleadosEntity> documentosempleado;
-    private Collection<EmpleadodescuentosotrosEntity> empleadoDescuentosOtros;
+    private Collection<EmpleadosDescuentosEntity> empleadoDescuentosOtros;
     private GenerosEntity id_genero;
     private EstadoscivilesEntity id_estadocivil;
     private DireccionesEntity id_direccion;
@@ -31,6 +31,8 @@ public class EmpleadosEntity {
     private Collection<EmpleadoscatalogoingresosEntity> empleadoCatalogoIngresos;
     private Collection<ProfesionesempleadosEntity> profesionesEmpleado;
     private boolean estado;
+    private BigDecimal prestamo;
+    private Boolean esServicioProfesional;
 
     @Id
     @Column(name = "id_empleado", nullable = false)
@@ -144,6 +146,16 @@ public class EmpleadosEntity {
         this.estado = estado;
     }
 
+    @Basic
+    @Column(name = "prestamo", nullable = false, precision = 2)
+    public BigDecimal getPrestamo() {
+        return prestamo;
+    }
+
+    public void setPrestamo(BigDecimal prestamo) {
+        this.prestamo =prestamo;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -185,11 +197,11 @@ public class EmpleadosEntity {
     }
 
     @OneToMany(mappedBy = "id_empleado")
-    public Collection<EmpleadodescuentosotrosEntity> getEmpleadoDescuentosOtros() {
+    public Collection<EmpleadosDescuentosEntity> getEmpleadoDescuentosOtros() {
         return empleadoDescuentosOtros;
     }
 
-    public void setEmpleadoDescuentosOtros(Collection<EmpleadodescuentosotrosEntity> empleadoDescuentosOtros) {
+    public void setEmpleadoDescuentosOtros(Collection<EmpleadosDescuentosEntity> empleadoDescuentosOtros) {
         this.empleadoDescuentosOtros = empleadoDescuentosOtros;
     }
 
@@ -268,5 +280,15 @@ public class EmpleadosEntity {
 
     public void setProfesionesEmpleado(Collection<ProfesionesempleadosEntity> profesionesEmpleado) {
         this.profesionesEmpleado = profesionesEmpleado;
+    }
+
+    @Basic
+    @Column(name = "es_servicio_profesional")
+    public Boolean getEsServicioProfesional() {
+        return esServicioProfesional;
+    }
+
+    public void setEsServicioProfesional(Boolean esServicioProfesional) {
+        this.esServicioProfesional = esServicioProfesional;
     }
 }

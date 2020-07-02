@@ -13,6 +13,8 @@ public class ProfesionesEntity {
 
     @Id
     @Column(name = "id_profesion", nullable = false)
+    @SequenceGenerator(name="profesion_id_seq", sequenceName = "profesiones_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "profesion_id_seq")
     public int getIdProfesion() {
         return idProfesion;
     }

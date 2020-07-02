@@ -26,10 +26,11 @@ public class ProfesionRestController {
     @GetMapping("/profesion/{id}")
     public ProfesionesEntity getProfesion(@PathVariable int id) {return profesionService.findById(id);}
 
-    @PostMapping("/profesion")
+    @PostMapping("/profesion/crear")
     public ResponseEntity<?> crearProfesion(@RequestBody ProfesionesEntity profesion)
     {
         try{
+            profesion.setEstado(true);
             return new ResponseEntity<>(profesionService.guardar(profesion), HttpStatus.CREATED);
         } catch (DataAccessException e) {
             return new ResponseEntity<>(e.getCause().getCause().toString(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -40,9 +41,11 @@ public class ProfesionRestController {
     public ResponseEntity<?> modificarProfesion(@RequestBody ProfesionesEntity profesion)
     {
         try{
+            profesion.setEstado(true);
             return new ResponseEntity<>(profesionService.modificar(profesion), HttpStatus.CREATED);
         } catch (DataAccessException e) {
             return new ResponseEntity<>(e.getCause().getCause().toString(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
+

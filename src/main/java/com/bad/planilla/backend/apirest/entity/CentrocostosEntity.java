@@ -11,12 +11,15 @@ public class CentrocostosEntity {
     private int idCosto;
     private BigDecimal monto;
     private BigDecimal montoactual;
-    private Date periodo;
+    private int periodo;
     private UnidadesorganizacionalesEntity id_unidadorganizacional;
+    private int idUnidadPadre;
     private boolean estado;
 
     @Id
-    @Column(name = "id_costo", nullable = false)
+    @Column(name = "id_costo", nullable = false) 
+    @SequenceGenerator(name="centrocosto_id_seq",sequenceName = "centrocostos_id_seq",allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "centrocosto_id_seq")
     public int getIdCosto() {
         return idCosto;
     }
@@ -47,13 +50,13 @@ public class CentrocostosEntity {
 
     @Basic
     @Column(name = "periodo", nullable = false)
-    public Date getPeriodo() {
-        return periodo;
-    }
+    public int getPeriodo() {
+		return periodo;
+	}
 
-    public void setPeriodo(Date periodo) {
-        this.periodo = periodo;
-    }
+	public void setPeriodo(int periodo) {
+		this.periodo = periodo;
+	}
 
     @Basic
     @Column(name = "estado")
@@ -61,11 +64,23 @@ public class CentrocostosEntity {
         return estado;
     }
 
-    public void setEstado(boolean estado) {
+    
+	public void setEstado(boolean estado) {
         this.estado = estado;
     }
+    
+    
+    @Basic
+    @Column(name="id_unidadpadre")
+    public int getIdUnidadPadre() {
+		return idUnidadPadre;
+	}
 
-    @Override
+	public void setIdUnidadPadre(int idUnidadPadre) {
+		this.idUnidadPadre = idUnidadPadre;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

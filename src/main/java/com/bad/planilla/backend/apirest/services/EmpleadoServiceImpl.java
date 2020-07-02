@@ -33,4 +33,6 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     public void deleteById(int id_empleado) {
         //Se debe garantizar que este solo desactive el empleado
     }
+
+
 }
