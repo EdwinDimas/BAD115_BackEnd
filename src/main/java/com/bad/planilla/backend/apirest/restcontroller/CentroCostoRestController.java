@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -23,8 +24,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bad.planilla.backend.apirest.entity.CentrocostosEntity;
+import com.bad.planilla.backend.apirest.entity.EmpleadosEntity;
+import com.bad.planilla.backend.apirest.entity.PlanillaDescontar;
 import com.bad.planilla.backend.apirest.entity.UnidadesorganizacionalesEntity;
 import com.bad.planilla.backend.apirest.globals.Constants;
+import com.bad.planilla.backend.apirest.services.EmpleadoService;
 import com.bad.planilla.backend.apirest.services.ICentroCostoService;
 import com.bad.planilla.backend.apirest.services.IUnidadOrganizacionalService;
 
@@ -38,6 +42,9 @@ public class CentroCostoRestController {
 
 	@Autowired
 	private IUnidadOrganizacionalService uos;
+	
+	@Autowired
+	private EmpleadoService es;
 
 //	@GetMapping("/unidad_organizacional/list/{id}")
 //	public List<UnidadesorganizacionalesEntity> listUnidades(@PathVariable int id){	
@@ -256,32 +263,48 @@ public class CentroCostoRestController {
 
 	//SE ASUME POR EL MOMENTO QUE AL MOMENTO DE IMPRIMIR LA BOLETA SE DESCONTARA EL MONTO CORRESPONDIENTE DEL PRESUPUESTO
 	//SE DEBE PASARA COO PARAMETRO EL SALARIO BASE + INGRESOS DEL EMPLEADO
-	@PreAuthorize("isAuthenticated() and hasAuthority('CENTRO_COSTO_DISCOUNT')")
-	@PutMapping("/centro_costo/descontar/{idCosto}")
-	public ResponseEntity<?> descontarCosto(@PathVariable int idUnidad,float salario) {
+	@PreAuthorize("isAuthenticated() and hasAuthority('CENTRO_COSTO_PAY')")
+	@GetMapping("/centro_costo/descontar")
+	public ResponseEntity<?> descontarCosto() {
 		Map<String, Object> respuesta = new HashMap<>();
-		CentrocostosEntity costoUnidad = cs.costoByUnidadAndPeriodo(idUnidad, LocalDate.now().getYear()); 
-		if (costoUnidad == null) {
-			respuesta.put("mensaje", "La unidad con ID:" + idUnidad + " no existe en la DB");
-			return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.NOT_FOUND);
+		List<PlanillaDescontar> planilla = cs.getPlanillaDescontar();
+		CentrocostosEntity costoUnidad = null,costoDescontado=null;
+		if (planilla.isEmpty() || planilla == null) {
+			respuesta.put("mensaje", "No hay planilla a descontar!!");
+			respuesta.put("indice",-1);
+			return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.OK);
 		}
-		BigDecimal bDecimalSalario = new BigDecimal(Float.toString(salario));
-		//DESCUENTO A LA UNIDAD CORRESPONDIENTE
-		try {
-			if (costoUnidad.getMontoactual().compareTo(bDecimalSalario) == -1) {
-				respuesta.put("mensaje", "El salario ha descontar es mayor que el presupuesto disponible en la unidad organizacional!!");
-				return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.BAD_REQUEST);
+		int anio = LocalDate.now().getYear();
+		Optional<EmpleadosEntity> empleado = null;
+		String msg = "";int cantidadMensajes = 0;
+		for (PlanillaDescontar planillaDescontar : planilla) {
+			costoUnidad = cs.costoByUnidadAndPeriodo(planillaDescontar.getId_unidadorganizacional(),anio);
+			if (costoUnidad.getMontoactual().compareTo(planillaDescontar.getPago())== -1) {
+				cantidadMensajes+=1;
+				empleado = es.findById(planillaDescontar.getId_empleado());
+				msg += "Falta de presupuesto, no se pudo pagar Boleta de pago empleado:"+empleado.get().getPrimernombre()+
+						" "+empleado.get().getSegundonombre()+" del Departamento:"+planillaDescontar.getNombre()+".\n";
 			}else {
-				costoUnidad.setMontoactual(costoUnidad.getMontoactual().subtract(bDecimalSalario));
-				costoUnidad = cs.guardar(costoUnidad);
+				try {
+					costoUnidad.setMontoactual(costoUnidad.getMontoactual().subtract(planillaDescontar.getPago()));
+					costoDescontado = cs.guardar(costoUnidad);
+				} catch (DataAccessException e) {
+					respuesta.put("mensaje", "Error al descontar pago de planilla a centro de costo, intente de nuevo !!");
+					respuesta.put("error", e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
+					return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.INTERNAL_SERVER_ERROR);
+				}
 			}
-		} catch (DataAccessException e) {
-			respuesta.put("mensaje", "Error al descontar el salario!!");
-			respuesta.put("error", e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
-			return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.INTERNAL_SERVER_ERROR);
+			//System.out.println(planillaDescontar.getPago());
 		}
-		respuesta.put("mensaje", "El salario ha sido descontado de la unidad organizacional con exito!!");
-		return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.CREATED);
+		if (cantidadMensajes > 0) {
+			msg+="\nDebe suministrar mas presupuesto a los departamentos antes mencionados";
+			respuesta.put("mensaje", msg);
+			respuesta.put("indice",1);
+		}else {
+			respuesta.put("mensaje", "La planilla ha sido pagada con exito!!");
+			respuesta.put("indice",0);
+		}
+		return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.OK);
 	}
 
 }

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.bad.planilla.backend.apirest.entity.CentrocostosEntity;
+import com.bad.planilla.backend.apirest.entity.PlanillaDescontar;
 import com.bad.planilla.backend.apirest.entity.UnidadesorganizacionalesEntity;
 @Repository("centroCostoRepository")
 public interface CentroCostoRepository extends JpaRepository<CentrocostosEntity, Long> {
@@ -22,4 +23,7 @@ public interface CentroCostoRepository extends JpaRepository<CentrocostosEntity,
 	
 	@Query(value="select * from centrocostos where id_unidadorganizacional = ?1 and periodo = ?2 and estado = true",nativeQuery=true)
 	public CentrocostosEntity findByUnidadAndPeriodo(int idUnidad, int periodo);
+	
+	//@Query(value="select * from planilla_descontar",nativeQuery=true)
+	//public List<PlanillaDescontar> getPlanillaDescontar(); 
 }

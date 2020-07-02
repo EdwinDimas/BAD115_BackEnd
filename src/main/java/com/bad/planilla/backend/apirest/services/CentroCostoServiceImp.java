@@ -7,12 +7,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bad.planilla.backend.apirest.entity.CentrocostosEntity;
+import com.bad.planilla.backend.apirest.entity.PlanillaDescontar;
 import com.bad.planilla.backend.apirest.repository.CentroCostoRepository;
+import com.bad.planilla.backend.apirest.repository.PlanillaRepository;
 @Service("centroCostoService")
 public class CentroCostoServiceImp implements ICentroCostoService{
 	
 	@Autowired
 	private CentroCostoRepository ccr;
+	
+	@Autowired
+	private PlanillaRepository pr;
 
 	@Override
 	public CentrocostosEntity findById(int id) {
@@ -48,5 +53,11 @@ public class CentroCostoServiceImp implements ICentroCostoService{
 	public CentrocostosEntity costoByUnidadAndPeriodo(int idUnidad, int periodo) {
 		
 		return ccr.findByUnidadAndPeriodo(idUnidad,periodo);
+	}
+
+	@Override
+	public List<PlanillaDescontar> getPlanillaDescontar() {
+		
+		return (List<PlanillaDescontar>) pr.findAll();
 	}
 }
