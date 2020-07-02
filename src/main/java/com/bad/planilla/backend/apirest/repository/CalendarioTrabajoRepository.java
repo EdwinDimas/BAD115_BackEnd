@@ -9,8 +9,9 @@ import java.util.List;
 @Repository("calendarioTrabajoRepository")
 public interface CalendarioTrabajoRepository extends JpaRepository<CalendariostrabajosEntity, Integer> {
     public CalendariostrabajosEntity findByCalendariotrabajo(int id);
-    public List<CalendariostrabajosEntity> findByOrderByPeriocidad(); ;
     @Query(value = "SELECT * FROM calendariostrabajos where periodo = ?1", nativeQuery = true)
     public CalendariostrabajosEntity obtenerCalendarioDelAnio(int anio);
 
+    public List<CalendariostrabajosEntity> findByOrderByPeriocidad();
+    public List<CalendariostrabajosEntity> findByOrderByPeriodoDesc();
 }

@@ -14,7 +14,7 @@ public class CalendarioTrabajoServiceImp implements ICalendarioTrabajoService{
 
     @Override
     public List<CalendariostrabajosEntity> list() {
-        return calendarioTrabajoRepository.findByOrderByPeriocidad();
+        return calendarioTrabajoRepository.findByOrderByPeriodoDesc();
     }
 
     @Override
@@ -42,6 +42,7 @@ public class CalendarioTrabajoServiceImp implements ICalendarioTrabajoService{
         CalendariostrabajosEntity calendarioTrabajo = calendarioTrabajoRepository.findByCalendariotrabajo(id);
         if (calendarioTrabajo.isEstado()){
             calendarioTrabajo.setEstado(false);
+            calendarioTrabajo.setActivo(false);
             calendarioTrabajoRepository.save(calendarioTrabajo);
             return "Calendario desactivada";
         } else {
