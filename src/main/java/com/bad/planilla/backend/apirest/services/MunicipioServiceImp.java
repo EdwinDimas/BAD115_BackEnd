@@ -22,6 +22,6 @@ public class MunicipioServiceImp implements IMunicipioService {
 
     @Override
     public MunicipiosEntity findById(int id) {
-        return null;
+        return municipioRepository.findByIdMunicipio(id);
     }
 }

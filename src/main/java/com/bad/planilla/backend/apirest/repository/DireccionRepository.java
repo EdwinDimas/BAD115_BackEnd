@@ -12,9 +12,10 @@ import javax.transaction.Transactional;
 @Repository("direccionRepository")
 public interface DireccionRepository extends JpaRepository<DireccionesEntity,Long> {
 
-    @Modifying(clearAutomatically = true)
-    @Transactional
-    @Query(value="insert into direcciones values(?1, ?2, ?3, ?4, ?5)",nativeQuery = true)
-    public int guardar(String colonia, String descripcion,boolean estado, int departamento,int municipio);
+//    @Modifying(clearAutomatically = true)
+//    @Transactional
+//    @Query(value="insert into direcciones values(?1, ?2, ?3, ?4, ?5)",nativeQuery = true)
+//    public int guardar(String colonia, String descripcion,boolean estado, int departamento,int municipio);
+    public DireccionesEntity findByIdDireccion(int id);
 
 }
