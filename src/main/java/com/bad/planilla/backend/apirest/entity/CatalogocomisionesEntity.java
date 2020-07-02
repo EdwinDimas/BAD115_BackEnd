@@ -15,6 +15,8 @@ public class CatalogocomisionesEntity {
 
     @Id
     @Column(name = "id_comision", nullable = false)
+    @SequenceGenerator(name="comision_id_seq", sequenceName = "comisiones_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "comision_id_seq")
     public int getIdComision() {
         return idComision;
     }
