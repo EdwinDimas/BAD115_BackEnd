@@ -8,6 +8,6 @@ import java.util.List;
 @Repository("calendarioTrabajoRepository")
 public interface CalendarioTrabajoRepository extends JpaRepository<CalendariostrabajosEntity, Integer> {
     public CalendariostrabajosEntity findByCalendariotrabajo(int id);
-    public List<CalendariostrabajosEntity> findByOrderByPeriocidad(); ;
-
+    public List<CalendariostrabajosEntity> findByOrderByPeriocidad();
+    public List<CalendariostrabajosEntity> findByOrderByPeriodoDesc();
 }

@@ -29,6 +29,7 @@ public class UnidadOrganizacionalServiceImp implements IUnidadOrganizacionalServ
 
     @Override
     public UnidadesorganizacionalesEntity modificar(UnidadesorganizacionalesEntity unidadOrganizacional) {
+        //unidadOrganizacionalRepository.updateCosto(unidadOrganizacional.getIdUnidadorganizacional(), unidadOrganizacional.getUnidadOrganizacionalSuperior());
         return unidadOrganizacionalRepository.save(unidadOrganizacional);
     }
 
