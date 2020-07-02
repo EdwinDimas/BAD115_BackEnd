@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -23,10 +24,12 @@ public class ComisionRestController {
     @Autowired
     private IComisionService comisionService;
 
+    @PreAuthorize("isAuthenticated() and hasAuthority('COMISION_READ')")
     @GetMapping("/comision")
     public List<CatalogocomisionesEntity> list()
     {return comisionService.list();}
 
+    @PreAuthorize("isAuthenticated() and hasAuthority('COMISION_READ')")
     @GetMapping("/comision/{id}")
     public ResponseEntity<?> buscarComision(@PathVariable int id){
         CatalogocomisionesEntity comision = null;
@@ -47,6 +50,7 @@ public class ComisionRestController {
         return new ResponseEntity<CatalogocomisionesEntity>(comision,HttpStatus.OK);
     }
 
+    @PreAuthorize("isAuthenticated() and hasAuthority('COMISION_CREATE')")
     @PostMapping("/comision/crear")
     public ResponseEntity<?> crearComision(@RequestBody CatalogocomisionesEntity comision){
         try {
@@ -57,6 +61,7 @@ public class ComisionRestController {
         }
     }
 
+    @PreAuthorize("isAuthenticated() and hasAuthority('COMISION_UPDATE')")
     @PutMapping("/comision")
     public ResponseEntity<?> modificarComision(@RequestBody CatalogocomisionesEntity comision){
         try {

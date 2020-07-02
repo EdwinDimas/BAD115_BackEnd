@@ -107,7 +107,6 @@ public class CatalogoIngresoRestController {
 	}
 
 	@PreAuthorize("isAuthenticated() and hasAuthority('INGRESO_DISABLED')")
-
 	@GetMapping("/ingreso/desactivar/{id}")
 	public ResponseEntity<?> desactivarRol(@PathVariable int id){
 		CatalogoingresosEntity ingresoActual=null,ingresoDesactivado=null;

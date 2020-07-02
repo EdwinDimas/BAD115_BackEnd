@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import com.bad.planilla.backend.apirest.globals.Constants;
 
@@ -41,16 +42,19 @@ public class EmpleadoRestController {
     @Autowired
     private EstadoCivilRepository ecr;
 
+    @PreAuthorize("isAuthenticated() and hasAuthority('EMPLEADO_READ')")
     @GetMapping("/empleado")
     public List List(){
         return es.list();
     }
 
+    @PreAuthorize("isAuthenticated() and hasAuthority('EMPLEADO_READ')")
     @GetMapping("/empleado/{id}")
     public Optional<EmpleadosEntity> getEmpleadp(@PathVariable int id){
         return es.findById(id);
     }
 
+    @PreAuthorize("isAuthenticated() and hasAuthority('EMPLEADO_CREATE')")
     @PostMapping("/empleado/{id_genero}/{id_estadocivil}/{id_puestotrabajo}")
     public ResponseEntity<?> crearEmpleado(
             @RequestBody EmpleadosEntity empleado,
@@ -61,6 +65,7 @@ public class EmpleadoRestController {
         return crearActualizarEmpleado(id_genero, id_estadocivil, id_puestotrabajo, empleado);
     }
 
+    @PreAuthorize("isAuthenticated() and hasAuthority('EMPLEADO_UPDATE')")
     @PutMapping("/empleado/{id_genero}/{id_estadocivil}/{id_puestotrabajo}")
     public ResponseEntity<?> modificarEmpleado(
             @RequestBody EmpleadosEntity empleado,
@@ -84,12 +89,15 @@ public class EmpleadoRestController {
         }
     }
 
+    @PreAuthorize("isAuthenticated() and hasAuthority('ESTADO_CIVIL_READ')")
     @GetMapping("/estadocivil")
     public List listarEstadosCiviles(){return ecr.findAll(); }
 
+    @PreAuthorize("isAuthenticated() and hasAuthority('GENERO_READ')")
     @GetMapping("/genero")
     public List listarGeneros(){return gr.findAll();}
 
+    @PreAuthorize("isAuthenticated() and hasAuthority('PUESTO_TRABAJO_READ')")
     @GetMapping("/puestostrabajo")
     public List listarPuestosDeTrabajo(){return pdtr.findAllByOrderByNombre(); }
 

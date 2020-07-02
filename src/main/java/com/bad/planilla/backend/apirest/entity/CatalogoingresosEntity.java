@@ -62,15 +62,6 @@ public class CatalogoingresosEntity {
         return estado;
     }
 
-	public void setPorcentaje_ingreso(BigDecimal porcentaje_ingreso) {
-		this.porcentaje_ingreso = porcentaje_ingreso;
-	}
-
-	@Basic
-	public boolean isEstado() {
-		return estado;
-	}
-
 	public void setEstado(boolean estado) {
 		this.estado = estado;
 	}

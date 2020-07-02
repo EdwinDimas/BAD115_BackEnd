@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,11 +24,13 @@ public class UnidadOrganizacionalRestController {
     private IEmpresaService empresaService;
 
     //Mostrar lista
+    @PreAuthorize("isAuthenticated() and hasAuthority('UNIDAD_ORGANIZACIONAL_READ')")
     @GetMapping("/departamentos")
     public List<UnidadesorganizacionalesEntity>list(){
         return unidadOrganizacionalService.list();
     }
 
+    @PreAuthorize("isAuthenticated() and hasAuthority('UNIDAD_ORGANIZACIONAL_CREATE')")
     @PostMapping("/departamentos")
     public ResponseEntity<?> crearUnidadorganizacional(@RequestBody UnidadesorganizacionalesEntity  unidadOrganizacional){
 
@@ -40,11 +43,13 @@ public class UnidadOrganizacionalRestController {
     }
 
     //Mostrar
+    @PreAuthorize("isAuthenticated() and hasAuthority('UNIDAD_ORGANIZACIONAL_READ')")
     @GetMapping("/departamentos/{id}")
     public UnidadesorganizacionalesEntity getUnidadorganizacional(@PathVariable int id){
         return unidadOrganizacionalService.findById(id);
     }
     //Editar
+    @PreAuthorize("isAuthenticated() and hasAuthority('UNIDAD_ORGANIZACIONAL_UPDATE')")
     @PutMapping("/departamentos/{id}")
     public ResponseEntity<?> modificarUnidadorganizacional(@RequestBody UnidadesorganizacionalesEntity unidadOrganizacional){
         try {
@@ -55,6 +60,7 @@ public class UnidadOrganizacionalRestController {
         }
     }
     //Desactivar
+    @PreAuthorize("isAuthenticated() and hasAuthority('UNIDAD_ORGANIZACIONAL_DISABLED')")
     @DeleteMapping("/departamentos/{id}")
     public ResponseEntity<?> desactivar(@PathVariable int id){
         try {
