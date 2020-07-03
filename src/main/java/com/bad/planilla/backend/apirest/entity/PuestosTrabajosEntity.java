@@ -10,8 +10,9 @@ public class PuestosTrabajosEntity {
     private int idPuestotrabajo;
     private String nombre;
     private String descripcion;
-    private Collection<SalariospuestostrabajosEntity> salarioPuestoTrabajo;
+    private Collection<SalariosPuestosTrabajosEntity> salarioPuestoTrabajo;
     private boolean estado;
+    private SalariosEntity id_salario;
 
     @Id
     @Column(name = "id_puestotrabajo", nullable = false)
@@ -36,7 +37,7 @@ public class PuestosTrabajosEntity {
     }
 
     @Basic
-    @Column(name = "descripcion", nullable = false, length = 100)
+    @Column(name = "descripcion", nullable = false, length = 500)
     public String getDescripcion() {
         return descripcion;
     }
@@ -74,11 +75,21 @@ public class PuestosTrabajosEntity {
     }
 
     @OneToMany(mappedBy = "id_puestotrabajo")
-    public Collection<SalariospuestostrabajosEntity> getSalarioPuestoTrabajo() {
+    public Collection<SalariosPuestosTrabajosEntity> getSalarioPuestoTrabajo() {
         return salarioPuestoTrabajo;
     }
 
-    public void setSalarioPuestoTrabajo(Collection<SalariospuestostrabajosEntity> salarioPuestoTrabajo) {
+    public void setSalarioPuestoTrabajo(Collection<SalariosPuestosTrabajosEntity> salarioPuestoTrabajo) {
         this.salarioPuestoTrabajo = salarioPuestoTrabajo;
+    }
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_salario", referencedColumnName = "id_salario")
+    public SalariosEntity getId_salario() {
+        return id_salario;
+    }
+
+    public void setId_salario(SalariosEntity id_salario) {
+        this.id_salario = id_salario;
     }
 }

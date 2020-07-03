@@ -21,7 +21,7 @@ public class EmpleadosEntity {
     private boolean comision;
     private Collection<BoletaspagosEntity> boletaPago;
     private Collection<DocumentosempleadosEntity> documentosempleado;
-    private Collection<EmpleadodescuentosotrosEntity> empleadoDescuentosOtros;
+    private Collection<EmpleadosDescuentosEntity> empleadoDescuentosOtros;
     private GenerosEntity id_genero;
     private EstadoscivilesEntity id_estadocivil;
     private DireccionesEntity id_direccion;
@@ -32,9 +32,12 @@ public class EmpleadosEntity {
     private Collection<ProfesionesempleadosEntity> profesionesEmpleado;
     private boolean estado;
     private BigDecimal prestamo;
+    private Boolean esServicioProfesional;
 
     @Id
     @Column(name = "id_empleado", nullable = false)
+    @SequenceGenerator(name="empleado_id_seq", sequenceName = "empleados_id_empleado_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "empleado_id_seq")
     public int getIdEmpleado() {
         return idEmpleado;
     }
@@ -194,11 +197,11 @@ public class EmpleadosEntity {
     }
 
     @OneToMany(mappedBy = "id_empleado")
-    public Collection<EmpleadodescuentosotrosEntity> getEmpleadoDescuentosOtros() {
+    public Collection<EmpleadosDescuentosEntity> getEmpleadoDescuentosOtros() {
         return empleadoDescuentosOtros;
     }
 
-    public void setEmpleadoDescuentosOtros(Collection<EmpleadodescuentosotrosEntity> empleadoDescuentosOtros) {
+    public void setEmpleadoDescuentosOtros(Collection<EmpleadosDescuentosEntity> empleadoDescuentosOtros) {
         this.empleadoDescuentosOtros = empleadoDescuentosOtros;
     }
 
@@ -277,5 +280,15 @@ public class EmpleadosEntity {
 
     public void setProfesionesEmpleado(Collection<ProfesionesempleadosEntity> profesionesEmpleado) {
         this.profesionesEmpleado = profesionesEmpleado;
+    }
+
+    @Basic
+    @Column(name = "es_servicio_profesional")
+    public Boolean getEsServicioProfesional() {
+        return esServicioProfesional;
+    }
+
+    public void setEsServicioProfesional(Boolean esServicioProfesional) {
+        this.esServicioProfesional = esServicioProfesional;
     }
 }
