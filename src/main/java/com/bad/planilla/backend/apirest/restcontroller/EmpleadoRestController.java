@@ -1,14 +1,9 @@
 package com.bad.planilla.backend.apirest.restcontroller;
 
-import com.bad.planilla.backend.apirest.entity.EstadoscivilesEntity;
-import com.bad.planilla.backend.apirest.entity.GenerosEntity;
-import com.bad.planilla.backend.apirest.entity.PuestosTrabajosEntity;
-import com.bad.planilla.backend.apirest.repository.EmpleadoRepository;
-import com.bad.planilla.backend.apirest.repository.EstadoCivilRepository;
-import com.bad.planilla.backend.apirest.repository.GeneroRepository;
-import com.bad.planilla.backend.apirest.repository.PuestoTrabajoRepository;
+import com.bad.planilla.backend.apirest.entity.*;
+import com.bad.planilla.backend.apirest.repository.*;
+import com.bad.planilla.backend.apirest.services.DireccionServiceImp;
 import com.bad.planilla.backend.apirest.services.EmpleadoServiceImpl;
-import com.bad.planilla.backend.apirest.entity.EmpleadosEntity;
 import com.bad.planilla.backend.apirest.services.IPuestoTrabajoService;
 import com.bad.planilla.backend.apirest.services.PuestoTrabajoServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +26,9 @@ public class EmpleadoRestController {
     private EmpleadoServiceImpl es;
 
     @Autowired
+    private DireccionServiceImp ds;
+
+    @Autowired
     private PuestoTrabajoServiceImp pts;
 
     @Autowired
@@ -42,40 +40,62 @@ public class EmpleadoRestController {
     @Autowired
     private EstadoCivilRepository ecr;
 
+    @Autowired
+    private MunicipioRepository mr;
+
+    @Autowired
+    private DepartamentoRepository dr;
+
+    @Autowired
+    private DireccionRepository dir;
+
+    static class EmpleadoYDireccion {
+        public EmpleadosEntity empleado;
+        public DireccionesEntity direccion;
+    }
+
     @PreAuthorize("isAuthenticated() and hasAuthority('EMPLEADO_READ')")
     @GetMapping("/empleado")
     public List List(){
         return es.list();
     }
 
-    @PreAuthorize("isAuthenticated() and hasAuthority('EMPLEADO_READ')")
+   @PreAuthorize("isAuthenticated() and hasAuthority('EMPLEADO_READ')")
     @GetMapping("/empleado/{id}")
     public Optional<EmpleadosEntity> getEmpleadp(@PathVariable int id){
         return es.findById(id);
     }
 
-    @PreAuthorize("isAuthenticated() and hasAuthority('EMPLEADO_CREATE')")
-    @PostMapping("/empleado/{id_genero}/{id_estadocivil}/{id_puestotrabajo}")
+   @PreAuthorize("isAuthenticated() and hasAuthority('EMPLEADO_CREATE')")
+    @PostMapping("/empleado/{id_genero}/{id_estadocivil}/{id_puestotrabajo}/{id_municipio}")
     public ResponseEntity<?> crearEmpleado(
-            @RequestBody EmpleadosEntity empleado,
+            @RequestBody EmpleadoYDireccion empleadoYDireccion,
             @PathVariable int id_genero,
             @PathVariable int id_estadocivil,
-            @PathVariable int id_puestotrabajo) {
-        empleado.setEstado(true);
-        return crearActualizarEmpleado(id_genero, id_estadocivil, id_puestotrabajo, empleado);
+            @PathVariable int id_puestotrabajo,
+            @PathVariable int id_municipio) {
+        empleadoYDireccion.empleado.setEstado(true);
+        return crearActualizarEmpleado(id_genero, id_estadocivil, id_puestotrabajo, id_municipio, empleadoYDireccion.empleado, empleadoYDireccion.direccion);
     }
 
-    @PreAuthorize("isAuthenticated() and hasAuthority('EMPLEADO_UPDATE')")
-    @PutMapping("/empleado/{id_genero}/{id_estadocivil}/{id_puestotrabajo}")
+   @PreAuthorize("isAuthenticated() and hasAuthority('EMPLEADO_UPDATE')")
+    @PutMapping("/empleado/{id_genero}/{id_estadocivil}/{id_puestotrabajo}/{id_municipio}")
     public ResponseEntity<?> modificarEmpleado(
-            @RequestBody EmpleadosEntity empleado,
+            @RequestBody EmpleadoYDireccion empleadoYDireccion,
             @PathVariable int id_genero,
             @PathVariable int id_estadocivil,
-            @PathVariable int id_puestotrabajo){
-        return crearActualizarEmpleado(id_genero, id_estadocivil, id_puestotrabajo, empleado);
+            @PathVariable int id_puestotrabajo,
+            @PathVariable int id_municipio){
+        Optional<EmpleadosEntity> emp = es.findById(empleadoYDireccion.empleado.getIdEmpleado());
+        DireccionesEntity direcccion_actual = emp.get().getId_direccion();
+        direcccion_actual.setColonia(empleadoYDireccion.direccion.getColonia());
+        direcccion_actual.setDescripcion(empleadoYDireccion.direccion.getDescripcion());
+
+
+        return crearActualizarEmpleado(id_genero, id_estadocivil, id_puestotrabajo, id_municipio, empleadoYDireccion.empleado, direcccion_actual);
     }
 
-    private ResponseEntity<?> crearActualizarEmpleado(int id_genero, int id_estadocivil, int id_puestotrabajo, EmpleadosEntity empleado){
+    private ResponseEntity<?> crearActualizarEmpleado(int id_genero, int id_estadocivil, int id_puestotrabajo, int id_municipio, EmpleadosEntity empleado, DireccionesEntity direccion){
         try {
             GenerosEntity genero = gr.findByIdGenero(id_genero);
             EstadoscivilesEntity estado = ecr.findByIdEstadocivil(id_estadocivil);
@@ -83,6 +103,14 @@ public class EmpleadoRestController {
             if(genero != null) empleado.setId_genero(genero);
             if(estado != null) empleado.setId_estadocivil(estado);
             if(puesto != null) empleado.setId_puestotrabajo(puesto);
+
+
+            direccion.setEstado(true);
+            direccion.setId_municipio(mr.findByIdMunicipio(id_municipio));
+            direccion.setId_departmento(direccion.getId_departmento());
+            ds.guardar(direccion);
+            empleado.setId_direccion(direccion);
+
             return new ResponseEntity<>(es.save(empleado), HttpStatus.CREATED);
         }catch (DataAccessException | NullPointerException e){
             return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -100,7 +128,5 @@ public class EmpleadoRestController {
     @PreAuthorize("isAuthenticated() and hasAuthority('PUESTO_TRABAJO_READ')")
     @GetMapping("/puestostrabajo")
     public List listarPuestosDeTrabajo(){return pdtr.findAllByOrderByNombre(); }
-
-
 
 }
