@@ -13,7 +13,6 @@ public class CalendariostrabajosEntity {
     private Integer periodo;
     private Collection<BoletaspagosEntity> boletaspagosByCalendariotrabajo;
     private boolean estado;
-    private Integer periodo;
 
     @Id
     @Column(name = "calendariotrabajo", nullable = false)
@@ -93,13 +92,4 @@ public class CalendariostrabajosEntity {
         this.boletaspagosByCalendariotrabajo = boletaspagosByCalendariotrabajo;
     }
 
-    @Basic
-    @Column(name = "periodo")
-    public Integer getPeriodo() {
-        return periodo;
-    }
-
-    public void setPeriodo(Integer periodo) {
-        this.periodo = periodo;
-    }
 }
