@@ -103,11 +103,12 @@ public class EmpleadoRestController {
             if(genero != null) empleado.setId_genero(genero);
             if(estado != null) empleado.setId_estadocivil(estado);
             if(puesto != null) empleado.setId_puestotrabajo(puesto);
+            empleado.setTomarVacaciones(false);
 
 
             direccion.setEstado(true);
             direccion.setId_municipio(mr.findByIdMunicipio(id_municipio));
-            direccion.setId_departmento(direccion.getId_departmento());
+            direccion.setId_departmento(direccion.getId_municipio().getId_departmento());
             ds.guardar(direccion);
             empleado.setId_direccion(direccion);
 
