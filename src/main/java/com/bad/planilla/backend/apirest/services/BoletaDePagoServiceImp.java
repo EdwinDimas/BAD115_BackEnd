@@ -15,4 +15,10 @@ public class BoletaDePagoServiceImp implements IBoletaDePagoService {
     public BoletaspagosEntity guardar(BoletaspagosEntity boletaDePago) {
         return boletaDePagoRepository.save(boletaDePago);
     }
+
+	@Override
+	public BoletaspagosEntity buscarId(int id) {
+		
+		return boletaDePagoRepository.findById(id).orElse(null);
+	}
 }
