@@ -57,7 +57,7 @@ public class ComisionRestController {
         }
     }
 
-    @PutMapping("/comision")
+    @PutMapping("/comision/editar")
     public ResponseEntity<?> modificarComision(@RequestBody CatalogocomisionesEntity comision){
         try {
             comision.setEstado(true);

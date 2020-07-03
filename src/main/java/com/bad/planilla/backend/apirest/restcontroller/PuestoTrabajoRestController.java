@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = { Constants.URL_BASE})
 @RestController
 @RequestMapping(Constants.BASE)
 public class PuestoTrabajoRestController {
@@ -26,7 +27,7 @@ public class PuestoTrabajoRestController {
         return puestoTrabajoService.list();
     }
 
-    @PostMapping("/puestotrabajo")
+    @PostMapping("/puestotrabajo/crear")
     public ResponseEntity<?> crearPuestoTrabajo(@RequestBody PuestosTrabajosEntity puestoTrabajo){
         try {
             return new ResponseEntity<>(puestoTrabajoService.guardar(puestoTrabajo), HttpStatus.CREATED);

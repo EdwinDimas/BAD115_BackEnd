@@ -37,11 +37,10 @@ public class ProfesionRestController {
         }
     }
 
-    @PutMapping("/profesion")
+    @PutMapping("/profesion/{id}")
     public ResponseEntity<?> modificarProfesion(@RequestBody ProfesionesEntity profesion)
     {
         try{
-            profesion.setEstado(true);
             return new ResponseEntity<>(profesionService.modificar(profesion), HttpStatus.CREATED);
         } catch (DataAccessException e) {
             return new ResponseEntity<>(e.getCause().getCause().toString(), HttpStatus.INTERNAL_SERVER_ERROR);
