@@ -21,7 +21,6 @@ public class EmpleadosEntity {
     private boolean comision;
     private Collection<BoletaspagosEntity> boletaPago;
     private Collection<DocumentosempleadosEntity> documentosempleado;
-    private Collection<EmpleadosDescuentosEntity> empleadoDescuentosOtros;
     private GenerosEntity id_genero;
     private EstadoscivilesEntity id_estadocivil;
     private DireccionesEntity id_direccion;
@@ -147,16 +146,7 @@ public class EmpleadosEntity {
         this.estado = estado;
     }
 
-    @Basic
-    @Column(name = "prestamo", nullable = false, precision = 2)
-    public BigDecimal getPrestamo() {
-        return prestamo;
-    }
-
-    public void setPrestamo(BigDecimal prestamo) {
-        this.prestamo =prestamo;
-    }
-
+ 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -195,15 +185,6 @@ public class EmpleadosEntity {
 
     public void setDocumentosempleado(Collection<DocumentosempleadosEntity> documentosempleado) {
         this.documentosempleado = documentosempleado;
-    }
-
-    @OneToMany(mappedBy = "id_empleado")
-    public Collection<EmpleadosDescuentosEntity> getEmpleadoDescuentosOtros() {
-        return empleadoDescuentosOtros;
-    }
-
-    public void setEmpleadoDescuentosOtros(Collection<EmpleadosDescuentosEntity> empleadoDescuentosOtros) {
-        this.empleadoDescuentosOtros = empleadoDescuentosOtros;
     }
 
     @ManyToOne

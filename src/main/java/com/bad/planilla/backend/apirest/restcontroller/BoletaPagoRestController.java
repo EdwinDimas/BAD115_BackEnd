@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -30,6 +31,7 @@ public class BoletaPagoRestController {
     private DetalleBoletaPagoRepository detalleBoletaPagoRepository;
 
 //   produces = MediaType.APPLICATION_JSON_VALUE
+    @PreAuthorize("isAuthenticated() and hasAuthority('BOLETA_PAGO_READ')")
     @PostMapping("/obtenerboleta")
     public BoletaPagoFunctionEntity obtenerBoleta(@RequestBody ConsultaBoletaPago boletaPago){
         return boletaPagoServiceImp.obtenerBoleta(boletaPago.getId(), boletaPago.getDiasFaltados(),
@@ -40,6 +42,7 @@ public class BoletaPagoRestController {
                 boletaPago.getPeriodicidad());
     }
 
+    @PreAuthorize("isAuthenticated() and hasAuthority('BOLETA_PAGO_CREATE')")
     @PostMapping("/boletapago")
     public ResponseEntity<?> guardarBoleta(@RequestBody BoletaspagosEntity boletaDePago){
         try {

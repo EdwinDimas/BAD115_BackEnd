@@ -8,6 +8,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,12 +21,14 @@ public class CalendarioTrabajoRestController {
     @Autowired
     private ICalendarioTrabajoService calendarioTrabajoService;
 
+    @PreAuthorize("isAuthenticated() and hasAuthority('CALENDARIO_TRABAJO_READ')")
     @GetMapping("/periocidad")
     public List<CalendariostrabajosEntity>list(){
         return calendarioTrabajoService.list();
     }
 
     //Crear
+    @PreAuthorize("isAuthenticated() and hasAuthority('CALENDARIO_TRABAJO_CREATE')")
     @PostMapping("/periocidad")
     public ResponseEntity<?> crearCalendarioTrabajo(@RequestBody CalendariostrabajosEntity calendarioTrabajo){
         try{
@@ -36,11 +39,13 @@ public class CalendarioTrabajoRestController {
         }
     }
 //    //Mostrar
+    @PreAuthorize("isAuthenticated() and hasAuthority('CALENDARIO_TRABAJO_READ')")
     @GetMapping("/periocidad/{id}")
     public CalendariostrabajosEntity getCalendarioTrabajo(@PathVariable int id){
         return calendarioTrabajoService.findById(id);
     }
 //    //Editar
+    @PreAuthorize("isAuthenticated() and hasAuthority('CALENDARIO_TRABAJO_UPDATE')")
     @PutMapping("/periocidad/{id}")
     public ResponseEntity<?>  modificarCalendarioTrabajo(@RequestBody CalendariostrabajosEntity calendarioTrabajo){
         try{
@@ -51,6 +56,7 @@ public class CalendarioTrabajoRestController {
         }
     }
 //    //Desactivar
+    @PreAuthorize("isAuthenticated() and hasAuthority('CALENDARIO_TRABAJO_DISABLED')")
     @DeleteMapping("/periocidad/{id}")
     public ResponseEntity<?> desacactivar(@PathVariable int id){
         try {
@@ -59,7 +65,8 @@ public class CalendarioTrabajoRestController {
             return new ResponseEntity<>(e.getCause().getCause().toString(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    
+    @PreAuthorize("isAuthenticated() and hasAuthority('CALENDARIO_TRABAJO_READ')")
     @GetMapping("/periodicidad/{anio}")
     public CalendariostrabajosEntity  obtenerCalendarioDelAnio(@PathVariable int anio){
             return calendarioTrabajoService.obtenerCalendarioDelAnio(anio);

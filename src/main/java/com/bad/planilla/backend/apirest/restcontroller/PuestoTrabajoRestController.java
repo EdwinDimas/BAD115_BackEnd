@@ -10,6 +10,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -25,11 +26,13 @@ public class PuestoTrabajoRestController {
     @Autowired
     private SalarioServiceImp salarioServiceImp;
 
+    @PreAuthorize("isAuthenticated() and hasAuthority('PUESTO_TRABAJO_READ')")
     @GetMapping(value = "/puestotrabajo")
     public List<PuestosTrabajosEntity> list() {
         return puestoTrabajoService.list();
     }
 
+    @PreAuthorize("isAuthenticated() and hasAuthority('PUESTO_TRABAJO_CREATE')")
     @PostMapping("/puestotrabajo")
     public ResponseEntity<?> crearPuestoTrabajo(@RequestBody PuestosTrabajosEntity puestoTrabajo){
         try {
@@ -40,11 +43,13 @@ public class PuestoTrabajoRestController {
         }
     }
 
+    @PreAuthorize("isAuthenticated() and hasAuthority('PUESTO_TRABAJO_READ')")
     @GetMapping("/puestotrabajo/{id}")
     public PuestosTrabajosEntity getPuestoTrabajo(@PathVariable int id){
         return puestoTrabajoService.findById(id);
     }
 
+    @PreAuthorize("isAuthenticated() and hasAuthority('PUESTO_TRABAJO_UPDATE')")
     @PutMapping("/puestotrabajo/{id}")
     public ResponseEntity<?> modificarPuestoTrabajo(@RequestBody PuestosTrabajosEntity puestoTrabajo){
         try {
@@ -55,6 +60,7 @@ public class PuestoTrabajoRestController {
         }
     }
 
+    @PreAuthorize("isAuthenticated() and hasAuthority('PUESTO_TRABAJO_DISABLED')")
     @DeleteMapping("/puestotrabajo/{id}")
     public ResponseEntity<?> desactivar(@PathVariable int id){
         try {
