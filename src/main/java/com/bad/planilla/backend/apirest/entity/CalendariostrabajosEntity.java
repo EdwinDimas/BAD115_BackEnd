@@ -92,4 +92,5 @@ public class CalendariostrabajosEntity {
         this.boletaspagosByCalendariotrabajo = boletaspagosByCalendariotrabajo;
     }
 
+
 }
