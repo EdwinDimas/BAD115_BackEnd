@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,12 +21,15 @@ public class ProfesionRestController {
     @Autowired
     private ProfesionServiceImp profesionService;
 
+    @PreAuthorize("isAuthenticated() and hasAuthority('PROFESION_READ')")
     @GetMapping("/profesion")
     public List<ProfesionesEntity> list() {return profesionService.list();}
 
+    @PreAuthorize("isAuthenticated() and hasAuthority('PROFESION_READ')")
     @GetMapping("/profesion/{id}")
     public ProfesionesEntity getProfesion(@PathVariable int id) {return profesionService.findById(id);}
 
+    @PreAuthorize("isAuthenticated() and hasAuthority('PROFESION_CREATE')")
     @PostMapping("/profesion/crear")
     public ResponseEntity<?> crearProfesion(@RequestBody ProfesionesEntity profesion)
     {
@@ -37,6 +41,7 @@ public class ProfesionRestController {
         }
     }
 
+    @PreAuthorize("isAuthenticated() and hasAuthority('PROFESION_UPDATE')")
     @PutMapping("/profesion")
     public ResponseEntity<?> modificarProfesion(@RequestBody ProfesionesEntity profesion)
     {

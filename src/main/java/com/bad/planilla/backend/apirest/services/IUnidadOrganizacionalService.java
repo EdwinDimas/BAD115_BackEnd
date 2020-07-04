@@ -17,4 +17,5 @@ public interface IUnidadOrganizacionalService {
     
     public abstract List<UnidadesorganizacionalesEntity> listUnidadMayor(boolean unidad);
     public abstract List<UnidadesorganizacionalesEntity> listUnidadesSuperiores(int unidad);
+
 }

@@ -42,7 +42,7 @@ public class CatalogoIngresoRestController {
 	public List<CatalogoingresosEntity> listAll(){
 		return cs.list();
 	}
-	
+  
 	@PreAuthorize("isAuthenticated() and hasAuthority('INGRESO_READ')")
 	@GetMapping("/ingreso/{id}")
 	public ResponseEntity<?> buscar(@PathVariable int id){
@@ -63,7 +63,7 @@ public class CatalogoIngresoRestController {
 		}
 		return new ResponseEntity<CatalogoingresosEntity>(ingreso, HttpStatus.OK);
 	}
-	
+  
 	@PreAuthorize("isAuthenticated() and hasAuthority('INGRESO_CREATE')")
 	@PostMapping("/ingreso")
 	public ResponseEntity<?> crearIngreso(@RequestBody CatalogoingresosEntity ingreso){
@@ -80,7 +80,7 @@ public class CatalogoIngresoRestController {
 		respuesta.put("ingreso",ingresoCreado);
 		return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.CREATED);
 	}
-	
+
 	@PreAuthorize("isAuthenticated() and hasAuthority('INGRESO_UPDATE')")
 	@PutMapping("/ingreso/{id}")
 	public ResponseEntity<?> editarIngreso(@RequestBody CatalogoingresosEntity ingreso,@PathVariable int id){
@@ -105,7 +105,7 @@ public class CatalogoIngresoRestController {
 		respuesta.put("ingreso",ingresoEditado);
 		return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.CREATED);
 	}
-	
+
 	@PreAuthorize("isAuthenticated() and hasAuthority('INGRESO_DISABLED')")
 	@GetMapping("/ingreso/desactivar/{id}")
 	public ResponseEntity<?> desactivarRol(@PathVariable int id){

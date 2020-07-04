@@ -10,9 +10,9 @@ public class CalendariostrabajosEntity {
     private int calendariotrabajo;
     private boolean activo;
     private String periocidad;
-    private Integer periodo;
     private Collection<BoletaspagosEntity> boletaspagosByCalendariotrabajo;
     private boolean estado;
+    private Integer periodo;
 
     @Id
     @Column(name = "calendariotrabajo", nullable = false)
@@ -91,6 +91,5 @@ public class CalendariostrabajosEntity {
     public void setBoletaspagosByCalendariotrabajo(Collection<BoletaspagosEntity> boletaspagosByCalendariotrabajo) {
         this.boletaspagosByCalendariotrabajo = boletaspagosByCalendariotrabajo;
     }
-
 
 }

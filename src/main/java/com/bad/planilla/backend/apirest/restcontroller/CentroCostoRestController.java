@@ -23,12 +23,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bad.planilla.backend.apirest.entity.BoletaPago;
+import com.bad.planilla.backend.apirest.entity.BoletaspagosEntity;
 import com.bad.planilla.backend.apirest.entity.CentrocostosEntity;
 import com.bad.planilla.backend.apirest.entity.EmpleadosEntity;
 import com.bad.planilla.backend.apirest.entity.PlanillaDescontar;
 import com.bad.planilla.backend.apirest.entity.UnidadesorganizacionalesEntity;
 import com.bad.planilla.backend.apirest.globals.Constants;
 import com.bad.planilla.backend.apirest.services.EmpleadoService;
+import com.bad.planilla.backend.apirest.services.IBoletaDePagoService;
 import com.bad.planilla.backend.apirest.services.ICentroCostoService;
 import com.bad.planilla.backend.apirest.services.IUnidadOrganizacionalService;
 
@@ -45,6 +48,9 @@ public class CentroCostoRestController {
 	
 	@Autowired
 	private EmpleadoService es;
+	
+	@Autowired
+	private IBoletaDePagoService bs;
 
 //	@GetMapping("/unidad_organizacional/list/{id}")
 //	public List<UnidadesorganizacionalesEntity> listUnidades(@PathVariable int id){	
@@ -269,6 +275,7 @@ public class CentroCostoRestController {
 		Map<String, Object> respuesta = new HashMap<>();
 		List<PlanillaDescontar> planilla = cs.getPlanillaDescontar();
 		CentrocostosEntity costoUnidad = null,costoDescontado=null;
+		BoletaspagosEntity boleta = null;
 		if (planilla.isEmpty() || planilla == null) {
 			respuesta.put("mensaje", "No hay planilla a descontar!!");
 			respuesta.put("indice",-1);
@@ -288,6 +295,9 @@ public class CentroCostoRestController {
 				try {
 					costoUnidad.setMontoactual(costoUnidad.getMontoactual().subtract(planillaDescontar.getPago()));
 					costoDescontado = cs.guardar(costoUnidad);
+					boleta = bs.buscarId(planillaDescontar.getId_boletapago());
+					boleta.setPagado(true);
+					bs.guardar(boleta);
 				} catch (DataAccessException e) {
 					respuesta.put("mensaje", "Error al descontar pago de planilla a centro de costo, intente de nuevo !!");
 					respuesta.put("error", e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));

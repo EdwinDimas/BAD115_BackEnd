@@ -25,7 +25,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
 	public void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests().antMatchers(HttpMethod.GET,Constants.BASE+"/users/list").permitAll()
 		.antMatchers(HttpMethod.GET,Constants.BASE+"/user/bloqueado/{username}").permitAll()
-		.antMatchers(HttpMethod.GET,Constants.BASE+"/centro_costo/descontar").permitAll()
+		//.antMatchers(HttpMethod.GET,Constants.BASE+"/centro_costo/descontar").permitAll()
 		.anyRequest().authenticated()
 		.and().cors().configurationSource(corsConfigurationSource());
 	}

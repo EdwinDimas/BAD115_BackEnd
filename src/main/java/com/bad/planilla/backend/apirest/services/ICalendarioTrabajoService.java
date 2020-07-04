@@ -14,5 +14,6 @@ public interface  ICalendarioTrabajoService {
     public abstract CalendariostrabajosEntity modificar(CalendariostrabajosEntity calendariotrabajo);
     public void eliminar(int id);
     public abstract String desactivar(int id);
+    public abstract CalendariostrabajosEntity obtenerCalendarioDelAnio(int anio);
 
 }
