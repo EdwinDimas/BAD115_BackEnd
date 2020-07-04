@@ -92,9 +92,13 @@ public class CentroCostoRestController {
 
 	@PreAuthorize("isAuthenticated() and hasAuthority('CENTRO_COSTO_READ')")
 	@GetMapping("/centro_costo/list/{id}")
-	public List<CentrocostosEntity> listCostos(@PathVariable int id) {
+	public ResponseEntity<?> listCostos(@PathVariable int id) {
 		int año = LocalDate.now().getYear();
-		return (id == -1) ? cs.costosUnidadMayor(año) : cs.costosHijos(id, año);
+		Map<String, Object> respuesta = new HashMap<>();
+		List<CentrocostosEntity> costos =  (id == -1) ? cs.costosUnidadMayor(año) : cs.costosHijos(id, año);
+		respuesta.put("costos", costos);
+		respuesta.put("unidad", (id == -1) ? "Mayor " : uos.findById(id).getNombre());
+		return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.OK);
 	}
 
 //	@GetMapping("/centro_costo/list/{id}")
