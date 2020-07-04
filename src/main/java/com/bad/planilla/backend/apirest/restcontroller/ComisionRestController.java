@@ -62,7 +62,7 @@ public class ComisionRestController {
     }
 
     @PreAuthorize("isAuthenticated() and hasAuthority('COMISION_UPDATE')")
-    @PutMapping("/comision")
+    @PutMapping("/comision/editar")
     public ResponseEntity<?> modificarComision(@RequestBody CatalogocomisionesEntity comision){
         try {
             comision.setEstado(true);

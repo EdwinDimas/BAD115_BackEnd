@@ -33,7 +33,7 @@ public class PuestoTrabajoRestController {
     }
 
     @PreAuthorize("isAuthenticated() and hasAuthority('PUESTO_TRABAJO_CREATE')")
-    @PostMapping("/puestotrabajo")
+    @PostMapping("/puestotrabajo/crear")
     public ResponseEntity<?> crearPuestoTrabajo(@RequestBody PuestosTrabajosEntity puestoTrabajo){
         try {
             puestoTrabajo.setEstado(true);
