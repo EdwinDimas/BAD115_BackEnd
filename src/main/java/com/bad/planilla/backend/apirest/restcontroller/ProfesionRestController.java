@@ -42,7 +42,7 @@ public class ProfesionRestController {
     }
 
     @PreAuthorize("isAuthenticated() and hasAuthority('PROFESION_UPDATE')")
-    @PutMapping("/profesion/{id}")
+    @PutMapping("/profesion/")
     public ResponseEntity<?> modificarProfesion(@RequestBody ProfesionesEntity profesion)
     {
         try{
