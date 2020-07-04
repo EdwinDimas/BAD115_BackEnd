@@ -16,7 +16,7 @@ public class ComisionServiceImp implements IComisionService {
 
     @Override
     public List<CatalogocomisionesEntity> list()
-    {return com.findAll(); }
+    {return com.findAllByOrderByIdComision(); }
 
     @Override
     public CatalogocomisionesEntity guardar(CatalogocomisionesEntity comision)
