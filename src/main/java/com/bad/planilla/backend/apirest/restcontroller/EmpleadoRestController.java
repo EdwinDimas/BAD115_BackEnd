@@ -14,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import com.bad.planilla.backend.apirest.globals.Constants;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -105,7 +106,7 @@ public class EmpleadoRestController {
             if(puesto != null) empleado.setId_puestotrabajo(puesto);
             empleado.setTomarVacaciones(false);
 
-
+            empleado.setSalario( puesto.getId_salario().getDesde());
             direccion.setEstado(true);
             direccion.setId_municipio(mr.findByIdMunicipio(id_municipio));
             direccion.setId_departmento(direccion.getId_municipio().getId_departmento());
