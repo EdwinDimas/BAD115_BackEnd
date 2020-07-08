@@ -105,6 +105,7 @@ public class EmpleadoRestController {
             if(estado != null) empleado.setId_estadocivil(estado);
             if(puesto != null) empleado.setId_puestotrabajo(puesto);
             empleado.setTomarVacaciones(false);
+            empleado.setEstado(true);
 
             empleado.setSalario( puesto.getId_salario().getDesde());
             direccion.setEstado(true);
